@@ -1,0 +1,712 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+
+const SUPABASE_URL = 'https://wipegwhwfbykbjznfpry.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_e6nl9yCyxI_LFRrxqQKalw_Hhhm26r9';
+
+const days = [
+  { id: 'apr11', label: 'April 11', sub: 'Friday' },
+  { id: 'apr12', label: 'April 12', sub: 'Saturday' },
+  { id: 'apr13', label: 'April 13', sub: 'Sunday — PEAK' },
+  { id: 'apr14', label: 'April 14', sub: 'Monday' },
+];
+
+const parties = [
+  // April 11
+  {
+    id: 's2o-night-1',
+    day: 'apr11',
+    name: 'S2O Night 1',
+    headliner: 'Alan Walker × Steve Aoki',
+    venue: 'S2O Land, Ratchada',
+    color: '#40cef3',
+    colorDark: '#006479',
+    icon: 'water_drop',
+  },
+  {
+    id: 'siam-night-1',
+    day: 'apr11',
+    name: 'Siam Songkran Night 1',
+    headliner: 'Afrojack b2b R3HAB',
+    venue: 'Bravo BKK Arena, RCA',
+    color: '#006479',
+    colorDark: '#003345',
+    icon: 'festival',
+  },
+  {
+    id: 'gcircuit-opening',
+    day: 'apr11',
+    name: 'GCircuit Illuminate Opening',
+    headliner: 'Mario Beckman',
+    venue: 'UOB Live Hall, Emsphere',
+    color: '#c084fc',
+    colorDark: '#7e22ce',
+    icon: 'nightlife',
+  },
+  {
+    id: 'silom-apr11',
+    day: 'apr11',
+    name: 'Silom Soi 2 & 4',
+    headliner: 'Free street party',
+    venue: 'Silom Road',
+    color: '#FF9F0A',
+    colorDark: '#964300',
+    icon: 'celebration',
+  },
+
+  // April 12
+  {
+    id: 's2o-night-2',
+    day: 'apr12',
+    name: 'S2O Night 2',
+    headliner: 'Zedd',
+    venue: 'S2O Land, Ratchada',
+    color: '#40cef3',
+    colorDark: '#006479',
+    icon: 'water_drop',
+  },
+  {
+    id: 'siam-night-2',
+    day: 'apr12',
+    name: 'Siam Songkran Night 2',
+    headliner: 'Marshmello',
+    venue: 'Bravo BKK Arena, RCA',
+    color: '#006479',
+    colorDark: '#003345',
+    icon: 'festival',
+  },
+  {
+    id: 'gcircuit-boy-pool',
+    day: 'apr12',
+    name: 'GCircuit Boy Pool Party',
+    headliner: 'Luis Vazquez',
+    venue: 'Tribe Sky Beach Club',
+    color: '#c084fc',
+    colorDark: '#7e22ce',
+    icon: 'pool',
+  },
+  {
+    id: 'silom-apr12',
+    day: 'apr12',
+    name: 'Silom Soi 2 & 4',
+    headliner: 'Free street party',
+    venue: 'Silom Road',
+    color: '#FF9F0A',
+    colorDark: '#964300',
+    icon: 'celebration',
+  },
+
+  // April 13
+  {
+    id: 's2o-night-3',
+    day: 'apr13',
+    name: 'S2O Night 3',
+    headliner: 'Kygo',
+    venue: 'S2O Land, Ratchada',
+    color: '#40cef3',
+    colorDark: '#006479',
+    icon: 'water_drop',
+  },
+  {
+    id: 'siam-night-3',
+    day: 'apr13',
+    name: 'Siam Songkran Night 3',
+    headliner: 'Martin Garrix',
+    venue: 'Bravo BKK Arena, RCA',
+    color: '#006479',
+    colorDark: '#003345',
+    icon: 'festival',
+  },
+  {
+    id: 'gcircuit-bear-pool',
+    day: 'apr13',
+    name: 'GCircuit Bear Pool Party / AquaXXL',
+    headliner: 'Tomer Maizner',
+    venue: 'Tribe Sky Beach Club',
+    color: '#c084fc',
+    colorDark: '#7e22ce',
+    icon: 'pool',
+  },
+  {
+    id: 'silom-apr13',
+    day: 'apr13',
+    name: 'Silom Soi 2 & 4',
+    headliner: 'Peak day street party (FREE)',
+    venue: 'Silom Road',
+    color: '#FF9F0A',
+    colorDark: '#964300',
+    icon: 'celebration',
+  },
+  {
+    id: 'khao-san-apr13',
+    day: 'apr13',
+    name: 'Khao San Road',
+    headliner: 'Free street water fight',
+    venue: 'Khao San Road',
+    color: '#FF3B30',
+    colorDark: '#8B0000',
+    icon: 'water_drop',
+  },
+
+  // April 14
+  {
+    id: 'siam-night-4',
+    day: 'apr14',
+    name: 'Siam Songkran Night 4',
+    headliner: 'John Summit',
+    venue: 'Bravo BKK Arena, RCA',
+    color: '#006479',
+    colorDark: '#003345',
+    icon: 'festival',
+  },
+  {
+    id: 'gcircuit-closing',
+    day: 'apr14',
+    name: 'GCircuit Automata Closing',
+    headliner: 'Tom Stephan',
+    venue: 'UOB Live Hall, Emsphere',
+    color: '#c084fc',
+    colorDark: '#7e22ce',
+    icon: 'nightlife',
+  },
+  {
+    id: 'silom-apr14',
+    day: 'apr14',
+    name: 'Silom Soi 2 & 4',
+    headliner: 'Free street party',
+    venue: 'Silom Road',
+    color: '#FF9F0A',
+    colorDark: '#964300',
+    icon: 'celebration',
+  },
+];
+
+const partiesJson = JSON.stringify(parties);
+---
+
+<BaseLayout
+  title="Who's Going? — Find Your Festival Crew | Bangkok Songkran 2026"
+  description="Sign up to show which Songkran 2026 parties you're attending each night. Find others going to the same events and coordinate pre-drinks, meetups, and after-parties."
+  canonical="https://bkksongkran.com/meetup"
+>
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Community</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
+        WHO'S<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GOING?</span>
+      </h1>
+      <p class="text-lg max-w-2xl mb-3" style="color:#326177;">Find your festival crew. Sign up to show which parties you're hitting — then coordinate pre-drinks, meetups, and after-parties.</p>
+      <p class="text-sm flex items-center gap-1.5" style="color:#6b8fa3;">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;color:#40cef3;">info</span>
+        Just use a nickname if you prefer. No account needed.
+      </p>
+    </div>
+  </section>
+
+  <!-- DAY TABS -->
+  <section class="px-6 pb-2 sticky top-20 z-30" style="background:rgba(238,248,255,0.95);backdrop-filter:blur(12px);">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex gap-1 sm:gap-2 overflow-x-auto no-scrollbar pb-1" id="day-tabs">
+        {days.map((day, i) => (
+          <button
+            data-day={day.id}
+            onclick={`switchDay('${day.id}')`}
+            class={`day-tab flex-shrink-0 flex flex-col items-center px-4 sm:px-6 py-2.5 rounded-full text-sm font-bold transition-all ${i === 0 ? 'active-day' : ''}`}
+          >
+            <span class="day-tab-label">{day.label}</span>
+            <span class="day-tab-sub text-[10px] font-normal opacity-70">{day.sub}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTY CARDS CONTAINER -->
+  <section class="px-6 pt-8 pb-24">
+    <div class="max-w-7xl mx-auto">
+      {days.map(day => (
+        <div id={`day-${day.id}`} class="day-panel space-y-6" style={day.id !== 'apr11' ? 'display:none;' : ''}>
+          {parties.filter(p => p.day === day.id).map(party => (
+            <div
+              class="party-card rounded-2xl overflow-hidden"
+              data-party-id={party.id}
+              style={`background:rgba(255,255,255,0.85);border:1.5px solid ${party.color}40;box-shadow:0 2px 24px rgba(0,51,69,0.07);`}
+            >
+              <!-- Card header -->
+              <div class="flex items-start justify-between gap-4 p-5 pb-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center mt-0.5" style={`background:${party.color}20;`}>
+                    <span class="material-symbols-outlined text-lg" style={`color:${party.color};font-variation-settings:'FILL' 1;`}>{party.icon}</span>
+                  </div>
+                  <div>
+                    <h3 class="font-headline font-extrabold text-xl tracking-tight leading-tight" style="color:#003345;">{party.name}</h3>
+                    <p class="text-sm font-semibold mt-0.5" style={`color:${party.colorDark};`}>{party.headliner}</p>
+                    <p class="text-xs mt-1 flex items-center gap-1" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">location_on</span>
+                      {party.venue}
+                    </p>
+                  </div>
+                </div>
+                <!-- Count badge -->
+                <div class="flex-shrink-0 text-center">
+                  <div class="count-badge text-sm font-bold px-3 py-1 rounded-full" style={`background:${party.color}15;color:${party.colorDark};min-width:64px;`} id={`count-${party.id}`}>
+                    — going
+                  </div>
+                </div>
+              </div>
+
+              <!-- People list -->
+              <div class="px-5 pb-3">
+                <div class="people-list flex flex-wrap gap-2" id={`people-${party.id}`}>
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Toggle form button -->
+              <div class="px-5 pb-5">
+                <button
+                  class="im-going-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
+                  style={`background:${party.color};box-shadow:0 4px 16px ${party.color}40;`}
+                  onclick={`toggleForm('${party.id}')`}
+                  id={`btn-${party.id}`}
+                >
+                  <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">add_circle</span>
+                  I'm going
+                </button>
+
+                <!-- Inline signup form -->
+                <div class="signup-form hidden mt-4 rounded-xl p-4" id={`form-${party.id}`} style="background:rgba(238,248,255,0.8);border:1px solid rgba(192,232,255,0.6);">
+                  <p class="text-sm font-semibold mb-3" style="color:#003345;">Add yourself to the list</p>
+                  <div class="space-y-3">
+                    <div>
+                      <label class="text-xs font-bold uppercase tracking-wider block mb-1" style="color:#6b8fa3;">Name / Nickname <span style="color:#FF3B30;">*</span></label>
+                      <input
+                        type="text"
+                        maxlength="30"
+                        placeholder="e.g. Marco, @handle, Alex from Berlin"
+                        class="name-input w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-all focus:ring-2"
+                        style={`border-color:rgba(192,232,255,0.8);background:white;color:#003345;--tw-ring-color:${party.color};`}
+                        id={`name-${party.id}`}
+                      />
+                      <p class="name-counter text-[10px] mt-1 text-right" style="color:#6b8fa3;" id={`name-counter-${party.id}`}>0 / 30</p>
+                    </div>
+                    <div>
+                      <label class="text-xs font-bold uppercase tracking-wider block mb-1" style="color:#6b8fa3;">Note <span class="font-normal normal-case">(optional)</span></label>
+                      <input
+                        type="text"
+                        maxlength="100"
+                        placeholder='e.g. "arriving at 10pm, DM @handle for pre-drinks"'
+                        class="note-input w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-all focus:ring-2"
+                        style={`border-color:rgba(192,232,255,0.8);background:white;color:#003345;--tw-ring-color:${party.color};`}
+                        id={`note-${party.id}`}
+                      />
+                      <p class="note-counter text-[10px] mt-1 text-right" style="color:#6b8fa3;" id={`note-counter-${party.id}`}>0 / 100</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <button
+                        class="submit-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:scale-105"
+                        style={`background:${party.color};`}
+                        onclick={`submitEntry('${party.id}', '${day.id}')`}
+                        id={`submit-${party.id}`}
+                      >
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                        Count me in!
+                      </button>
+                      <button
+                        class="text-sm font-semibold transition-colors hover:underline"
+                        style="color:#6b8fa3;"
+                        onclick={`cancelForm('${party.id}')`}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                    <!-- Validation error -->
+                    <p class="form-error text-xs font-semibold hidden" style="color:#FF3B30;" id={`error-${party.id}`}></p>
+                  </div>
+                </div>
+
+                <!-- Success message -->
+                <div class="success-msg hidden mt-3 flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl" id={`success-${party.id}`} style="background:#34C75915;color:#34C759;border:1px solid #34C75930;">
+                  <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                  <span>You're on the list! See you there.</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+
+      <!-- Loading state -->
+      <div id="loading-state" class="flex items-center justify-center py-12 gap-3" style="color:#6b8fa3;">
+        <span class="material-symbols-outlined animate-spin text-2xl" style="color:#40cef3;">progress_activity</span>
+        <span class="text-sm font-semibold">Loading sign-ups...</span>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="hidden text-center py-12">
+        <span class="material-symbols-outlined text-3xl mb-3 block" style="color:#FF9F0A;">wifi_off</span>
+        <p class="text-sm font-semibold" style="color:#6b8fa3;">Couldn't load sign-ups. The table may not be created yet.</p>
+        <p class="text-xs mt-1" style="color:#6b8fa3;">Sign-ups will appear once the Supabase table is set up.</p>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .day-tab {
+    color: #6b8fa3;
+    background: transparent;
+    border: 1.5px solid transparent;
+  }
+  .day-tab:hover {
+    color: #006479;
+    background: rgba(0,100,121,0.06);
+  }
+  .active-day {
+    background: #006479 !important;
+    color: white !important;
+    border-color: #006479 !important;
+  }
+  .active-day .day-tab-sub {
+    color: rgba(255,255,255,0.75) !important;
+  }
+  .party-card {
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .party-card:hover {
+    box-shadow: 0 8px 40px rgba(0,51,69,0.12) !important;
+    transform: translateY(-1px);
+  }
+  .signup-form input:focus {
+    border-color: #40cef3 !important;
+    box-shadow: 0 0 0 2px rgba(64,206,243,0.2);
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  .person-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 4px;
+    border-radius: 9999px;
+    background: rgba(238,248,255,0.9);
+    border: 1px solid rgba(192,232,255,0.6);
+    font-size: 12px;
+    color: #003345;
+    max-width: 220px;
+  }
+  .person-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  .person-name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .person-note {
+    font-size: 10px;
+    color: #6b8fa3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 120px;
+  }
+</style>
+
+<script define:vars={{ partiesJson, SUPABASE_URL, SUPABASE_KEY }}>
+const PARTIES = JSON.parse(partiesJson);
+const API = SUPABASE_URL + '/rest/v1/meetup_entries';
+const HEADERS = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Content-Type': 'application/json',
+};
+
+// Map party id -> color for avatar
+const partyColorMap = {};
+PARTIES.forEach(p => { partyColorMap[p.id] = p.color; });
+
+// State: entries grouped by party id
+let entriesByParty = {};
+let dataLoaded = false;
+
+// ── Fetch all entries ────────────────────────────────────────
+async function loadEntries() {
+  try {
+    const res = await fetch(API + '?select=id,name,party,day,note,created_at&order=created_at.asc', {
+      headers: HEADERS,
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    entriesByParty = {};
+    data.forEach(entry => {
+      if (!entriesByParty[entry.party]) entriesByParty[entry.party] = [];
+      entriesByParty[entry.party].push(entry);
+    });
+    renderAllParties();
+    dataLoaded = true;
+    document.getElementById('loading-state').style.display = 'none';
+  } catch (e) {
+    console.error('Failed to load entries:', e);
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('error-state').classList.remove('hidden');
+    // Still render empty state so page is usable
+    renderAllParties();
+    dataLoaded = true;
+  }
+}
+
+// ── Render people list for a party ──────────────────────────
+function renderParty(partyId) {
+  const entries = entriesByParty[partyId] || [];
+  const peopleEl = document.getElementById('people-' + partyId);
+  const countEl  = document.getElementById('count-' + partyId);
+  if (!peopleEl || !countEl) return;
+
+  // Update count
+  const n = entries.length;
+  countEl.textContent = n === 0 ? 'Be first!' : n + (n === 1 ? ' going' : ' going');
+
+  // Clear people list
+  while (peopleEl.firstChild) peopleEl.removeChild(peopleEl.firstChild);
+
+  if (entries.length === 0) return;
+
+  const color = partyColorMap[partyId] || '#40cef3';
+
+  entries.forEach(entry => {
+    const chip = document.createElement('div');
+    chip.className = 'person-chip';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'person-avatar';
+    avatar.style.background = color;
+    // Safe: use textContent
+    const initial = (entry.name || '?').trim().charAt(0);
+    avatar.textContent = initial;
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'person-name';
+    nameSpan.textContent = entry.name || '';
+
+    chip.appendChild(avatar);
+    chip.appendChild(nameSpan);
+
+    if (entry.note && entry.note.trim()) {
+      const noteSpan = document.createElement('span');
+      noteSpan.className = 'person-note';
+      noteSpan.textContent = '· ' + entry.note.trim();
+      chip.appendChild(noteSpan);
+    }
+
+    peopleEl.appendChild(chip);
+  });
+}
+
+function renderAllParties() {
+  PARTIES.forEach(p => renderParty(p.id));
+}
+
+// ── Tab switching ────────────────────────────────────────────
+window.switchDay = function(dayId) {
+  document.querySelectorAll('.day-panel').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.day-tab').forEach(btn => btn.classList.remove('active-day'));
+  const panel = document.getElementById('day-' + dayId);
+  if (panel) panel.style.display = '';
+  const tab = document.querySelector('[data-day="' + dayId + '"]');
+  if (tab) tab.classList.add('active-day');
+};
+
+// ── Toggle signup form ───────────────────────────────────────
+window.toggleForm = function(partyId) {
+  const form    = document.getElementById('form-' + partyId);
+  const btn     = document.getElementById('btn-' + partyId);
+  const success = document.getElementById('success-' + partyId);
+  if (!form) return;
+
+  const isHidden = form.classList.contains('hidden');
+  // Close all other forms first
+  document.querySelectorAll('.signup-form').forEach(f => f.classList.add('hidden'));
+  document.querySelectorAll('.im-going-btn').forEach(b => {
+    b.querySelector('span').textContent = 'add_circle';
+  });
+
+  if (isHidden) {
+    form.classList.remove('hidden');
+    btn.querySelector('span').textContent = 'remove_circle';
+    success.classList.add('hidden');
+    // Focus name input
+    setTimeout(() => {
+      const nameInput = document.getElementById('name-' + partyId);
+      if (nameInput) nameInput.focus();
+    }, 50);
+  }
+};
+
+window.cancelForm = function(partyId) {
+  const form = document.getElementById('form-' + partyId);
+  const btn  = document.getElementById('btn-' + partyId);
+  if (form) form.classList.add('hidden');
+  if (btn) btn.querySelector('span').textContent = 'add_circle';
+};
+
+// ── Submit entry ─────────────────────────────────────────────
+window.submitEntry = async function(partyId, dayId) {
+  const nameInput  = document.getElementById('name-' + partyId);
+  const noteInput  = document.getElementById('note-' + partyId);
+  const errorEl    = document.getElementById('error-' + partyId);
+  const submitBtn  = document.getElementById('submit-' + partyId);
+  const form       = document.getElementById('form-' + partyId);
+  const successEl  = document.getElementById('success-' + partyId);
+
+  const name = (nameInput.value || '').trim();
+  const note = (noteInput.value || '').trim();
+
+  // Clear previous error
+  errorEl.classList.add('hidden');
+  errorEl.textContent = '';
+
+  // Validate
+  if (!name) {
+    errorEl.textContent = 'Please enter a name or nickname.';
+    errorEl.classList.remove('hidden');
+    nameInput.focus();
+    return;
+  }
+  if (name.length > 30) {
+    errorEl.textContent = 'Name must be 30 characters or fewer.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  if (note.length > 100) {
+    errorEl.textContent = 'Note must be 100 characters or fewer.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  // Disable button while submitting
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '0.6';
+  const originalText = submitBtn.querySelector('span:last-child');
+
+  // Build payload
+  const payload = {
+    name: name,
+    party: partyId,
+    day: dayId,
+    note: note || null,
+  };
+
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const errBody = await res.text();
+      console.error('Insert error:', errBody);
+      errorEl.textContent = 'Something went wrong. Please try again.';
+      errorEl.classList.remove('hidden');
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      return;
+    }
+
+    const [newEntry] = await res.json();
+
+    // Add to local state
+    if (!entriesByParty[partyId]) entriesByParty[partyId] = [];
+    entriesByParty[partyId].push(newEntry);
+
+    // Re-render the party
+    renderParty(partyId);
+
+    // Hide form, show success
+    form.classList.add('hidden');
+    successEl.classList.remove('hidden');
+    const btnIcon = document.querySelector('#btn-' + partyId + ' span');
+    if (btnIcon) btnIcon.textContent = 'check_circle';
+
+    // Reset inputs
+    nameInput.value = '';
+    noteInput.value = '';
+    document.getElementById('name-counter-' + partyId).textContent = '0 / 30';
+    document.getElementById('note-counter-' + partyId).textContent = '0 / 100';
+
+  } catch (e) {
+    console.error('Submit failed:', e);
+    errorEl.textContent = 'Network error. Please check your connection and try again.';
+    errorEl.classList.remove('hidden');
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+  }
+};
+
+// ── Character counters ───────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Name counters
+  document.querySelectorAll('.name-input').forEach(input => {
+    const partyId = input.id.replace('name-', '');
+    input.addEventListener('input', () => {
+      const el = document.getElementById('name-counter-' + partyId);
+      if (el) {
+        const len = input.value.length;
+        el.textContent = len + ' / 30';
+        el.style.color = len > 25 ? '#FF9F0A' : '#6b8fa3';
+      }
+    });
+    // Submit on Enter
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const noteInput = document.getElementById('note-' + partyId);
+        if (noteInput) noteInput.focus();
+      }
+    });
+  });
+
+  // Note counters
+  document.querySelectorAll('.note-input').forEach(input => {
+    const partyId = input.id.replace('note-', '');
+    input.addEventListener('input', () => {
+      const el = document.getElementById('note-counter-' + partyId);
+      if (el) {
+        const len = input.value.length;
+        el.textContent = len + ' / 100';
+        el.style.color = len > 85 ? '#FF9F0A' : '#6b8fa3';
+      }
+    });
+    // Submit on Enter
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const partyId = input.id.replace('note-', '');
+        const party = PARTIES.find(p => p.id === partyId);
+        if (party) submitEntry(partyId, party.day);
+      }
+    });
+  });
+
+  // Load entries
+  loadEntries();
+});
+</script>
