@@ -47,29 +47,66 @@ const partiesJson = JSON.stringify(parties);
 >
 
   <!-- HEADER -->
-  <section class="pt-36 pb-14 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.9),rgba(238,248,255,0));">
+  <section class="pt-32 pb-8 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.9),rgba(238,248,255,0));">
     <div class="max-w-7xl mx-auto">
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Community</div>
-      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
+      <h1 class="font-headline font-extrabold tracking-tighter mb-3" style="font-size:clamp(2.5rem,8vw,6rem);color:#003345;line-height:0.9;">
         WHO'S<br/>
         <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GOING?</span>
       </h1>
       <p class="text-lg max-w-xl mb-3" style="color:#326177;">Find your crew. Sign up for events, add pre-drinks, after-parties — coordinate everything in one place.</p>
-      <p class="text-sm flex items-center gap-1.5" style="color:#6b8fa3;">
-        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;color:#40cef3;">info</span>
-        No account needed. Organising a group or large meetup? <a href="/contact?type=whos-going" class="font-bold underline transition-colors hover:text-primary" style="color:#006479;">Contact us</a> — we can feature it.
-      </p>
+      <p class="text-sm" style="color:#6b8fa3;">No account needed. Organising a large group? <a href="/contact?type=whos-going" class="font-semibold underline" style="color:#006479;">Get in touch</a> — we can feature it.</p>
     </div>
   </section>
 
+  <!-- UNLOCK BANNER -->
+  <section class="px-6 pb-3 pt-1" id="meetup-unlock-banner">
+    <div class="max-w-7xl mx-auto flex items-center gap-4 flex-wrap">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm" style="color:#6b8fa3;font-variation-settings:'FILL' 1;">lock</span>
+        <p class="text-sm" style="color:#326177;">Contact handles are hidden for privacy — just drop your email to confirm you're a real person and unlock them. We don't store it or send you anything.</p>
+      </div>
+      <button id="btn-meetup-unlock" class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#006479,#40cef3);">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
+        Reveal contacts
+      </button>
+    </div>
+  </section>
+
+  <!-- UNLOCK MODAL -->
+  <div id="meetup-unlock-modal" class="hidden fixed inset-0 z-50" style="background:rgba(0,30,50,0.6);backdrop-filter:blur(8px);">
+    <div class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4">
+      <div class="w-full max-w-sm rounded-2xl p-6 space-y-4" style="background:white;border:1px solid rgba(192,232,255,0.5);box-shadow:0 8px 40px rgba(0,51,69,0.15);">
+        <div class="flex items-center justify-between">
+          <h3 class="font-headline font-bold text-lg" style="color:#003345;">Reveal Contact Info</h3>
+          <button id="meetup-unlock-close" class="p-1 rounded-full hover:bg-gray-100 transition-colors">
+            <span class="material-symbols-outlined" style="color:#6b8fa3;">close</span>
+          </button>
+        </div>
+        <p class="text-sm" style="color:#326177;">Enter your email to reveal handles across all events. Your email is stored privately and never shared.</p>
+        <div>
+          <input type="email" id="meetup-unlock-email" placeholder="you@gmail.com" class="field-input" autocomplete="email" />
+          <p class="text-[11px] mt-1" style="color:#6b8fa3;">Use a real address: Gmail, Outlook, Yahoo, iCloud, etc.</p>
+        </div>
+        <div id="turnstile-meetup-unlock"></div>
+        <button id="meetup-unlock-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
+          Reveal all contacts
+        </button>
+        <p id="meetup-unlock-error" class="hidden text-xs font-bold" style="color:#ef4444;"></p>
+        <p class="text-[11px] text-center" style="color:#6b8fa3;">One-time only — stays unlocked on this device.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- STICKY TABS BAR -->
-  <div class="sticky top-20 z-30 px-6" style="border-bottom:1px solid rgba(192,232,255,0.3);">
+  <div class="sticky top-16 z-30 px-6">
     <div class="max-w-7xl mx-auto">
       <!-- Row 1: Add event button -->
-      <div class="flex justify-end gap-2 pt-2 pb-1">
-        <button onclick="openAddEvent()" class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
+      <div class="flex justify-center sm:justify-end gap-2 pt-2 pb-1">
+        <button onclick="openAddEvent()" class="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 hover:scale-105 w-full sm:w-auto justify-center" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
           <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">add</span>
-          Add event
+          Add your event
         </button>
       </div>
       <!-- Row 2: Day tabs -->
@@ -88,124 +125,138 @@ const partiesJson = JSON.stringify(parties);
       <!-- Row 3: Filters -->
       <div id="filter-bar" class="flex gap-2 overflow-x-auto no-scrollbar py-2">
         <button data-filter="all" onclick="filterEvents('all')" class="filter-btn active-filter flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all">All</button>
-        <button data-filter="festival" onclick="filterEvents('festival')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Festival</button>
-        <button data-filter="circuit" onclick="filterEvents('circuit')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Circuit</button>
-        <button data-filter="free" onclick="filterEvents('free')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Free</button>
-        <button data-filter="pre-drinks" onclick="filterEvents('pre-drinks')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Pre-drinks</button>
-        <button data-filter="afterparty" onclick="filterEvents('afterparty')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Afterparty</button>
-        <button data-filter="meetup" onclick="filterEvents('meetup')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Meetup</button>
-        <button data-filter="other" onclick="filterEvents('other')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Other</button>
+        <button data-filter="festival" onclick="filterEvents('festival')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Festival</button>
+        <button data-filter="circuit" onclick="filterEvents('circuit')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Circuit</button>
+        <button data-filter="free" onclick="filterEvents('free')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Free</button>
+        <button data-filter="pre-drinks" onclick="filterEvents('pre-drinks')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Pre-drinks</button>
+        <button data-filter="afterparty" onclick="filterEvents('afterparty')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Afterparty</button>
+        <button data-filter="meetup" onclick="filterEvents('meetup')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Meetup</button>
+        <button data-filter="other" onclick="filterEvents('other')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="color:#003345;">Other</button>
       </div>
     </div>
   </div>
 
-  <!-- ADD EVENT MODAL -->
-  <div id="add-event-modal" class="hidden fixed inset-0 flex items-end sm:items-center justify-center" style="z-index:10000;background:rgba(0,20,40,0.6);backdrop-filter:blur(6px);">
-    <div class="w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 overflow-y-auto" style="background:white;box-shadow:0 32px 80px rgba(0,0,0,0.3);max-height:90vh;">
-      <div class="flex items-center justify-between mb-1">
-        <h2 class="font-headline font-extrabold text-2xl" style="color:#003345;">Add Your Event</h2>
-        <button onclick="closeAddEvent()" class="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100">
-          <span class="material-symbols-outlined" style="color:#6b8fa3;">close</span>
-        </button>
-      </div>
-      <p class="text-sm mb-6" style="color:#6b8fa3;">Pre-drinks, after-party, hotel rooftop, beach bar — anything.</p>
-
-      <div class="space-y-4">
-        <div>
-          <label class="field-label">Event name *</label>
-          <input id="custom-event-name" type="text" maxlength="60" placeholder='e.g. "Pre-drinks at Octave Rooftop"' class="field-input" />
-          <div class="flex justify-end mt-1"><span id="custom-event-name-counter" class="text-[10px]" style="color:#6b8fa3;">0 / 60</span></div>
+  <!-- ADD EVENT INLINE PANEL -->
+  <section id="add-event-panel" class="hidden px-6 pt-4 pb-4">
+    <div class="max-w-3xl mx-auto">
+      <div class="rounded-2xl overflow-hidden" style="background:white;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,51,69,0.1);">
+        <!-- Panel header -->
+        <div style="background:linear-gradient(135deg,rgba(180,0,93,0.06),rgba(233,30,140,0.04));border-bottom:1px solid rgba(192,232,255,0.4);padding:20px 24px 18px;">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h2 class="font-headline font-extrabold text-2xl" style="color:#003345;">Add Your Event</h2>
+              <p style="font-size:13px;color:#6b8fa3;margin-top:3px;">Pre-drinks, after-party, rooftop, beach bar — anything.</p>
+            </div>
+            <button onclick="closeAddEvent()" style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.05);border:none;cursor:pointer;flex-shrink:0;">
+              <span class="material-symbols-outlined" style="color:#6b8fa3;font-size:20px;">close</span>
+            </button>
+          </div>
         </div>
-        <div class="grid grid-cols-2 gap-3">
+        <!-- Form body -->
+        <div class="p-6 space-y-4">
           <div>
-            <label class="field-label">Day *</label>
-            <div class="custom-select-wrap" id="day-select-wrap">
-              <button type="button" class="custom-select-btn field-input flex items-center justify-between gap-2" onclick="toggleSelect('day-select-wrap')">
-                <span id="day-select-label">April 10 — Friday</span>
-                <span class="material-symbols-outlined text-base flex-shrink-0" style="color:#6b8fa3;">expand_more</span>
-              </button>
-              <input type="hidden" id="custom-event-day" value="apr10" />
-              <div class="custom-select-menu hidden">
-                <button type="button" class="custom-select-option active" onclick="selectOption('day-select-wrap','custom-event-day','apr10','April 10 — Friday')">April 10 — Friday</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr11','April 11 — Saturday')">April 11 — Saturday</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr12','April 12 — Sunday')">April 12 — Sunday</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr13','April 13 — Monday 🔥')">April 13 — Monday 🔥</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr14','April 14 — Tuesday')">April 14 — Tuesday</button>
+            <label class="field-label">Event name *</label>
+            <input id="custom-event-name" type="text" maxlength="60" placeholder='e.g. "Pre-drinks at Octave Rooftop"' class="field-input" />
+            <div class="flex justify-end mt-1"><span id="custom-event-name-counter" class="text-[10px]" style="color:#6b8fa3;">0 / 60</span></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="field-label">Day *</label>
+              <div class="custom-select-wrap" id="day-select-wrap">
+                <button type="button" class="custom-select-btn field-input flex items-center justify-between gap-2" onclick="toggleSelect('day-select-wrap')">
+                  <span id="day-select-label">April 10 — Friday</span>
+                  <span class="material-symbols-outlined text-base flex-shrink-0" style="color:#6b8fa3;">expand_more</span>
+                </button>
+                <input type="hidden" id="custom-event-day" value="apr10" />
+                <div class="custom-select-menu hidden">
+                  <button type="button" class="custom-select-option active" onclick="selectOption('day-select-wrap','custom-event-day','apr10','April 10 — Friday')">April 10 — Friday</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr11','April 11 — Saturday')">April 11 — Saturday</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr12','April 12 — Sunday')">April 12 — Sunday</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr13','April 13 — Monday 🔥')">April 13 — Monday 🔥</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr14','April 14 — Tuesday')">April 14 — Tuesday</button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Category *</label>
+              <div class="custom-select-wrap" id="cat-select-wrap">
+                <button type="button" class="custom-select-btn field-input flex items-center justify-between gap-2" onclick="toggleSelect('cat-select-wrap')">
+                  <span id="cat-select-label">🍹 Pre-drinks</span>
+                  <span class="material-symbols-outlined text-base flex-shrink-0" style="color:#6b8fa3;">expand_more</span>
+                </button>
+                <input type="hidden" id="custom-event-category" value="pre-drinks" />
+                <div class="custom-select-menu hidden">
+                  <button type="button" class="custom-select-option active" onclick="selectOption('cat-select-wrap','custom-event-category','pre-drinks','🍹 Pre-drinks')">🍹 Pre-drinks</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('cat-select-wrap','custom-event-category','afterparty','🎉 Afterparty')">🎉 Afterparty</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('cat-select-wrap','custom-event-category','meetup','👥 Meetup')">👥 Meetup</button>
+                  <button type="button" class="custom-select-option" onclick="selectOption('cat-select-wrap','custom-event-category','other','✨ Other')">✨ Other</button>
+                </div>
               </div>
             </div>
           </div>
           <div>
-            <label class="field-label">Category *</label>
-            <div class="custom-select-wrap" id="cat-select-wrap">
-              <button type="button" class="custom-select-btn field-input flex items-center justify-between gap-2" onclick="toggleSelect('cat-select-wrap')">
-                <span id="cat-select-label">🍹 Pre-drinks</span>
-                <span class="material-symbols-outlined text-base flex-shrink-0" style="color:#6b8fa3;">expand_more</span>
-              </button>
-              <input type="hidden" id="custom-event-category" value="pre-drinks" />
-              <div class="custom-select-menu hidden">
-                <button type="button" class="custom-select-option active" onclick="selectOption('cat-select-wrap','custom-event-category','pre-drinks','🍹 Pre-drinks')">🍹 Pre-drinks</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('cat-select-wrap','custom-event-category','afterparty','🎉 Afterparty')">🎉 Afterparty</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('cat-select-wrap','custom-event-category','meetup','👥 Meetup')">👥 Meetup</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('cat-select-wrap','custom-event-category','other','✨ Other')">✨ Other</button>
-              </div>
+            <label class="field-label">Your name *</label>
+            <input id="custom-event-host" type="text" maxlength="30" placeholder="Marco, Alex..." class="field-input" />
+          </div>
+          <div>
+            <label class="field-label">Contact *</label>
+            <div class="grid grid-cols-3 gap-2 mb-2">
+              <label>
+                <input type="radio" name="ce_contact_type" value="ig" class="peer hidden" checked />
+                <div class="peer-checked:border-pink-600 peer-checked:bg-pink-50 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Instagram</div>
+              </label>
+              <label>
+                <input type="radio" name="ce_contact_type" value="wa" class="peer hidden" />
+                <div class="peer-checked:border-pink-600 peer-checked:bg-pink-50 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">WhatsApp</div>
+              </label>
+              <label>
+                <input type="radio" name="ce_contact_type" value="tg" class="peer hidden" />
+                <div class="peer-checked:border-pink-600 peer-checked:bg-pink-50 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Telegram</div>
+              </label>
             </div>
+            <input id="custom-event-contact" type="text" maxlength="50" placeholder="@yourhandle or +66..." class="field-input" />
+            <p class="text-[10px] mt-1" style="color:#6b8fa3;">Shown publicly so people can join</p>
           </div>
-        </div>
-        <div>
-          <label class="field-label">Your name *</label>
-          <input id="custom-event-host" type="text" maxlength="30" placeholder="Marco, Alex..." class="field-input" />
-        </div>
-        <div>
-          <label class="field-label">Contact *</label>
-          <div class="grid grid-cols-3 gap-2 mb-2">
-            <label>
-              <input type="radio" name="ce_contact_type" value="ig" class="peer hidden" checked />
-              <div class="peer-checked:border-pink-600 peer-checked:bg-pink-50 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Instagram</div>
-            </label>
-            <label>
-              <input type="radio" name="ce_contact_type" value="wa" class="peer hidden" />
-              <div class="peer-checked:border-pink-600 peer-checked:bg-pink-50 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">WhatsApp</div>
-            </label>
-            <label>
-              <input type="radio" name="ce_contact_type" value="tg" class="peer hidden" />
-              <div class="peer-checked:border-pink-600 peer-checked:bg-pink-50 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Telegram</div>
-            </label>
+          <div>
+            <label class="field-label">Your email *</label>
+            <input id="custom-event-email" type="email" maxlength="100" placeholder="you@email.com" class="field-input" />
+            <p class="text-[10px] mt-1" style="color:#6b8fa3;">Private — only used if there's an issue</p>
           </div>
-          <input id="custom-event-contact" type="text" maxlength="50" placeholder="@yourhandle or +66..." class="field-input" />
-          <p class="text-[10px] mt-1" style="color:#6b8fa3;">Shown publicly so people can join</p>
-        </div>
-        <div>
-          <label class="field-label">Your email *</label>
-          <input id="custom-event-email" type="email" maxlength="100" placeholder="you@email.com" class="field-input" />
-          <p class="text-[10px] mt-1" style="color:#6b8fa3;">Private — only used if there's an issue</p>
-        </div>
-        <div>
-          <label class="field-label">Details <span class="font-normal normal-case" style="color:#6b8fa3;">(optional)</span></label>
-          <textarea id="custom-event-note" maxlength="200" rows="2" placeholder="8pm, Sukhumvit Soi 11, meet near entrance" class="field-input resize-none"></textarea>
-        </div>
-        <div class="flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs" style="background:#FFF8E0;border:1px solid rgba(255,159,10,0.2);color:#92400E;">
-          <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">info</span>
-          No ticket selling, promotions, or advertising. Events are for personal meetups only.
-        </div>
-        <label class="flex items-start gap-3 cursor-pointer">
-          <input id="custom-event-gdpr" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-pink-600" />
-          <span class="text-xs" style="color:#6b8fa3;">I agree that my nickname and contact handle will be shown publicly on this page so others can join my event. My email is stored privately and will not be shared. I confirm this is a personal meetup, not a promotion.</span>
-        </label>
-        <div id="turnstile-meetup"></div>
-        <p id="custom-event-error" class="text-xs font-semibold hidden" style="color:#ef4444;"></p>
-        <div class="flex items-center gap-3 pt-1">
-          <button id="custom-event-submit" onclick="submitCustomEvent()" class="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
-            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">celebration</span>
-            Create event
-          </button>
-          <button onclick="closeAddEvent()" class="text-sm font-semibold transition-colors hover:underline" style="color:#6b8fa3;">Cancel</button>
+          <div>
+            <label class="field-label">Details <span class="font-normal normal-case" style="color:#6b8fa3;">(optional)</span></label>
+            <textarea id="custom-event-note" maxlength="200" rows="2" placeholder="8pm, Sukhumvit Soi 11, meet near entrance" class="field-input resize-none"></textarea>
+          </div>
+          <div class="flex items-start gap-2 px-3 py-2.5 rounded-xl text-xs" style="background:#FFF8E0;border:1px solid rgba(255,159,10,0.2);color:#92400E;">
+            <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">info</span>
+            No ticket selling, promotions, or advertising. Events are for personal meetups only.
+          </div>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input id="custom-event-gdpr" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-pink-600" />
+            <span class="text-xs" style="color:#6b8fa3;">I agree that my nickname and contact handle will be shown publicly on this page so others can join my event. My email is stored privately and will not be shared. I confirm this is a personal meetup, not a promotion.</span>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input id="custom-event-marketing" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-pink-600" />
+            <span class="text-xs" style="color:#6b8fa3;">I agree to receive occasional emails from BKK Songkran about festival updates, tips, and community events. You can unsubscribe at any time.</span>
+          </label>
+          <div class="px-3 py-2.5 rounded-xl text-xs" style="background:rgba(238,248,255,0.7);border:1px solid rgba(192,232,255,0.5);color:#6b8fa3;">
+            BKK Songkran is an independent community guide. We are not affiliated with, endorsed by, or legally responsible for any events listed on this page. All events are user-submitted and organised independently.
+          </div>
+          <div id="turnstile-meetup"></div>
+          <p id="custom-event-error" class="text-xs font-semibold hidden" style="color:#ef4444;"></p>
+          <div class="flex items-center gap-3">
+            <button id="custom-event-submit" onclick="submitCustomEvent()" class="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
+              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">celebration</span>
+              Create event
+            </button>
+            <button onclick="closeAddEvent()" class="text-sm font-semibold" style="color:#6b8fa3;background:none;border:none;cursor:pointer;">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- PARTY CARDS -->
-  <section class="px-6 pt-8 pb-28">
+  <section class="px-6 pt-6 pb-20">
     <div class="max-w-3xl mx-auto space-y-4">
 
       {days.map(day => (
@@ -302,21 +353,23 @@ const partiesJson = JSON.stringify(parties);
             </div>
           ))}
 
-          <!-- Custom events for this day -->
-          <div id={`custom-events-${day.id}`} class="space-y-4"></div>
+          <!-- Community events section -->
+          <div class="mt-2">
+            <div class="text-[10px] font-black uppercase tracking-widest mb-3" style="color:#6b8fa3;">Community Events</div>
+            <div id={`custom-events-${day.id}`} class="space-y-4"></div>
+            <!-- Per-day empty state — shown by JS when no community events exist for this day -->
+            <div id={`day-empty-${day.id}`} class="hidden text-center py-8 px-4 rounded-2xl" style="background:rgba(225,243,255,0.35);border:1.5px dashed rgba(64,206,243,0.3);">
+              <span class="material-symbols-outlined text-3xl mb-2 block" style="color:#40cef3;font-variation-settings:'FILL' 1;">group_add</span>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">No community events yet</p>
+              <p class="text-xs mb-3" style="color:#6b8fa3;">Add a pre-drinks, afterparty, or meetup for {day.label}.</p>
+              <button onclick="openAddEvent()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">add_circle</span>
+                Add event
+              </button>
+            </div>
+          </div>
         </div>
       ))}
-
-      <!-- Empty state -->
-      <div id="empty-state" class="hidden text-center py-16 px-6">
-        <span class="material-symbols-outlined text-5xl mb-4 block" style="color:#40cef3;font-variation-settings:'FILL' 1;">group_add</span>
-        <p class="font-headline font-extrabold text-2xl mb-2" style="color:#003345;">Nothing here yet</p>
-        <p class="text-sm mb-6 max-w-xs mx-auto" style="color:#6b8fa3;">Be the first to add a pre-drinks, afterparty, or meetup for this day.</p>
-        <button onclick="openAddEvent()" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);box-shadow:0 4px 20px rgba(180,0,93,0.3);">
-          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">add_circle</span>
-          Create first event
-        </button>
-      </div>
 
       <!-- Loading -->
       <div id="loading-state" class="flex items-center justify-center py-16 gap-3" style="color:#6b8fa3;">
@@ -492,6 +545,40 @@ function markEventSigned(eventId) {
 function hasSignedEvent(eventId) { return getSignedEvents().includes(eventId); }
 
 // ── Spam / promo detection ────────────────────────────────────
+// ── Unlock contacts ───────────────────────────────────────────
+const KNOWN_PROVIDERS = /^[^\s@]+@(gmail|googlemail|yahoo|ymail|outlook|hotmail|live|msn|icloud|me|mac|proton|protonmail|fastmail|hey|aol|zoho)\.(com|co\.uk|fr|de|es|it|nl|be|ch|at|ca|com\.au|co\.nz|co\.za|co\.in|co\.jp|com\.br|co\.id)$/i;
+
+function isUnlocked() {
+  return !!localStorage.getItem('meetup_unlock_email');
+}
+
+function validateUnlockEmail(email) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Please enter a valid email address.';
+  if (!KNOWN_PROVIDERS.test(email)) return 'Please use a real email provider (Gmail, Outlook, Yahoo, iCloud, etc.).';
+  return null;
+}
+
+function openMeetupUnlockModal() {
+  document.getElementById('meetup-unlock-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  initUnlockMeetupTurnstile();
+}
+function closeMeetupUnlockModal() {
+  document.getElementById('meetup-unlock-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+window.__meetupUnlockTurnstileId = null;
+function initUnlockMeetupTurnstile() {
+  if (window.__meetupUnlockTurnstileId !== null) return;
+  if (window.turnstile) {
+    window.__meetupUnlockTurnstileId = window.turnstile.render('#turnstile-meetup-unlock', {
+      sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+      theme: 'light',
+    });
+  }
+}
+
 const SPAM_PATTERNS = [
   /https?:\/\//i,           // URLs
   /www\./i,                 // URLs without protocol
@@ -669,19 +756,36 @@ function renderChips(containerEl, entries, color) {
       const parts = rawNote.split(' · ');
       const contact = parts[0].trim();
       const noteText = parts.slice(1).join(' · ').trim();
-      const isHandle = contact.startsWith('@');
-      const isPhone = /^\+?[\d\s\-()]{7,}$/.test(contact);
+      const pfx = contact.startsWith('ig:') ? 'ig' : contact.startsWith('wa:') ? 'wa' : contact.startsWith('tg:') ? 'tg' : null;
+      const handle = pfx ? contact.slice(3).trim() : contact;
+      const isHandle = pfx || handle.startsWith('@');
+      const isPhone = !pfx && /^\+?[\d\s\-()]{7,}$/.test(handle);
 
-      if (isHandle || isPhone) {
-        const link = document.createElement('a');
-        const builtUrl = isHandle ? 'https://instagram.com/' + contact.slice(1) : 'https://wa.me/' + contact.replace(/\D/g,'');
+      if (!isUnlocked()) {
+        const lockBadge = document.createElement('button');
+        lockBadge.style.cssText = 'padding:2px 8px;border-radius:20px;background:rgba(107,143,163,0.1);font-size:11px;font-weight:700;color:#6b8fa3;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;';
+        const lockIco = document.createElement('span');
+        lockIco.className = 'material-symbols-outlined';
+        lockIco.style.cssText = 'font-size:12px;font-variation-settings:"FILL" 1;';
+        lockIco.textContent = 'lock';
+        lockBadge.appendChild(lockIco);
+        lockBadge.appendChild(document.createTextNode(' Unlock to see'));
+        lockBadge.addEventListener('click', openMeetupUnlockModal);
+        row.appendChild(lockBadge);
+      } else if (isHandle || isPhone) {
+        const builtUrl = (pfx === 'wa' || isPhone)
+          ? 'https://wa.me/' + handle.replace(/\D/g,'')
+          : pfx === 'tg'
+          ? 'https://t.me/' + handle.replace(/^@/,'')
+          : 'https://instagram.com/' + handle.replace(/^@/,'');
         const SAFE = ['https://instagram.com/','https://wa.me/','https://t.me/'];
         if (!SAFE.some(p => builtUrl.startsWith(p))) return;
+        const link = document.createElement('a');
         link.href = builtUrl;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.style.cssText = `padding:2px 8px;border-radius:20px;background:${color}18;font-size:11px;font-weight:700;color:${color};text-decoration:none;white-space:nowrap;flex-shrink:0;`;
-        link.textContent = contact;
+        link.textContent = handle;
         row.appendChild(link);
       } else if (contact) {
         const ct = document.createElement('span');
@@ -695,12 +799,11 @@ function renderChips(containerEl, entries, color) {
         nt.style.cssText = 'font-size:12px;color:#6b8fa3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
         nt.textContent = '· ' + noteText;
         row.appendChild(nt);
-      } else if (!isHandle && !isPhone && contact) {
-        // whole thing is a plain note
+      } else if (isUnlocked() && !isHandle && !isPhone && contact) {
         const nt = document.createElement('span');
         nt.style.cssText = 'font-size:12px;color:#6b8fa3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
         nt.textContent = '· ' + rawNote;
-        row.removeChild(row.lastChild); // remove the badge we just added
+        row.removeChild(row.lastChild);
         row.appendChild(nt);
       }
     }
@@ -724,9 +827,13 @@ function renderChips(containerEl, entries, color) {
 function renderAllCustom() {
   ['apr10','apr11','apr12','apr13','apr14'].forEach(day => {
     const el = document.getElementById('custom-events-' + day);
+    const emptyEl = document.getElementById('day-empty-' + day);
     if (!el) return;
     while (el.firstChild) el.removeChild(el.firstChild);
-    Object.values(customByDay[day] || {}).forEach(ev => el.appendChild(buildCustomCard(ev, day)));
+    const events = Object.values(customByDay[day] || {});
+    events.forEach(ev => el.appendChild(buildCustomCard(ev, day)));
+    // Show per-day empty state only if no community events for this day
+    if (emptyEl) emptyEl.classList.toggle('hidden', events.length > 0);
   });
 }
 
@@ -796,8 +903,8 @@ function buildCustomCard(ev, day) {
   const contactRaw = noteParts[0].trim();
   const description = noteParts.slice(1).join(' · ').trim();
 
-  // Description block
-  if (description) {
+  // Description block — only shown when unlocked (may contain context that reveals identity)
+  if (description && isUnlocked()) {
     const descEl = document.createElement('p');
     descEl.style.cssText = 'margin-top:12px;font-size:13px;color:#326177;line-height:1.5;padding:10px 14px;border-radius:10px;background:rgba(238,248,255,0.7);border:1px solid rgba(192,232,255,0.5);';
     descEl.textContent = description;
@@ -825,7 +932,18 @@ function buildCustomCard(ev, day) {
   else if (/^\+?[\d\s\-()]{7,}$/.test(contactRaw)) { platform = 'wa'; }
 
 
-  if (platform && PLATFORM_META[platform] && handle) {
+  if (!isUnlocked()) {
+    const lockBtn = document.createElement('button');
+    lockBtn.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:700;color:#6b8fa3;background:rgba(107,143,163,0.08);border:1.5px dashed rgba(107,143,163,0.3);cursor:pointer;';
+    const lockIco = document.createElement('span');
+    lockIco.className = 'material-symbols-outlined';
+    lockIco.style.cssText = 'font-size:18px;font-variation-settings:"FILL" 1;';
+    lockIco.textContent = 'lock';
+    lockBtn.appendChild(lockIco);
+    lockBtn.appendChild(document.createTextNode('Unlock to see contact'));
+    lockBtn.addEventListener('click', openMeetupUnlockModal);
+    contactRow.appendChild(lockBtn);
+  } else if (platform && PLATFORM_META[platform] && handle) {
     const pm = PLATFORM_META[platform];
     const contactBtn = document.createElement('a');
     const builtContactUrl = pm.href(handle);
@@ -869,18 +987,13 @@ window.filterEvents = function(cat) {
     if (btn.getAttribute('data-filter') === cat) {
       btn.classList.add('active-filter'); btn.style.background = ''; btn.style.color = '';
     } else {
-      btn.classList.remove('active-filter'); btn.style.background = 'rgba(0,0,0,0.04)'; btn.style.color = '#003345';
+      btn.classList.remove('active-filter'); btn.style.background = ''; btn.style.color = '#003345';
     }
   });
-  let visible = 0;
   document.querySelectorAll('.party-card, .custom-card').forEach(card => {
     const cardCat = card.getAttribute('data-filter-cat') || '';
-    const show = cat === 'all' || cardCat === cat;
-    card.style.display = show ? '' : 'none';
-    if (show) visible++;
+    card.style.display = (cat === 'all' || cardCat === cat) ? '' : 'none';
   });
-  const emptyEl = document.getElementById('empty-state');
-  if (emptyEl) emptyEl.classList.toggle('hidden', visible > 0);
 };
 
 // ── Tab switch ────────────────────────────────────────────────
@@ -891,9 +1004,6 @@ window.switchDay = function(id) {
   if (p) p.style.display = '';
   const t = document.querySelector('[data-day="' + id + '"]');
   if (t) t.classList.add('active-day');
-  // Reset empty state visibility after panel switch
-  const emptyEl = document.getElementById('empty-state');
-  if (emptyEl) emptyEl.classList.add('hidden');
   filterEvents('all');
 };
 
@@ -977,20 +1087,22 @@ window.submitEntry = async function(pid, dayId) {
   }
 };
 
-// ── Add event modal ───────────────────────────────────────────
+// ── Add event inline panel ────────────────────────────────────
 window.openAddEvent = function() {
-  document.getElementById('add-event-modal').classList.remove('hidden');
-  setTimeout(() => document.getElementById('custom-event-name').focus(), 50);
+  const panel = document.getElementById('add-event-panel');
+  panel.classList.remove('hidden');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => { const el = document.getElementById('custom-event-name'); if (el) el.focus(); }, 300);
 };
 window.closeAddEvent = function() {
-  document.getElementById('add-event-modal').classList.add('hidden');
+  document.getElementById('add-event-panel').classList.add('hidden');
   ['custom-event-name','custom-event-host','custom-event-contact','custom-event-email','custom-event-note'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const defaultRadio = document.querySelector('input[name="ce_contact_type"][value="ig"]');
   if (defaultRadio) defaultRadio.checked = true;
   const catInput = document.getElementById('custom-event-category'); if (catInput) catInput.value = 'pre-drinks';
   const catLabel = document.querySelector('#cat-select-wrap [id$="-select-label"]'); if (catLabel) catLabel.textContent = '🍹 Pre-drinks';
   const dayInput = document.getElementById('custom-event-day'); if (dayInput) dayInput.value = 'apr10';
-  const dayLabel = document.querySelector('#day-select-wrap [id$="-select-label"]'); if (dayLabel) dayLabel.textContent = 'April 11 — Friday';
+  const dayLabel = document.querySelector('#day-select-wrap [id$="-select-label"]'); if (dayLabel) dayLabel.textContent = 'April 10 — Friday';
   const gdprEl = document.getElementById('custom-event-gdpr'); if (gdprEl) gdprEl.checked = false;
   if (window.turnstile && window.__meetupTurnstileId !== null) window.turnstile.reset(window.__meetupTurnstileId);
   document.getElementById('custom-event-error').classList.add('hidden');
@@ -1120,7 +1232,52 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) el.textContent = evNm.value.length + ' / 60';
   });
 
-  document.getElementById('add-event-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddEvent(); });
+  // Unlock banner & modal wiring
+  if (isUnlocked()) {
+    const banner = document.getElementById('meetup-unlock-banner');
+    if (banner) banner.classList.add('hidden');
+  }
+  document.getElementById('btn-meetup-unlock')?.addEventListener('click', openMeetupUnlockModal);
+  document.getElementById('meetup-unlock-close')?.addEventListener('click', closeMeetupUnlockModal);
+  document.getElementById('meetup-unlock-modal')?.addEventListener('click', e => { if (e.target === e.currentTarget) closeMeetupUnlockModal(); });
+
+  document.getElementById('meetup-unlock-btn')?.addEventListener('click', async () => {
+    const emailEl = document.getElementById('meetup-unlock-email');
+    const errEl = document.getElementById('meetup-unlock-error');
+    const btn = document.getElementById('meetup-unlock-btn');
+    const email = (emailEl?.value || '').trim();
+    errEl.classList.add('hidden');
+
+    const emailErr = validateUnlockEmail(email);
+    if (emailErr) { errEl.textContent = emailErr; errEl.classList.remove('hidden'); emailEl?.focus(); return; }
+
+    const tsId = window.__meetupUnlockTurnstileId;
+    const token = (tsId !== null && window.turnstile) ? window.turnstile.getResponse(tsId) : '';
+    if (!token) { errEl.textContent = 'Please complete the security check.'; errEl.classList.remove('hidden'); return; }
+
+    btn.disabled = true; btn.style.opacity = '0.6';
+    try {
+      // Just validate email server-side via a lightweight check, store locally
+      const res = await fetch('/api/unlock-meetup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, turnstileToken: token }),
+      });
+      const data = await res.json();
+      if (!res.ok) { errEl.textContent = data.error || 'Failed. Try again.'; errEl.classList.remove('hidden'); if (window.turnstile && tsId !== null) window.turnstile.reset(tsId); return; }
+      localStorage.setItem('meetup_unlock_email', email);
+      closeMeetupUnlockModal();
+      document.getElementById('meetup-unlock-banner')?.classList.add('hidden');
+      // Re-render chips and custom cards to show contacts
+      PARTIES.forEach(p => renderParty(p.id));
+      renderAllCustom();
+    } catch {
+      errEl.textContent = 'Connection error. Try again.';
+      errEl.classList.remove('hidden');
+    } finally {
+      btn.disabled = false; btn.style.opacity = '1';
+    }
+  });
 
   load();
 });

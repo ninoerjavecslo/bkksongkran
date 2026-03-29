@@ -44,7 +44,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   const { type, festival, dates, tier, quantity, price, contact, contact_type, email, note } = body;
 
-  if (!type || !festival || !dates || !tier || !quantity || !price || !contact || !contact_type || !email)
+  const isBuying = type === 'buying';
+  if (!type || !festival || !dates || !tier || !quantity || (!isBuying && !price) || !contact || !contact_type || !email)
     return json({ error: 'Missing required fields' }, 400);
 
   if (!ALLOWED_TYPES.includes(type))         return json({ error: 'Invalid type' }, 400);
@@ -54,7 +55,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const str = (v: unknown, max: number) => String(v ?? '').slice(0, max);
   const qty = Math.min(Math.max(1, Number(quantity)), 20);
-  const prc = Math.min(Math.max(0, Number(price)), 999_999);
+  const prc = isBuying ? 0 : Math.min(Math.max(0, Number(price)), 999_999);
   if (isNaN(qty) || isNaN(prc)) return json({ error: 'Invalid quantity or price' }, 400);
 
   const mod = moderateTicket({ note: str(note, 500), tier: str(tier, 100), contact: str(contact, 200) });
