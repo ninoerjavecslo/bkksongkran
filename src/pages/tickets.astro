@@ -349,6 +349,12 @@ function getRevealed(): Record<string,{contact:string;contact_type:string}> {
 function saveRevealed(r: Record<string,{contact:string;contact_type:string}>) {
   localStorage.setItem('revealed_tickets', JSON.stringify(r));
 }
+function getStoredEmail(): string {
+  return localStorage.getItem('reveal_email') || '';
+}
+function saveStoredEmail(email: string) {
+  localStorage.setItem('reveal_email', email);
+}
 
 // Custom selects
 const csValues: Record<string,string> = { tier: 'GA' };
@@ -511,6 +517,7 @@ unlockBtn.addEventListener('click', async () => {
       if (_tsId !== null && _tsId !== undefined && (window as any).turnstile) (window as any).turnstile.reset(_tsId);
     } else {
       saveRevealed(data.contacts || {});
+      saveStoredEmail(email);
       closeUnlockModal();
       unlockBanner.classList.add('hidden');
       render();
@@ -691,7 +698,25 @@ function ago(d:string) {
   return `${Math.floor(h/24)}d ago`;
 }
 
-load();
+// On load, silently re-fetch contacts if previously unlocked (picks up new listings)
+async function autoRefreshContacts() {
+  const email = getStoredEmail();
+  if (!email) return;
+  try {
+    const res = await fetch('/api/reveal', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      saveRevealed(data.contacts || {});
+      render();
+    }
+  } catch {}
+}
+
+load().then(() => autoRefreshContacts());
 </script>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
