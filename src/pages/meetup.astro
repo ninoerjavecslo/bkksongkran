@@ -1013,6 +1013,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const ni = document.getElementById('note-' + pid); if (ni) ni.focus(); } });
   });
+  document.querySelectorAll('.contact-input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const v = inp.value;
+      if (v && !v.startsWith('@') && !/^[\d+]/.test(v)) {
+        const pos = inp.selectionStart;
+        inp.value = '@' + v;
+        inp.setSelectionRange(pos + 1, pos + 1);
+      }
+    });
+  });
   document.querySelectorAll('.note-input').forEach(inp => {
     const pid = inp.id.replace('note-', '');
     inp.addEventListener('input', () => {
