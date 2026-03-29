@@ -178,7 +178,7 @@ function initMap() {
 
   places.forEach(p => {
     const el = makeMarkerEl(p.category);
-    const m = new mapboxgl.Marker({ element: el })
+    const m = new mapboxgl.Marker({ element: el, anchor: 'center' })
       .setLngLat([p.lng, p.lat])
       .addTo(map);
     el.addEventListener('click', () => showPopup(p));
