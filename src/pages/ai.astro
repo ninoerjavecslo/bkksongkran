@@ -20,8 +20,8 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 
         <!-- Avatar -->
         <div class="relative flex-shrink-0">
-          <div class="w-32 h-32 rounded-full flex items-center justify-center relative" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 0 40px rgba(64,206,243,0.4);">
-            <span class="material-symbols-outlined text-white" style="font-size:40px;font-variation-settings:'FILL' 1;">water_drop</span>
+          <div class="w-16 h-16 md:w-32 md:h-32 rounded-full flex items-center justify-center relative" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 0 40px rgba(64,206,243,0.4);">
+            <span class="material-symbols-outlined text-white" style="font-size:clamp(20px,4vw,40px);font-variation-settings:'FILL' 1;">water_drop</span>
             <div class="absolute inset-0 rounded-full" style="background:linear-gradient(135deg,#006479,#40cef3);opacity:0.3;animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
           </div>
           <div class="absolute -bottom-2 -right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-lg" style="background:#fff;border:1px solid rgba(192,232,255,0.6);">
@@ -41,7 +41,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
 
       <!-- CHAT -->
-      <div class="lg:col-span-8 flex flex-col" style="height:680px;">
+      <div class="lg:col-span-8 flex flex-col" style="height:clamp(520px,80vh,680px);">
         <div class="card flex flex-col h-full overflow-hidden">
 
           <!-- Chat header -->

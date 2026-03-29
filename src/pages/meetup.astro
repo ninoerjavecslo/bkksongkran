@@ -59,33 +59,29 @@ const partiesJson = JSON.stringify(parties);
   </section>
 
   <!-- STICKY TABS BAR -->
-  <div class="sticky top-20 z-30 px-6" style="background:transparent;border-bottom:1px solid rgba(192,232,255,0.3);">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
-      <!-- Day tabs -->
-      <div class="flex overflow-x-auto no-scrollbar">
-        {days.map((day, i) => (
-          <button
-            data-day={day.id}
-            onclick={`switchDay('${day.id}')`}
-            class={`day-tab flex-shrink-0 px-5 py-3 rounded-xl text-sm font-bold transition-all ${i === 0 ? 'active-day' : ''}`}
-          >
-            <div class="day-tab-label">{day.label}</div>
-            <div class="day-tab-sub text-[9px] font-medium mt-0.5 opacity-70">{day.sub}</div>
-          </button>
-        ))}
-      </div>
-      <!-- Add event button -->
-      <button onclick="openAddEvent()" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
-        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">add</span>
-        Add event
-      </button>
-    </div>
-  </div>
-
-  <!-- FILTER BAR -->
-  <div class="px-6 pt-3 pb-2" style="background:transparent;">
+  <div class="sticky top-20 z-30 px-6" style="background:rgba(240,249,255,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(192,232,255,0.3);">
     <div class="max-w-7xl mx-auto">
-      <div id="filter-bar" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+      <!-- Row 1: Day tabs + Add event button -->
+      <div class="flex items-center justify-between gap-3 pt-1">
+        <div class="flex overflow-x-auto no-scrollbar">
+          {days.map((day, i) => (
+            <button
+              data-day={day.id}
+              onclick={`switchDay('${day.id}')`}
+              class={`day-tab flex-shrink-0 px-5 py-3 rounded-xl text-sm font-bold transition-all ${i === 0 ? 'active-day' : ''}`}
+            >
+              <div class="day-tab-label">{day.label}</div>
+              <div class="day-tab-sub text-[9px] font-medium mt-0.5 opacity-70">{day.sub}</div>
+            </button>
+          ))}
+        </div>
+        <button onclick="openAddEvent()" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">add</span>
+          Add event
+        </button>
+      </div>
+      <!-- Row 2: Filters -->
+      <div id="filter-bar" class="flex gap-2 overflow-x-auto no-scrollbar py-2">
         <button data-filter="all" onclick="filterEvents('all')" class="filter-btn active-filter flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all">All</button>
         <button data-filter="festival" onclick="filterEvents('festival')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Festival</button>
         <button data-filter="circuit" onclick="filterEvents('circuit')" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all" style="background:rgba(0,0,0,0.04);color:#003345;">Circuit</button>
@@ -910,7 +906,7 @@ window.closeAddEvent = function() {
   const dayInput = document.getElementById('custom-event-day'); if (dayInput) dayInput.value = 'apr11';
   const dayLabel = document.querySelector('#day-select-wrap [id$="-select-label"]'); if (dayLabel) dayLabel.textContent = 'April 11 — Friday';
   const gdprEl = document.getElementById('custom-event-gdpr'); if (gdprEl) gdprEl.checked = false;
-  if (window.turnstile && meetupTurnstileId !== null) window.turnstile.reset(meetupTurnstileId);
+  if (window.turnstile && window.__meetupTurnstileId !== null) window.turnstile.reset(window.__meetupTurnstileId);
   document.getElementById('custom-event-error').classList.add('hidden');
 };
 window.submitCustomEvent = async function() {
@@ -945,7 +941,7 @@ window.submitCustomEvent = async function() {
 
   if (sessionSubmits >= MAX_SUBMITS) { errEl.textContent = 'You\'ve reached the maximum of 3 sign-ups per session.'; errEl.classList.remove('hidden'); return; }
 
-  const turnstileToken = (window.turnstile && meetupTurnstileId !== null) ? window.turnstile.getResponse(meetupTurnstileId) : '';
+  const turnstileToken = (window.turnstile && window.__meetupTurnstileId !== null) ? window.turnstile.getResponse(window.__meetupTurnstileId) : '';
   if (!turnstileToken) { errEl.textContent = 'Please complete the security check.'; errEl.classList.remove('hidden'); return; }
 
   subBtn.disabled = true; subBtn.style.opacity = '0.6';
@@ -1046,12 +1042,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script>
-let meetupTurnstileId = null;
+window.__meetupTurnstileId = null;
 window.openAddEvent = (function(orig) {
   return function() {
     orig();
-    if (window.turnstile && meetupTurnstileId === null) {
-      meetupTurnstileId = window.turnstile.render('#turnstile-meetup', {
+    if (window.turnstile && window.__meetupTurnstileId === null) {
+      window.__meetupTurnstileId = window.turnstile.render('#turnstile-meetup', {
         sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
         'refresh-expired': 'auto',
       });
