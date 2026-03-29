@@ -21,11 +21,24 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
         BKK<br/>
         <span style="background:linear-gradient(135deg,#b4005d,#ff8eb2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GUIDE</span>
       </h1>
-      <p class="text-lg max-w-2xl" style="color:#326177;">
-        Community-curated Bangkok guide. Gay bars, clubs, saunas, sightseeing, food & more.
-        <span class="font-semibold" style="color:#b4005d;">60,000+ views</span> on the original map.
+      <p class="text-lg max-w-2xl mb-4" style="color:#326177;">
+        Community-curated Bangkok guide for LGBTQ+ travellers. Gay bars, clubs, saunas, hotels, food, sightseeing and more — all mapped across Silom, Sukhumvit and beyond.
       </p>
-      <div class="flex flex-wrap gap-6 mt-6">
+      <div class="flex flex-wrap gap-3 mb-6">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background:rgba(180,0,93,0.08);color:#b4005d;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">place</span>
+          Silom · Sukhumvit · Old City · Riverside
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background:rgba(0,100,121,0.08);color:#006479;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">touch_app</span>
+          Tap any card to see it on the map
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background:rgba(0,100,121,0.08);color:#006479;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">filter_list</span>
+          Filter by category above
+        </span>
+      </div>
+      <div class="flex flex-wrap gap-6 mt-2">
         {guideCategories.map(c => (
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-base" style={`color:${c.color};font-variation-settings:'FILL' 1;`}>{c.icon}</span>

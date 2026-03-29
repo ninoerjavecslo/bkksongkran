@@ -3,322 +3,125 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 import { waterFightZones } from '../data/index';
 
 const intensityConfig = {
-  insane: { label: 'INSANE', color: '#FF3B30', icon: 'whatshot' },
-  high:   { label: 'HIGH',   color: '#FF9F0A', icon: 'local_fire_department' },
-  medium: { label: 'CHILL',  color: '#34C759', icon: 'spa' },
+  insane: { label: 'INSANE', color: '#FF3B30', bg: '#FFE8E8', icon: 'whatshot' },
+  high:   { label: 'HIGH',   color: '#FF9F0A', bg: '#FFF8E0', icon: 'local_fire_department' },
+  medium: { label: 'CHILL',  color: '#34C759', bg: '#E8FFF0', icon: 'spa' },
 };
-
-const festivalMarkers = [
-  { id: 's2o',      name: 'S2O Festival',    dates: 'Apr 11–13', venue: 'S2O Land, Ratchada', lat: 13.7671, lng: 100.5648, color: '#40cef3', price: '฿1,800+' },
-  { id: 'siam',     name: 'Siam Songkran',   dates: 'Apr 11–14', venue: 'Bravo BKK Arena, RCA', lat: 13.7447, lng: 100.5672, color: '#ff8eb2', price: '฿1,500+' },
-  { id: 'gcircuit', name: 'GCircuit 20th',   dates: 'Apr 10–13', venue: 'UOB Live Hall, Emsphere', lat: 13.7270, lng: 100.5697, color: '#b4005d', price: '฿2,800+' },
-];
-
-const zonesJson     = JSON.stringify(waterFightZones.map(z => ({
-  id: z.id, name: z.name, lat: z.lat, lng: z.lng,
-  crowd: z.crowd, area: z.area, desc: z.desc, bestTime: z.bestTime,
-})));
-const festivalsJson = JSON.stringify(festivalMarkers);
-const mapboxToken   = import.meta.env.PUBLIC_MAPBOX_TOKEN;
 ---
 
-<BaseLayout title="Bangkok Songkran 2026 Map — Festival Venues & Water Fight Zones" description="Interactive map of Songkran 2026 Bangkok. Festival venues, water fight zones, and the ultimate BKK guide map." canonical="https://bkksongkran.com/map">
+<BaseLayout title="Live Songkran Crowd Map Bangkok 2026 — Real-Time Heat Map" description="Real-time crowd levels at every Songkran zone in Bangkok. See where the action is, report what you see, and find the best spots." canonical="https://bkksongkran.com/map">
 
   <!-- HEADER -->
-  <section class="pt-36 pb-10 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+  <section class="pt-36 pb-12 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
     <div class="max-w-7xl mx-auto">
-      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Interactive Maps</div>
-      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.9;">
-        BANGKOK<br/>
-        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">MAP GUIDE</span>
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Live Tools</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.95;">
+        LIVE<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">HEAT MAP</span>
       </h1>
-      <p class="text-lg max-w-2xl" style="color:#326177;">Festival venues, water fight zones, and a full Bangkok guide — all in one place.</p>
+      <p class="text-lg max-w-xl" style="color:#326177;">Real-time crowd data from people at the festival. See where the action is — and where it's too much.</p>
     </div>
   </section>
 
-  <!-- TABS -->
-  <section class="px-6 pb-2 sticky top-20 z-30" style="background:rgba(238,248,255,0.95);backdrop-filter:blur(12px);">
+  <!-- COMING SOON BANNER -->
+  <section class="px-6 pb-12">
     <div class="max-w-7xl mx-auto">
-      <div class="flex gap-2 border-b" style="border-color:rgba(192,232,255,0.5);">
-        <button id="tab-festival" onclick="switchTab('festival')" class="tab-btn active-tab px-5 py-3 text-sm font-bold transition-all">
-          <span class="material-symbols-outlined text-base align-middle mr-1" style="font-variation-settings:'FILL' 1;">festival</span>
-          Festival Map
-        </button>
-        <button id="tab-bkk" onclick="switchTab('bkk')" class="tab-btn px-5 py-3 text-sm font-bold transition-all" style="color:#6b8fa3;">
-          <span class="material-symbols-outlined text-base align-middle mr-1" style="font-variation-settings:'FILL' 1;">explore</span>
-          BKK Guide Map
-        </button>
+      <div class="rounded-3xl p-8 md:p-12 text-center relative overflow-hidden" style="background:linear-gradient(135deg,#006479,#00899e,#40cef3);">
+        <div class="absolute inset-0 opacity-10" style="background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,0.05) 10px,rgba(255,255,255,0.05) 20px);"></div>
+        <div class="relative">
+          <span class="material-symbols-outlined text-5xl text-white/60 mb-4 block" style="font-variation-settings:'FILL' 1;">map</span>
+          <h2 class="font-headline font-extrabold text-3xl md:text-4xl text-white mb-3">Coming Soon</h2>
+          <p class="text-white/70 text-base max-w-lg mx-auto mb-6">The live heat map goes online when Songkran starts. Real-time crowd reports, zone tracking, and live updates from people at the festival.</p>
+          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">calendar_today</span>
+            Live from April 10, 2026
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ TAB: FESTIVAL MAP ═══ -->
-  <div id="panel-festival">
-    <section class="px-6 pt-6 pb-4">
-      <div class="max-w-7xl mx-auto">
-        <!-- Legend -->
-        <div class="flex flex-wrap gap-3 mb-4">
-          <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:#40cef320;color:#006479;">
-            <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:#40cef3;"></span> Festival Venue
-          </span>
-          <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:#FF3B3015;color:#FF3B30;">
-            <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">whatshot</span> Insane Zone
-          </span>
-          <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:#FF9F0A15;color:#FF9F0A;">
-            <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">local_fire_department</span> High Zone
-          </span>
-          <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:#34C75915;color:#34C759;">
-            <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">spa</span> Chill Zone
-          </span>
+  <!-- WATER FIGHT ZONES -->
+  <section class="px-6 pb-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FF3B3015;">
+          <span class="material-symbols-outlined text-xl" style="color:#FF3B30;font-variation-settings:'FILL' 1;">water_drop</span>
         </div>
-
-        <!-- Map -->
-        <div id="festival-map" class="rounded-2xl overflow-hidden" style="height:520px;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);"></div>
-
-        <!-- Info card shown on marker click -->
-        <div id="map-popup" class="hidden mt-4 rounded-2xl p-5" style="background:white;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 24px rgba(0,100,121,0.1);">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h3 id="popup-name" class="font-headline font-extrabold text-lg" style="color:#003345;"></h3>
-              <p id="popup-sub" class="text-xs font-semibold mt-0.5" style="color:#6b8fa3;"></p>
-            </div>
-            <span id="popup-badge" class="flex-shrink-0 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full"></span>
-          </div>
-          <p id="popup-desc" class="text-sm mt-3" style="color:#326177;"></p>
-          <div id="popup-extra" class="flex gap-4 mt-3 text-xs font-semibold" style="color:#6b8fa3;"></div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">Water Fight Zones</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Where the action happens. These zones will be tracked live during the festival.</p>
         </div>
       </div>
-    </section>
+      <p class="text-sm mb-10 max-w-2xl" style="color:#326177;">All free, no tickets needed. From full-on chaos to chill family-friendly zones — pick your intensity level.</p>
 
-    <!-- ZONE LIST -->
-    <section class="px-6 pb-20">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="font-headline font-extrabold text-2xl mb-6" style="color:#003345;">Water Fight Zones</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {waterFightZones.map(zone => {
-            const intensity = intensityConfig[zone.intensity as keyof typeof intensityConfig];
-            return (
-              <button
-                onclick={`focusZone(${zone.lat}, ${zone.lng}, '${zone.id}')`}
-                class="text-left rounded-2xl p-4 transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer w-full"
-                style="background:white;border:1px solid rgba(192,232,255,0.5);"
-              >
-                <div class="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 class="font-headline font-bold text-base" style="color:#003345;">{zone.name}</h3>
-                    <p class="text-xs mt-0.5" style="color:#6b8fa3;">{zone.area} · Best: {zone.bestTime}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {waterFightZones.map(zone => {
+          const intensity = intensityConfig[zone.intensity as keyof typeof intensityConfig];
+          return (
+            <div class="rounded-2xl overflow-hidden transition-all hover:shadow-lg" style={`border:1px solid ${zone.color}25;background:white;`}>
+              <div class="p-5 flex items-start justify-between gap-3" style={`background:${zone.color}08;`}>
+                <div>
+                  <h3 class="font-headline font-extrabold text-lg" style="color:#003345;">{zone.name}</h3>
+                  <div class="flex flex-wrap items-center gap-3 mt-1.5">
+                    <span class="flex items-center gap-1 text-xs font-semibold" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs">calendar_today</span> {zone.dates}
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-semibold" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs">schedule</span> {zone.hours}
+                    </span>
                   </div>
-                  <span class="flex-shrink-0 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full"
-                    style={`background:${intensity.color}15;color:${intensity.color};`}>
-                    <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{intensity.icon}</span>
-                    {intensity.label}
-                  </span>
                 </div>
-                <p class="text-xs mt-2 line-clamp-2" style="color:#326177;">{zone.vibe || zone.desc}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ═══ TAB: BKK GUIDE ═══ -->
-  <div id="panel-bkk" class="hidden">
-    <section class="px-6 pt-6 pb-20">
-      <div class="max-w-7xl mx-auto">
-        <div class="rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8" style="background:linear-gradient(135deg,#1a0030,#b4005d,#ff8eb2);">
-          <div class="flex-1 text-center md:text-left">
-            <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:rgba(255,255,255,0.7);">Community Guide</div>
-            <h2 class="font-headline font-extrabold text-3xl md:text-4xl text-white mb-3">BKK Guide</h2>
-            <p class="text-white/80 text-base max-w-lg mb-6">Gay bars, clubs, saunas, sightseeing, food, hotels & more. 80+ places across Bangkok with tips from the community.</p>
-            <div class="flex flex-wrap gap-3 justify-center md:justify-start mb-6">
-              {[
-                { label: 'Gay Bars & Clubs', icon: 'nightlife' },
-                { label: 'Saunas',           icon: 'hot_tub' },
-                { label: 'Food & Shopping',  icon: 'restaurant' },
-                { label: 'Sightseeing',      icon: 'photo_camera' },
-                { label: 'Hotels',           icon: 'hotel' },
-              ].map(c => (
-                <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.15);color:white;">
-                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
-                  {c.label}
+                <span class="flex-shrink-0 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full" style={`background:${intensity.bg};color:${intensity.color};`}>
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{intensity.icon}</span>
+                  {intensity.label}
                 </span>
-              ))}
+              </div>
+
+              <div class="p-5 space-y-4">
+                <p class="text-sm" style="color:#326177;">{zone.vibe}</p>
+
+                <div class="flex items-start gap-2.5 p-3 rounded-xl" style="background:rgba(238,248,255,0.6);border:1px solid rgba(192,232,255,0.3);">
+                  <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style="color:#006479;font-variation-settings:'FILL' 1;">directions_transit</span>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider block mb-0.5" style="color:#006479;">How to get there</span>
+                    <p class="text-xs font-medium" style="color:#326177;">{zone.howToGet}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-2.5 p-3 rounded-xl" style={`background:${zone.color}06;border:1px solid ${zone.color}15;`}>
+                  <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style={`color:${zone.color};font-variation-settings:'FILL' 1;`}>tips_and_updates</span>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider block mb-0.5" style={`color:${zone.color};`}>Pro Tip</span>
+                    <p class="text-xs" style="color:#326177;">{zone.tip}</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <a href="/bkk-guide" class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105" style="background:white;color:#b4005d;">
-              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">map</span>
-              Open BKK Guide
-              <span class="material-symbols-outlined text-base">arrow_forward</span>
-            </a>
-          </div>
-          <div class="text-7xl">🗺️</div>
-        </div>
+          );
+        })}
       </div>
-    </section>
-  </div>
+
+      <!-- Info cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+        {[
+          {icon:'water_drop',   title:'Water Refill Stations', desc:'Free refill points at every water fight zone. Stay hydrated — Bangkok heat is no joke.',     color:'#006479'},
+          {icon:'medical_services', title:'Safety Hubs',       desc:'First aid at every major water zone. Look for the green tent.',                               color:'#34C759'},
+          {icon:'directions_transit', title:'BTS/MRT Only',    desc:'Forget taxis. Extended hours during Songkran week.',                                           color:'#FF9F0A'},
+          {icon:'smartphone',   title:'Offline First',         desc:'Save maps & this page offline. Data dies in crowds.',                                          color:'#b4005d'},
+        ].map(t => (
+          <div class="flex gap-4 p-4 rounded-xl" style="background:rgba(255,255,255,0.7);border:1px solid rgba(192,232,255,0.5);">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${t.color}15;`}>
+              <span class="material-symbols-outlined text-base" style={`color:${t.color};font-variation-settings:'FILL' 1;`}>{t.icon}</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm mb-0.5" style="color:#003345;">{t.title}</h4>
+              <p class="text-xs" style="color:#326177;">{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
 </BaseLayout>
-
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
-
-<style>
-  .tab-btn { border-bottom: 2px solid transparent; }
-  .active-tab { border-bottom-color: #006479 !important; color: #006479 !important; }
-  .mapboxgl-popup-content { border-radius: 12px !important; padding: 12px 14px !important; box-shadow: 0 4px 24px rgba(0,100,121,0.15) !important; font-family: 'Be Vietnam Pro', sans-serif; }
-  .map-pin { display:flex;align-items:center;justify-content:center;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.2);font-size:15px;cursor:pointer;transition:transform .15s; }
-  .map-pin:hover { transform:scale(1.18); }
-  .map-pin-wrap { filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3)); cursor:pointer; }
-</style>
-
-<script define:vars={{ zonesJson, festivalsJson, mapboxToken }}>
-const zones    = JSON.parse(zonesJson);
-const festivals = JSON.parse(festivalsJson);
-
-const CROWD = {
-  insane: { color: '#FF3B30', label: 'INSANE' },
-  high:   { color: '#FF9F0A', label: 'HIGH' },
-  medium: { color: '#34C759', label: 'CHILL' },
-};
-
-let map = null, activePopup = null;
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-function makePin(iconName, color) {
-  const wrap = document.createElement('div');
-  wrap.className = 'map-pin-wrap';
-  wrap.style.cssText = 'width:36px;height:44px;cursor:pointer;position:relative;will-change:auto;';
-
-  const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('width', '36'); svg.setAttribute('height', '44'); svg.setAttribute('viewBox', '0 0 36 44');
-  svg.style.cssText = 'display:block;pointer-events:none;';
-
-  const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('d', 'M18 0C8.06 0 0 8.06 0 18c0 13.5 18 26 18 26s18-12.5 18-26C36 8.06 27.94 0 18 0z');
-  path.setAttribute('fill', color);
-
-  const circle = document.createElementNS(SVG_NS, 'circle');
-  circle.setAttribute('cx', '18'); circle.setAttribute('cy', '17'); circle.setAttribute('r', '10');
-  circle.setAttribute('fill', 'rgba(255,255,255,0.22)');
-
-  svg.appendChild(path);
-  svg.appendChild(circle);
-
-  const iconEl = document.createElement('span');
-  iconEl.className = 'material-symbols-outlined';
-  iconEl.style.cssText = 'position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:15px;color:white;pointer-events:none;user-select:none;line-height:1;';
-  iconEl.style.fontVariationSettings = "'FILL' 1";
-  iconEl.textContent = iconName;
-
-  wrap.appendChild(svg);
-  wrap.appendChild(iconEl);
-  return wrap;
-}
-
-function showCard(data, type) {
-  const popup = document.getElementById('map-popup');
-  const nameEl = document.getElementById('popup-name');
-  const subEl  = document.getElementById('popup-sub');
-  const badge  = document.getElementById('popup-badge');
-  const descEl = document.getElementById('popup-desc');
-  const extra  = document.getElementById('popup-extra');
-
-  popup.classList.remove('hidden');
-  nameEl.textContent = data.name;
-  while (extra.firstChild) extra.removeChild(extra.firstChild);
-
-  if (type === 'zone') {
-    const c = CROWD[data.crowd] || CROWD.medium;
-    subEl.textContent = data.area;
-    badge.textContent = c.label;
-    badge.style.cssText = `background:${c.color}20;color:${c.color};`;
-    descEl.textContent = data.desc;
-    const t = document.createElement('span');
-    t.textContent = '⏰ Best time: ' + data.bestTime;
-    extra.appendChild(t);
-  } else {
-    subEl.textContent = data.venue;
-    badge.textContent = data.dates;
-    badge.style.cssText = `background:${data.color}20;color:${data.color};`;
-    descEl.textContent = data.venue + ' · ' + data.dates;
-    const ps = document.createElement('span');
-    ps.textContent = '🎟 From ' + data.price;
-    const lk = document.createElement('a');
-    lk.href = '/events#' + data.id;
-    lk.textContent = 'View lineup →';
-    lk.style.cssText = 'color:#006479;text-decoration:underline;';
-    extra.appendChild(ps);
-    extra.appendChild(lk);
-  }
-  if (!map?.isMoving()) popup.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function initMap() {
-  if (map) return;
-  mapboxgl.accessToken = mapboxToken;
-  map = new mapboxgl.Map({
-    container: 'festival-map',
-    style: 'mapbox://styles/ninoerjavec/cmnbmfwyi001m01qt79mi86hx',
-    center: [100.525, 13.745],
-    zoom: 12.5,
-  });
-  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-  zones.forEach(z => {
-    const c = CROWD[z.crowd] || CROWD.medium;
-    const el = makePin('water_drop', c.color);
-    new mapboxgl.Marker({ element: el, anchor: 'bottom' }).setLngLat([z.lng, z.lat]).addTo(map);
-    el.addEventListener('click', (e) => { e.stopPropagation(); showCard(z, 'zone'); });
-  });
-
-  festivals.forEach(f => {
-    const el = makePin('festival', f.color);
-    new mapboxgl.Marker({ element: el, anchor: 'bottom' }).setLngLat([f.lng, f.lat]).addTo(map);
-    el.addEventListener('click', (e) => { e.stopPropagation(); showCard(f, 'festival'); });
-  });
-}
-
-window.focusZone = function(lat, lng, id) {
-  if (!map) { loadMapbox(() => { initMap(); doFocus(lat, lng, id); }); return; }
-  doFocus(lat, lng, id);
-};
-
-function doFocus(lat, lng, id) {
-  const zone = zones.find(z => z.id === id);
-  if (zone) showCard(zone, 'zone');
-}
-
-window.switchTab = function(tab) {
-  const panelFestival = document.getElementById('panel-festival');
-  const panelBkk      = document.getElementById('panel-bkk');
-  const tabFestival   = document.getElementById('tab-festival');
-  const tabBkk        = document.getElementById('tab-bkk');
-
-  if (tab === 'festival') {
-    panelFestival.classList.remove('hidden');
-    panelBkk.classList.add('hidden');
-    tabFestival.classList.add('active-tab');
-    tabFestival.style.color = '#006479';
-    tabBkk.classList.remove('active-tab');
-    tabBkk.style.color = '#6b8fa3';
-    loadMapbox(initMap);
-  } else {
-    panelBkk.classList.remove('hidden');
-    panelFestival.classList.add('hidden');
-    tabBkk.classList.add('active-tab');
-    tabBkk.style.color = '#006479';
-    tabFestival.classList.remove('active-tab');
-    tabFestival.style.color = '#6b8fa3';
-  }
-};
-
-function loadMapbox(cb) {
-  if (window.mapboxgl) { cb(); return; }
-  const s = document.createElement('script');
-  s.src = 'https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js';
-  s.onload = cb;
-  document.head.appendChild(s);
-}
-
-document.addEventListener('DOMContentLoaded', () => loadMapbox(initMap));
-</script>

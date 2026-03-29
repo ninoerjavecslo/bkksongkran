@@ -78,6 +78,19 @@ export const prerender = false;
         <button class="filter-btn" data-filter-fest="Siam Songkran">Siam Songkran</button>
         <button class="filter-btn" data-filter-fest="GCircuit">GCircuit</button>
       </div>
+      <div class="flex gap-2 p-1 rounded-xl" style="background:rgba(255,255,255,0.7);border:1px solid rgba(192,232,255,0.6);">
+        <button class="filter-btn active" data-filter-tier="all">All Tiers</button>
+        <button class="filter-btn" data-filter-tier="GA">GA</button>
+        <button class="filter-btn" data-filter-tier="VIP">VIP</button>
+      </div>
+      <div class="flex gap-2 p-1 rounded-xl" style="background:rgba(255,255,255,0.7);border:1px solid rgba(192,232,255,0.6);">
+        <button class="filter-btn active" data-filter-day="all">All Days</button>
+        <button class="filter-btn" data-filter-day="Apr 10">Apr 10</button>
+        <button class="filter-btn" data-filter-day="Apr 11">Apr 11</button>
+        <button class="filter-btn" data-filter-day="Apr 12">Apr 12</button>
+        <button class="filter-btn" data-filter-day="Apr 13">Apr 13</button>
+        <button class="filter-btn" data-filter-day="Apr 14">Apr 14</button>
+      </div>
       <div class="ml-auto text-sm font-semibold" style="color:#326177;" id="listing-count"></div>
     </div>
   </section>
@@ -239,7 +252,7 @@ export const prerender = false;
               <label class="form-label">Tickets <span class="req">*</span></label>
               <input type="number" name="quantity" min="1" max="10" value="1" class="form-input" />
             </div>
-            <div>
+            <div id="price-field">
               <label class="form-label">Price per ticket (฿) <span class="req">*</span></label>
               <input type="number" name="price" min="0" step="100" placeholder="e.g. 2000" class="form-input" />
             </div>
@@ -341,7 +354,7 @@ const FC: Record<string,{c:string;d:string}> = {
 const CI: Record<string,string> = { telegram:'send', line:'chat', whatsapp:'call', instagram:'photo_camera' };
 
 let tickets: any[] = [];
-let fType = 'all', fFest = 'all';
+let fType = 'all', fFest = 'all', fTier = 'all', fDay = 'all';
 
 function getRevealed(): Record<string,{contact:string;contact_type:string}> {
   try { return JSON.parse(localStorage.getItem('revealed_tickets') || '{}'); } catch { return {}; }
@@ -401,6 +414,20 @@ document.querySelectorAll('[data-filter-fest]').forEach(btn => {
     render();
   });
 });
+document.querySelectorAll('[data-filter-tier]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    fTier = btn.getAttribute('data-filter-tier')!;
+    document.querySelectorAll('[data-filter-tier]').forEach(b => b.classList.toggle('active', b === btn));
+    render();
+  });
+});
+document.querySelectorAll('[data-filter-day]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    fDay = btn.getAttribute('data-filter-day')!;
+    document.querySelectorAll('[data-filter-day]').forEach(b => b.classList.toggle('active', b === btn));
+    render();
+  });
+});
 
 // Form toggle
 const postSection = document.getElementById('post-modal')!;
@@ -426,6 +453,17 @@ function closeFormView() {
 }
 document.getElementById('btn-open-form')!.addEventListener('click', openForm);
 document.getElementById('close-form-btn')!.addEventListener('click', closeFormView);
+
+// Hide price field for buying listings
+const priceField = document.getElementById('price-field')!;
+document.querySelectorAll('input[name="type"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const isBuying = (document.querySelector('input[name="type"]:checked') as HTMLInputElement)?.value === 'buying';
+    priceField.style.display = isBuying ? 'none' : '';
+    const priceInput = priceField.querySelector('input') as HTMLInputElement;
+    priceInput.required = !isBuying;
+  });
+});
 
 // Unlock modal
 function openUnlockModal() {
@@ -550,7 +588,8 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
   const errors: string[] = [];
   if (!fd.festival) { errors.push('Select a festival'); document.querySelector('[data-cs-name="festival"] .cs-trigger')?.classList.add('error'); }
   if (!fd.dates) { errors.push('Select a date'); document.querySelector('[data-cs-name="dates"] .cs-trigger')?.classList.add('error'); }
-  if (!fd.price || Number(fd.price) <= 0) { errors.push('Enter a price'); form.querySelector('[name="price"]')?.classList.add('error'); }
+  const isBuyingSubmit = (form.querySelector('input[name="type"]:checked') as HTMLInputElement)?.value === 'buying';
+  if (!isBuyingSubmit && (!fd.price || Number(fd.price) <= 0)) { errors.push('Enter a price'); form.querySelector('[name="price"]')?.classList.add('error'); }
   if (!fd.contact) { errors.push('Enter contact info'); form.querySelector('[name="contact"]')?.classList.add('error'); }
   if (!fd.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fd.email as string)) { errors.push('Enter a valid email'); form.querySelector('[name="email"]')?.classList.add('error'); }
   if (!fd.gdpr) errors.push('Accept the data visibility agreement');
@@ -588,7 +627,7 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
     closeFormView();
     await load();
 
-    const deleteLink = `${location.origin}/api/tickets?id=${encodeURIComponent(data.id)}&token=${encodeURIComponent(data.deleteToken)}`;
+    const deleteLink = `${location.origin}/delete-ticket?id=${encodeURIComponent(data.id)}&token=${encodeURIComponent(data.deleteToken)}`;
     document.getElementById('delete-link-display')!.textContent = deleteLink;
     document.getElementById('success-modal')!.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -620,6 +659,8 @@ function render() {
   let list = tickets;
   if (fType !== 'all') list = list.filter((t:any) => t.type === fType);
   if (fFest !== 'all') list = list.filter((t:any) => t.festival === fFest);
+  if (fTier !== 'all') list = list.filter((t:any) => t.tier === fTier);
+  if (fDay !== 'all') list = list.filter((t:any) => Array.isArray(t.dates) ? t.dates.some((d:string) => d.startsWith(fDay)) : (t.dates||'').includes(fDay));
 
   document.getElementById('listing-count')!.textContent = `${list.length} listing${list.length!==1?'s':''}`;
   grid.replaceChildren();

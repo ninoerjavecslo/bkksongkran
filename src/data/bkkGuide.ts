@@ -85,9 +85,9 @@ export const guidePlaces: GuidePlace[] = [
   { id: 'connections',        name: 'Connections',              category: 'gay-bars',    area: 'Silom',       lat: 13.7284886, lng: 100.5328373 },
 
   // ── Gay Clubs ────────────────────────────────────────────────────────────
-  { id: 'dj-station',         name: 'DJ Station',               category: 'gay-clubs',   area: 'Silom',       lat: 13.7291224, lng: 100.5354288, tip: 'Bangkok\'s most famous gay club. Drag shows 11pm & 1am. Cover ฿200–350.' },
+  { id: 'dj-station',         name: 'DJ Station',               category: 'gay-clubs',   area: 'Silom',       lat: 13.7291224, lng: 100.5354288, tip: 'Bangkok\'s most famous gay club. Drag shows 11pm & 1am. Cover ฿400+.' },
   { id: 'beef',               name: 'BEEF',                     category: 'gay-clubs',   area: 'Silom',       lat: 13.7293044, lng: 100.5357035, tip: 'Bear-friendly club on Soi 2.' },
-  { id: 'god-club',           name: 'GOD',                      category: 'gay-clubs',   area: 'Silom',       lat: 13.7290841, lng: 100.5345701, tip: 'Good Ol Days. Mixed crowd, fun atmosphere.' },
+  { id: 'god-club',           name: 'GOD',                      category: 'gay-clubs',   area: 'Silom',       lat: 13.7290841, lng: 100.5345701, tip: 'Good Ol Days. Very busy, shirtless crowd, high energy.' },
   { id: 'backdoor-bkk',       name: 'Backdoor BKK',             category: 'gay-clubs',   area: 'Silom',       lat: 13.7290369, lng: 100.5344763 },
   { id: 'house-of-heals',     name: 'House of HEALS',           category: 'gay-clubs',   area: 'Silom',       lat: 13.7427887, lng: 100.5416439 },
 

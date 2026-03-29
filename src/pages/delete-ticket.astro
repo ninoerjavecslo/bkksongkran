@@ -1,0 +1,65 @@
+---
+export const prerender = false;
+import BaseLayout from '../components/layout/BaseLayout.astro';
+
+const id    = Astro.url.searchParams.get('id') || '';
+const token = Astro.url.searchParams.get('token') || '';
+
+let status: 'success' | 'error' | 'missing' = 'missing';
+let errorMsg = '';
+
+if (id && token) {
+  try {
+    const res = await fetch(`${Astro.url.origin}/api/tickets?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`, {
+      method: 'DELETE',
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      status = 'success';
+    } else {
+      status = 'error';
+      errorMsg = data.error || 'Something went wrong.';
+    }
+  } catch (e) {
+    status = 'error';
+    errorMsg = 'Network error — please try again.';
+  }
+}
+---
+
+<BaseLayout title="Delete Ticket Listing — Bangkok Songkran 2026" noindex={true}>
+  <section class="min-h-screen flex items-center justify-center px-6 pt-28 pb-20">
+    <div class="max-w-md w-full text-center">
+      {status === 'success' && (
+        <div class="card p-10 space-y-4">
+          <span class="material-symbols-outlined text-5xl" style="color:#34C759;font-variation-settings:'FILL' 1;">check_circle</span>
+          <h1 class="font-headline font-bold text-2xl" style="color:#003345;">Listing Deleted</h1>
+          <p class="text-sm" style="color:#326177;">Your ticket listing has been removed successfully.</p>
+          <a href="/tickets" class="inline-flex items-center gap-2 mt-2 px-6 py-3 rounded-xl text-sm font-bold text-white" style="background:linear-gradient(135deg,#006479,#40cef3);">
+            Back to Tickets
+          </a>
+        </div>
+      )}
+      {status === 'error' && (
+        <div class="card p-10 space-y-4">
+          <span class="material-symbols-outlined text-5xl" style="color:#ef4444;font-variation-settings:'FILL' 1;">error</span>
+          <h1 class="font-headline font-bold text-2xl" style="color:#003345;">Couldn't Delete</h1>
+          <p class="text-sm" style="color:#326177;">{errorMsg}</p>
+          <a href="/tickets" class="inline-flex items-center gap-2 mt-2 px-6 py-3 rounded-xl text-sm font-bold text-white" style="background:linear-gradient(135deg,#006479,#40cef3);">
+            Back to Tickets
+          </a>
+        </div>
+      )}
+      {status === 'missing' && (
+        <div class="card p-10 space-y-4">
+          <span class="material-symbols-outlined text-5xl" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">link_off</span>
+          <h1 class="font-headline font-bold text-2xl" style="color:#003345;">Invalid Link</h1>
+          <p class="text-sm" style="color:#326177;">This delete link is missing required parameters. Make sure you copied the full link.</p>
+          <a href="/tickets" class="inline-flex items-center gap-2 mt-2 px-6 py-3 rounded-xl text-sm font-bold text-white" style="background:linear-gradient(135deg,#006479,#40cef3);">
+            Back to Tickets
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
