@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import FestivalSchedule from '../components/organisms/FestivalSchedule.astro';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 import { festivals, additionalEvents, waterFightZones } from '../data/index';
 
 const ticketedEvents = additionalEvents.filter(e => e.type === 'festival');
@@ -102,6 +103,7 @@ const eventSchema = {
   <!-- HEADER -->
   <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
     <div class="max-w-7xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Events" }]} />
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#b4005d;">Festival Calendar</div>
       <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
         ALL THE<br/>

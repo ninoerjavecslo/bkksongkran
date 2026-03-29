@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 ---
 
 <BaseLayout title="Disclaimer — BKK Songkran" description="Disclaimer for BKK Songkran.com. We are an independent guide, not affiliated with any Songkran festival organiser." canonical="https://bkksongkran.com/disclaimer">
@@ -7,6 +8,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
   <section class="pt-36 pb-24 px-6">
     <div class="max-w-3xl mx-auto">
 
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Disclaimer" }]} />
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Legal</div>
       <h1 class="font-headline font-extrabold tracking-tighter mb-2" style="font-size:clamp(2.5rem,6vw,4rem);color:#003345;line-height:0.95;">Disclaimer</h1>
       <p class="text-sm mb-12" style="color:#6b8fa3;">Last updated: March 2026</p>

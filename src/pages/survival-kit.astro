@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import ChecklistItem from '../components/molecules/ChecklistItem.astro';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 import { checklist } from '../data/index';
 
 const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
@@ -11,6 +12,7 @@ const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
   <!-- HEADER -->
   <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
     <div class="max-w-7xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Survival Kit" }]} />
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#964300;">Packing Checklist</div>
       <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
         SURVIVAL<br/>

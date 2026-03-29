@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 ---
 
 <BaseLayout title="AI Songkran Guide — Ask Nong About Bangkok 2026" description="Ask our AI guide anything about Songkran 2026. Get personalized day plans, festival comparisons, LGBTQ+ spots, and real-time tips." canonical="https://bkksongkran.com/ai">
@@ -9,6 +10,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
     <div class="max-w-7xl mx-auto">
       <div class="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8">
         <div class="flex-1">
+          <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "AI Guide" }]} />
           <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#b4005d;">Live Festival Concierge</div>
           <h1 class="font-headline font-extrabold tracking-tighter mb-3" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.9;">
             Meet<br/><span style="background:linear-gradient(135deg,#b4005d,#ff8eb2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Nong</span>

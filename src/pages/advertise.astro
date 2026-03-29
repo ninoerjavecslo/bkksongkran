@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 ---
 
 <BaseLayout
@@ -11,6 +12,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
   <!-- HEADER -->
   <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.9),rgba(238,248,255,0));">
     <div class="max-w-4xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Advertise" }]} />
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Partner with us</div>
       <h1 class="font-headline font-extrabold tracking-tighter mb-5" style="font-size:clamp(2.8rem,8vw,5.5rem);color:#003345;line-height:0.9;">
         REACH THE<br/>

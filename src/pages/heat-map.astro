@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import { waterFightZones } from '../data/index';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 
 const intensityConfig = {
   insane: { label: 'INSANE', color: '#FF3B30', bg: '#FFE8E8', icon: 'whatshot' },
@@ -14,6 +15,7 @@ const intensityConfig = {
   <!-- HEADER -->
   <section class="pt-36 pb-12 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
     <div class="max-w-7xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Heat Map" }]} />
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Live Tools</div>
       <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.95;">
         LIVE<br/>

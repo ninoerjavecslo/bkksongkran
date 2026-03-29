@@ -75,7 +75,7 @@ In Thailand, it's celebrated by everyone — Buddhists, Muslims, Christians, and
 
 ### The Water Fight Side
 - **Street water battles** — Silom, Khao San, Siam Square become war zones
-- **Music festivals** — S2O, Siam Songkran, GCircuit host world-class DJs
+- **Music festivals** — [S2O](/blog/s2o-festival-2026-lineup), [Siam Songkran](/blog/siam-songkran-2026-lineup), [GCircuit](/blog/gcircuit-songkran-2026-lineup) host world-class DJs
 - **Foam parties** — especially on Khao San Road
 - **Water trucks** — driving through streets spraying crowds
 - **Ice water ambushes** — locals set up stations with barrels of ice water
@@ -133,9 +133,9 @@ While April 13 is the official start, many events begin earlier:
 | Date | What's Happening |
 |------|-----------------|
 | **Apr 9** | ICONSIAM riverside celebrations begin |
-| **Apr 10** | GCircuit Opening Party (Illuminate) |
-| **Apr 11** | S2O Festival Day 1, Siam Songkran Day 1 |
-| **Apr 12** | S2O Day 2, Siam Songkran Day 2, GCircuit Bear Pool Party |
+| **Apr 10** | [GCircuit](/blog/gcircuit-songkran-2026-lineup) Opening Party (Illuminate) |
+| **Apr 11** | [S2O](/blog/s2o-festival-2026-lineup) Day 1, [Siam Songkran](/blog/siam-songkran-2026-lineup) Day 1 |
+| **Apr 12** | [S2O](/blog/s2o-festival-2026-lineup) Day 2, Siam Songkran Day 2, [GCircuit](/blog/gcircuit-songkran-2026-lineup) Bear Pool Party |
 | **Apr 13** | **MAIN DAY** — street water fights everywhere, S2O Day 3, Siam Songkran Day 3 |
 | **Apr 14** | Siam Songkran Day 4 (closing), street parties continue |
 | **Apr 15** | Official final day, Silom winds down |
@@ -224,7 +224,7 @@ Centered around Siam Paragon and MBK, this is where Bangkok's young and trendy c
 
 **Getting there:** BTS Siam
 
-### 4. S2O Festival — The EDM Water Festival
+### 4. [S2O Festival](/blog/s2o-festival-2026-lineup) — The EDM Water Festival
 **Best for:** EDM fans, premium experience
 **Crowd level:** Insane
 **Dates:** April 11–13
@@ -234,7 +234,7 @@ The world's wettest music festival. Massive water cannons sync to the DJ drops. 
 
 **Getting there:** MRT Thailand Cultural Centre
 
-### 5. Siam Songkran — The Melora
+### 5. [Siam Songkran — The Melora](/blog/siam-songkran-2026-lineup)
 **Best for:** Festival-goers who want variety
 **Crowd level:** High
 **Dates:** April 11–14
@@ -244,7 +244,7 @@ Four nights of world-class DJs at Bravo BKK Arena. Slightly more accessible than
 
 **Getting there:** MRT Phetchaburi or Asoke
 
-### 6. GCircuit — Asia's Biggest LGBTQ+ Party
+### 6. [GCircuit](/blog/gcircuit-songkran-2026-lineup) — Asia's Biggest LGBTQ+ Party
 **Best for:** LGBTQ+ travelers, circuit party fans
 **Crowd level:** High
 **Dates:** April 10–13
@@ -315,9 +315,9 @@ Arrive early (6–8am) before the water fights start. Dress respectfully — cov
 
 ### 3. Attend a Music Festival
 2026 has three major festivals running simultaneously:
-- **S2O** (Apr 11–13) — EDM + water cannons, Kygo/Zedd/Alan Walker
-- **Siam Songkran** (Apr 11–14) — Martin Garrix, Marshmello
-- **GCircuit** (Apr 10–13) — LGBTQ+ circuit party
+- **[S2O](/blog/s2o-festival-2026-lineup)** (Apr 11–13) — EDM + water cannons, Kygo/Zedd/Alan Walker
+- **[Siam Songkran](/blog/siam-songkran-2026-lineup)** (Apr 11–14) — Martin Garrix, Marshmello
+- **[GCircuit](/blog/gcircuit-songkran-2026-lineup)** (Apr 10–13) — LGBTQ+ circuit party
 
 ### 4. Experience Rod Nam Dam Hua
 The most meaningful Songkran tradition. Pour scented water (nam ob) over the hands of elders to receive their blessings. If you're staying with a Thai family, you'll likely be invited to participate.
@@ -427,6 +427,8 @@ Songkran is Thailand's deadliest week for road accidents. The government calls i
 - Small dry bag or zip-lock for cash/cards
 - Sunglasses with a strap
 - Optional: waterproof goggles (game-changer at S2O)
+
+See our full [Songkran Survival Kit](/survival-kit) for a complete packing checklist.
     `,
   },
   {
@@ -459,8 +461,8 @@ Songkran is Thailand's deadliest week for road accidents. The government calls i
 
 ## Choose Bangkok If...
 
-- You want **world-class music festivals** (S2O, Siam Songkran)
-- You want the **LGBTQ+ scene** (Silom, GCircuit)
+- You want **world-class music festivals** ([S2O](/blog/s2o-festival-2026-lineup), [Siam Songkran](/blog/siam-songkran-2026-lineup))
+- You want the **LGBTQ+ scene** ([Silom](/blog/silom-road-songkran-guide), [GCircuit](/blog/gcircuit-songkran-2026-lineup))
 - You prefer **urban nightlife** that goes until sunrise
 - You want **variety** — multiple zones with different vibes
 - You're coming with a **group** that wants options
@@ -584,7 +586,7 @@ Day passes and VIP packages with dedicated zones and premium viewing are availab
 
 ## Also Happening During Songkran Week
 
-### Siam Songkran "The Melora" (Apr 11–14)
+### [Siam Songkran "The Melora"](/blog/siam-songkran-2026-lineup) (Apr 11–14)
 Four-night festival at RCA's Bravo BKK Arena. Four headliners on four consecutive nights:
 - **Apr 11:** Afrojack b2b R3HAB
 - **Apr 12:** Marshmello
@@ -593,7 +595,7 @@ Four-night festival at RCA's Bravo BKK Arena. Four headliners on four consecutiv
 
 **Venue:** Bravo BKK Arena, Royal City Avenue · **Nearest station:** MRT Phetchaburi or Asoke
 
-### GCircuit 20th Anniversary "ADRO-MADA" (Apr 10–13)
+### [GCircuit 20th Anniversary "ADRO-MADA"](/blog/gcircuit-songkran-2026-lineup) (Apr 10–13)
 Asia's biggest LGBTQ+ circuit party celebrates 20 years at Emsphere. Four themed nights across UOB Live Hall and Tribe Sky Beach Club rooftop pool:
 - **Apr 10:** Illuminate Opening — Mario Beckman
 - **Apr 11:** Boy Pool Party — Luis Vazquez
@@ -602,7 +604,7 @@ Asia's biggest LGBTQ+ circuit party celebrates 20 years at Emsphere. Four themed
 
 **Venue:** Emsphere, Sukhumvit · **Nearest station:** BTS Phrom Phong
 
-### Silom Soi 2 & 4 — Free Street Party (Apr 13–15)
+### [Silom Soi 2 & 4 — Free Street Party](/blog/silom-road-songkran-guide) (Apr 13–15)
 Bangkok's gay epicenter transforms into an open-air block party. Bars open from noon, completely packed by 2pm. Free entry — the heart of Songkran for the LGBTQ+ community.
     `,
   },
@@ -701,7 +703,7 @@ During Songkran, Grab will surge. Budget accordingly and use the pool option if 
 
 ## Also Happening During Songkran Week
 
-### S2O Songkran Music Festival (Apr 11–13)
+### [S2O Songkran Music Festival](/blog/s2o-festival-2026-lineup) (Apr 11–13)
 Asia's premier water music festival with industrial water cannons and three massive headliners:
 - **Apr 11:** Alan Walker × Steve Aoki (world premiere "Lonely Club")
 - **Apr 12:** Zedd
@@ -709,7 +711,7 @@ Asia's premier water music festival with industrial water cannons and three mass
 
 **Venue:** S2O Land, Ratchada Road · **Nearest station:** MRT Thailand Cultural Centre
 
-### GCircuit 20th Anniversary "ADRO-MADA" (Apr 10–13)
+### [GCircuit 20th Anniversary "ADRO-MADA"](/blog/gcircuit-songkran-2026-lineup) (Apr 10–13)
 Asia's biggest LGBTQ+ circuit party at Emsphere. Four themed nights:
 - **Apr 10:** Illuminate Opening — Mario Beckman
 - **Apr 11:** Boy Pool Party — Luis Vazquez
@@ -833,7 +835,7 @@ Single night tickets and multi-night packages are available on the official GCir
 
 GCircuit runs alongside two of the world's biggest water music festivals:
 
-### S2O Songkran Music Festival (Apr 11–13)
+### [S2O Songkran Music Festival](/blog/s2o-festival-2026-lineup) (Apr 11–13)
 Asia's premier water music festival. Industrial water cannons, massive EDM stage, and three headliners:
 - **Apr 11:** Alan Walker × Steve Aoki (world premiere of "Lonely Club")
 - **Apr 12:** Zedd
@@ -841,7 +843,7 @@ Asia's premier water music festival. Industrial water cannons, massive EDM stage
 
 **Venue:** S2O Land, Ratchada Road · **Nearest station:** MRT Thailand Cultural Centre
 
-### Siam Songkran "The Melora" (Apr 11–14)
+### [Siam Songkran "The Melora"](/blog/siam-songkran-2026-lineup) (Apr 11–14)
 Four-night festival at RCA (Royal City Avenue). Current #1 DJ Martin Garrix headlines on Apr 13:
 - **Apr 11:** Afrojack b2b R3HAB
 - **Apr 12:** Marshmello
@@ -850,7 +852,7 @@ Four-night festival at RCA (Royal City Avenue). Current #1 DJ Martin Garrix head
 
 **Venue:** Bravo BKK Arena, Royal City Avenue · **Nearest station:** MRT Phetchaburi or Asoke
 
-### Silom Soi 2 & 4 — Free LGBTQ+ Street Party (Apr 13–15)
+### [Silom Soi 2 & 4 — Free LGBTQ+ Street Party](/blog/silom-road-songkran-guide) (Apr 13–15)
 Bangkok's gay epicenter transforms into an open-air block party. Bars open from noon, the street floods by 2pm. No ticket needed — this is the free heart of Songkran for the LGBTQ+ community.
     `,
   },
@@ -930,7 +932,7 @@ For the first time in Thai history, **alcohol can be sold from 11am** throughout
 **What to bring:**
 - Waterproof phone pouch — your phone will be submerged multiple times
 - Waterproof sandals or shoes you don't mind ruining (no white sneakers)
-- Cash in a waterproof bag (most street vendors are cash-only)
+- Cash in a waterproof bag (most street vendors are cash-only) — [how much to bring](/blog/songkran-water-and-cash-guide)
 - Light clothes — you will be soaked within 3 minutes of entering
 - Small dry bag for valuables
 
@@ -971,7 +973,7 @@ You'll see this claim all over the internet. It's not accurate — at least not 
 
 **The reality:** Some official city-run water stations offer free refills. But the vast majority of water vendors along Songkran routes — the people with buckets, barrels, and hoses who you buy water from to fight others — **charge money**. Usually ฿20–50 per refill, depending on the zone and how deep you are in the party.
 
-At the big commercial festival zones (Silom, Khaosan Road, Siam Square), expect to pay. Budget accordingly.
+At the big commercial festival zones ([Silom](/blog/silom-road-songkran-guide), Khaosan Road, Siam Square), expect to pay. Budget accordingly.
 
 ---
 
@@ -1032,7 +1034,7 @@ For 5 days of Songkran, budget **฿6,000–12,000 in cash** as a minimum if you
 
 ## Cards at Ticketed Events
 
-The major festival venues (S2O, Siam Songkran, Bravo BKK Arena, UOB Live Hall) have cashless systems — you load credit onto a wristband or use contactless payment at bars inside the venue. This works well and you won't need cash for drinks once inside.
+The major festival venues ([S2O](/blog/s2o-festival-2026-lineup), [Siam Songkran](/blog/siam-songkran-2026-lineup), Bravo BKK Arena, UOB Live Hall) have cashless systems — you load credit onto a wristband or use contactless payment at bars inside the venue. This works well and you won't need cash for drinks once inside.
 
 **But:** Street food vendors, water sellers, tuk-tuks, and most small street stalls are **cash only**. Don't rely on your card for anything outside official venues.
 
@@ -1119,7 +1121,7 @@ You're attending a water festival. Pack accordingly.
 - **Quick-dry clothing** — swimwear shorts + rash guard or light shirt
 - **Waterproof sunscreen** (SPF 50+ minimum — you'll be outside for hours)
 
-**Cash:** Withdraw ฿10,000+ before April 12. ATMs in tourist areas run out.
+**Cash:** Withdraw ฿10,000+ before April 12. ATMs in tourist areas run out — see [cash guide](/blog/songkran-water-and-cash-guide).
 
 **Documents:** Keep your original passport — you need it for all 20+ events. Store a photo of it in the cloud as backup.
 
@@ -1134,9 +1136,9 @@ You're attending a water festival. Pack accordingly.
 - Sanam Luang / Maha Songkran (Apr 12-15) — traditional, near the Grand Palace
 
 **Ticketed events:**
-- S2O Songkran Music Festival (Apr 11-13) — S2O Land, Ratchada · MRT Thailand Cultural Centre
-- Siam Songkran "The Melora" (Apr 11-14) — Bravo BKK Arena, RCA · MRT Phetchaburi or Asoke
-- GCircuit "ADRO-MADA" (Apr 10-13) — UOB Live Hall, Emsphere · BTS Phrom Phong
+- [S2O Songkran Music Festival](/blog/s2o-festival-2026-lineup) (Apr 11-13) — S2O Land, Ratchada · MRT Thailand Cultural Centre
+- [Siam Songkran "The Melora"](/blog/siam-songkran-2026-lineup) (Apr 11-14) — Bravo BKK Arena, RCA · MRT Phetchaburi or Asoke
+- [GCircuit "ADRO-MADA"](/blog/gcircuit-songkran-2026-lineup) (Apr 10-13) — UOB Live Hall, Emsphere · BTS Phrom Phong
 
 You don't need to attend any ticketed events to have an amazing Songkran. But if you like electronic music and want a guaranteed crowd in a controlled environment, they're worth it.
 
@@ -1150,7 +1152,7 @@ You don't need to attend any ticketed events to have an amazing Songkran. But if
 
 **12:30pm** — Walk to Khao San Road (15-20 min from Sanam Luang). The water fights here start light and build — perfect warm-up.
 
-**2:00pm** — BTS to Sala Daeng. Join the Silom water fight zone. This is peak hours — expect maximum chaos and a 3-4 hour walk through the corridor.
+**2:00pm** — BTS to Sala Daeng. Join the [Silom water fight zone](/blog/silom-road-songkran-guide). This is peak hours — expect maximum chaos and a 3-4 hour walk through the corridor.
 
 **5:30pm** — Exit Silom zone. Find a restaurant or street food stall. Eat. Rest. Dry off a little.
 

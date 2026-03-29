@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
+import Breadcrumb from '../components/atoms/Breadcrumb.astro';
 
 const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
@@ -49,6 +50,7 @@ const partiesJson = JSON.stringify(parties);
   <!-- HEADER -->
   <section class="pt-32 pb-8 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.9),rgba(238,248,255,0));">
     <div class="max-w-7xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Who's Going?" }]} />
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Community</div>
       <h1 class="font-headline font-extrabold tracking-tighter mb-3" style="font-size:clamp(2.5rem,8vw,6rem);color:#003345;line-height:0.9;">
         WHO'S<br/>

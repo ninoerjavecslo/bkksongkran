@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../components/layout/BaseLayout.astro';
 import { articles } from '../../data/articles';
+import Breadcrumb from '../../components/atoms/Breadcrumb.astro';
 
 export function getStaticPaths() {
   return articles.map(article => ({
@@ -18,7 +19,8 @@ function esc(s: string): string {
 function fmt(text: string): string {
   return esc(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 }
 
 function renderContent(md: string): string {
@@ -127,28 +129,10 @@ const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
     "keywords": article.keywords,
   })} />
 
-  <!-- Breadcrumb Schema -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bkksongkran.com" },
-      { "@type": "ListItem", "position": 2, "name": "Guide", "item": "https://bkksongkran.com/blog" },
-      { "@type": "ListItem", "position": 3, "name": article.h1, "item": `https://bkksongkran.com/blog/${article.slug}` },
-    ]
-  })} />
-
   <!-- HEADER -->
   <section class="pt-36 pb-8 px-6">
     <div class="max-w-3xl mx-auto">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center gap-2 text-xs mb-6" style="color:#86b3cc;">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <span class="material-symbols-outlined text-xs">chevron_right</span>
-        <a href="/blog" class="hover:text-primary transition-colors">Guide</a>
-        <span class="material-symbols-outlined text-xs">chevron_right</span>
-        <span style="color:#326177;">{article.h1}</span>
-      </nav>
+      <Breadcrumb crumbs={[{ label: "Home", href: "/" }, { label: "Guide", href: "/blog" }, { label: article.h1 }]} />
 
       <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4" style={`background:${article.categoryColor}15;color:${article.categoryColor};`}>
         {article.category}
@@ -255,6 +239,8 @@ const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
   /* Inline styles */
   .article-content strong { color: #003345; font-weight: 700; }
   .article-content em { font-style: italic; color: #326177; }
+  .article-content a { color: #006479; font-weight: 600; text-decoration: underline; text-decoration-color: rgba(0,100,121,0.35); text-underline-offset: 2px; transition: color 0.15s, text-decoration-color 0.15s; }
+  .article-content a:hover { color: #40cef3; text-decoration-color: #40cef3; }
 
   /* Lists — styled with custom bullets */
   .article-content ul {
