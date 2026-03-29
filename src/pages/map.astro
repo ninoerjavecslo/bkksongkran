@@ -183,11 +183,16 @@ const CROWD = {
 let map = null, activePopup = null;
 
 function makePin(emoji, color, size) {
-  const el = document.createElement('div');
-  el.className = 'map-pin';
-  el.style.cssText = `width:${size}px;height:${size}px;background:${color};`;
-  el.textContent = emoji;
-  return el;
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'width:0;height:0;position:relative;';
+  const pin = document.createElement('div');
+  pin.className = 'map-pin';
+  pin.style.cssText = `position:absolute;transform:translate(-50%,-50%);width:${size}px;height:${size}px;background:${color};`;
+  pin.textContent = emoji;
+  pin.addEventListener('mouseenter', () => { pin.style.transform = 'translate(-50%,-50%) scale(1.18)'; });
+  pin.addEventListener('mouseleave', () => { pin.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  wrapper.appendChild(pin);
+  return wrapper;
 }
 
 function showCard(data, type) {
@@ -242,13 +247,13 @@ function initMap() {
   zones.forEach(z => {
     const c = CROWD[z.crowd] || CROWD.medium;
     const el = makePin('💧', c.color, 32);
-    el.addEventListener('click', () => showCard(z, 'zone'));
+    el.firstChild.addEventListener('click', () => showCard(z, 'zone'));
     new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat([z.lng, z.lat]).addTo(map);
   });
 
   festivals.forEach(f => {
     const el = makePin('🎪', f.color, 38);
-    el.addEventListener('click', () => showCard(f, 'festival'));
+    el.firstChild.addEventListener('click', () => showCard(f, 'festival'));
     new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat([f.lng, f.lat]).addTo(map);
   });
 }
