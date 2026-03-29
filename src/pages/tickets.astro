@@ -573,25 +573,7 @@ const unlockBtn = document.getElementById('unlock-btn')!;
 const unlockEmailEl = document.getElementById('unlock-email') as HTMLInputElement;
 const unlockError = document.getElementById('unlock-error')!;
 
-if (Object.keys(getRevealed()).length > 0) {
-  unlockBanner.classList.add('hidden');
-} else {
-  // Auto-unlock if user already verified email on meetup page
-  const sharedEmail = localStorage.getItem('meetup_unlock_email');
-  if (sharedEmail) {
-    fetch('/api/reveal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: sharedEmail, turnstileToken: '' }),
-    }).then(r => r.json()).then(data => {
-      if (data.contacts) {
-        saveRevealed(data.contacts);
-        unlockBanner.classList.add('hidden');
-        render();
-      }
-    }).catch(() => {});
-  }
-}
+if (Object.keys(getRevealed()).length > 0) unlockBanner.classList.add('hidden');
 
 function initUnlockTurnstile() {
   if ((window as any).__unlockTurnstileId !== null && (window as any).__unlockTurnstileId !== undefined) return;
@@ -843,9 +825,13 @@ function ago(d:string) {
 }
 
 // On load, silently re-fetch contacts if previously unlocked (picks up new listings)
+// Also checks meetup_unlock_email so one unlock works across both pages
 async function autoRefreshContacts() {
-  const email = getStoredEmail();
+  const email = getStoredEmail() || localStorage.getItem('meetup_unlock_email') || '';
   if (!email) return;
+  // Share the email key so future visits skip this fetch
+  if (!getStoredEmail()) saveStoredEmail(email);
+  if (!localStorage.getItem('meetup_unlock_email')) localStorage.setItem('meetup_unlock_email', email);
   try {
     const res = await fetch('/api/reveal', {
       method: 'POST',
@@ -855,6 +841,7 @@ async function autoRefreshContacts() {
     if (res.ok) {
       const data = await res.json();
       saveRevealed(data.contacts || {});
+      unlockBanner.classList.add('hidden');
       render();
     }
   } catch {}
