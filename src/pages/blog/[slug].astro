@@ -107,7 +107,7 @@ const htmlContent = renderContent(article.content);
 const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
 ---
 
-<BaseLayout title={article.metaTitle} description={article.metaDescription} canonical={`https://bkksongkran.com/blog/${article.slug}`}>
+<BaseLayout title={article.metaTitle} description={article.metaDescription} canonical={`https://bkksongkran.com/blog/${article.slug}`} ogImage={article.featuredImage ? `https://bkksongkran.com${article.featuredImage}` : undefined}>
 
   <!-- Extra head tags -->
   <meta slot="head" name="keywords" content={article.keywords.join(', ')} />

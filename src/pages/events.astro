@@ -11,9 +11,93 @@ const intensityConfig = {
   high:   { label: 'HIGH', color: '#FF9F0A', bg: '#FFF8E0', icon: 'local_fire_department' },
   medium: { label: 'CHILL', color: '#34C759', bg: '#E8FFF0', icon: 'spa' },
 };
+
+// ── JSON-LD Event schema helpers ───────────────
+// Map abbreviated date strings like "Apr 11–13" or "Apr 10–11" to ISO dates.
+// All events are in 2026.
+const MONTH_MAP: Record<string, string> = {
+  Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+  Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12',
+};
+
+function parseDateRange(dates: string): { startDate: string; endDate: string } {
+  // e.g. "Apr 11–13", "Apr 10–15", "Apr 14", "Apr 9–30", "Apr 9–14"
+  const match = dates.match(/^(\w+)\s+(\d+)(?:[–\-](\d+))?/);
+  if (!match) return { startDate: '2026-04-10', endDate: '2026-04-14' };
+  const month = MONTH_MAP[match[1]] ?? '04';
+  const startDay = match[2].padStart(2, '0');
+  // If range end day crosses into next month it would need extra logic — all events stay in April here.
+  const endDay = (match[3] ?? match[2]).padStart(2, '0');
+  return {
+    startDate: `2026-${month}-${startDay}`,
+    endDate:   `2026-${month}-${endDay}`,
+  };
+}
+
+const festivalSchemas = festivals.map(f => {
+  const { startDate, endDate } = parseDateRange(f.dates);
+  return {
+    '@type': 'Event',
+    name: f.name,
+    description: f.description,
+    startDate,
+    endDate,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: f.venue,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bangkok',
+        addressCountry: 'TH',
+      },
+    },
+    url: 'https://bkksongkran.com/events',
+    ...(f.url ? { sameAs: f.url } : {}),
+    organizer: {
+      '@type': 'Organization',
+      name: f.name,
+      url: f.url ?? 'https://bkksongkran.com/events',
+    },
+  };
+});
+
+const additionalSchemas = additionalEvents.map(e => {
+  const { startDate, endDate } = parseDateRange(e.dates);
+  return {
+    '@type': 'Event',
+    name: e.name,
+    description: e.desc,
+    startDate,
+    endDate,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: e.venue,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bangkok',
+        addressCountry: 'TH',
+      },
+    },
+    url: 'https://bkksongkran.com/events',
+    isAccessibleForFree: e.price === 'Free',
+  };
+});
+
+const eventSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [...festivalSchemas, ...additionalSchemas],
+};
 ---
 
 <BaseLayout title="Songkran 2026 Events & Timetables — All Festivals, Lineups & Tickets" description="Complete Songkran 2026 event calendar. S2O, Siam Songkran, GCircuit lineups with day-by-day schedules. Water fight zones and free events in Bangkok." canonical="https://bkksongkran.com/events">
+
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(eventSchema)} />
+  </Fragment>
 
   <!-- HEADER -->
   <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
