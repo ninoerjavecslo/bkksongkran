@@ -1,6 +1,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { supabase } from '../../lib/supabase';
 
 const rateMap = new Map<string, { count: number; reset: number }>();
 function isRateLimited(ip: string): boolean {
@@ -25,7 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
   let body: any;
   try { body = await request.json(); } catch { return json({ error: 'Invalid request.' }, 400); }
 
-  const { email, turnstileToken } = body;
+  const { email, turnstileToken, newsletter } = body;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return json({ error: 'Please enter a valid email address.' }, 400);
@@ -43,6 +44,14 @@ export const POST: APIRoute = async ({ request }) => {
     });
     const tsData: any = await tsRes.json();
     if (!tsData.success) return json({ error: 'Bot check failed. Please try again.' }, 403);
+  }
+
+  // Store in subscribers table if they opted in (upsert to avoid duplicates)
+  if (newsletter === true) {
+    await supabase.from('subscribers').upsert(
+      { email: email.toLowerCase().trim(), source: 'meetup_unlock', newsletter: true },
+      { onConflict: 'email', ignoreDuplicates: false }
+    );
   }
 
   return json({ ok: true });

@@ -62,9 +62,12 @@ const partiesJson = JSON.stringify(parties);
   <!-- UNLOCK BANNER -->
   <section class="px-6 pb-3 pt-1" id="meetup-unlock-banner">
     <div class="max-w-7xl mx-auto flex items-center gap-4 flex-wrap">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-sm" style="color:#6b8fa3;font-variation-settings:'FILL' 1;">lock</span>
-        <p class="text-sm" style="color:#326177;">Contact handles are hidden for privacy — just drop your email to confirm you're a real person and unlock them. We don't store it or send you anything.</p>
+      <div class="flex items-center gap-2 flex-1 min-w-0">
+        <span class="material-symbols-outlined text-sm flex-shrink-0" style="color:#6b8fa3;font-variation-settings:'FILL' 1;">lock</span>
+        <p class="text-sm" style="color:#326177;">
+          Contact handles are hidden.<br class="hidden sm:block" />
+          <span class="sm:hidden"> </span>Enter your email once to reveal them.
+        </p>
       </div>
       <button id="btn-meetup-unlock" class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#006479,#40cef3);">
         <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
@@ -83,11 +86,15 @@ const partiesJson = JSON.stringify(parties);
             <span class="material-symbols-outlined" style="color:#6b8fa3;">close</span>
           </button>
         </div>
-        <p class="text-sm" style="color:#326177;">Enter your email to reveal handles across all events. Your email is stored privately and never shared.</p>
+        <p class="text-sm" style="color:#326177;">Enter your email to confirm you're a real person and reveal contact handles.</p>
         <div>
           <input type="email" id="meetup-unlock-email" placeholder="you@gmail.com" class="field-input" autocomplete="email" />
-          <p class="text-[11px] mt-1" style="color:#6b8fa3;">Use a real address: Gmail, Outlook, Yahoo, iCloud, etc.</p>
+          <p class="text-[11px] mt-1" style="color:#6b8fa3;">Gmail, Outlook, Yahoo, iCloud, etc.</p>
         </div>
+        <label class="flex items-start gap-3 cursor-pointer">
+          <input id="meetup-unlock-newsletter" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-cyan-600" />
+          <span class="text-xs" style="color:#6b8fa3;">Send me Songkran 2026 updates — lineups, last-minute tips, community highlights. No spam, unsubscribe anytime.</span>
+        </label>
         <div id="turnstile-meetup-unlock"></div>
         <button id="meetup-unlock-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
           <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
@@ -1255,13 +1262,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = (tsId !== null && window.turnstile) ? window.turnstile.getResponse(tsId) : '';
     if (!token) { errEl.textContent = 'Please complete the security check.'; errEl.classList.remove('hidden'); return; }
 
+    const newsletter = document.getElementById('meetup-unlock-newsletter')?.checked ?? false;
     btn.disabled = true; btn.style.opacity = '0.6';
     try {
-      // Just validate email server-side via a lightweight check, store locally
       const res = await fetch('/api/unlock-meetup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, turnstileToken: token }),
+        body: JSON.stringify({ email, turnstileToken: token, newsletter }),
       });
       const data = await res.json();
       if (!res.ok) { errEl.textContent = data.error || 'Failed. Try again.'; errEl.classList.remove('hidden'); if (window.turnstile && tsId !== null) window.turnstile.reset(tsId); return; }

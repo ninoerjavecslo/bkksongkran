@@ -174,6 +174,10 @@ const buyingTips = [
         <div>
           <div class="tpl-meta text-xs font-semibold mb-1" style="color:#326177;"></div>
           <div class="tpl-price font-headline font-black text-2xl"></div>
+          <div class="tpl-buying-info hidden">
+            <div class="tpl-buying-event font-headline font-black text-xl leading-tight"></div>
+            <div class="tpl-buying-date text-sm font-bold mt-0.5" style="color:#326177;"></div>
+          </div>
           <div class="tpl-qty text-xs" style="color:#326177;"></div>
         </div>
         <p class="tpl-note text-xs leading-relaxed hidden" style="color:#326177;"></p>
@@ -657,6 +661,7 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
     return;
   }
 
+  if (isBuyingSubmit) delete fd.price;
   delete fd.gdpr;
   delete fd.safety;
 
@@ -743,11 +748,23 @@ function render() {
     fb.textContent = t.festival;
 
     (clone.querySelector('.tpl-time') as HTMLElement).textContent = ago(t.created_at);
-    (clone.querySelector('.tpl-meta') as HTMLElement).textContent = `${t.dates} · ${t.tier}`;
-    const pe = clone.querySelector('.tpl-price') as HTMLElement;
-    pe.style.color = fc.d;
-    pe.textContent = `฿${Number(t.price).toLocaleString()}`;
-    (clone.querySelector('.tpl-qty') as HTMLElement).textContent = `${t.quantity} ticket${t.quantity>1?'s':''}`;
+    if (sell) {
+      (clone.querySelector('.tpl-meta') as HTMLElement).textContent = `${t.dates} · ${t.tier}`;
+      const pe = clone.querySelector('.tpl-price') as HTMLElement;
+      pe.style.color = fc.d;
+      pe.textContent = `฿${Number(t.price).toLocaleString()}`;
+      (clone.querySelector('.tpl-qty') as HTMLElement).textContent = `${t.quantity} ticket${t.quantity>1?'s':''}`;
+    } else {
+      (clone.querySelector('.tpl-meta') as HTMLElement).textContent = t.tier;
+      (clone.querySelector('.tpl-price') as HTMLElement).classList.add('hidden');
+      const bi = clone.querySelector('.tpl-buying-info') as HTMLElement;
+      bi.classList.remove('hidden');
+      const be = clone.querySelector('.tpl-buying-event') as HTMLElement;
+      be.style.color = fc.d;
+      be.textContent = t.festival;
+      (clone.querySelector('.tpl-buying-date') as HTMLElement).textContent = t.dates;
+      (clone.querySelector('.tpl-qty') as HTMLElement).textContent = `Looking for ${t.quantity} ticket${t.quantity>1?'s':''}`;
+    }
 
     const ne = clone.querySelector('.tpl-note') as HTMLElement;
     if (t.note) { ne.textContent = t.note; ne.classList.remove('hidden'); }
