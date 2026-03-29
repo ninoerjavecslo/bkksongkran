@@ -704,18 +704,30 @@ function ago(d:string) {
 load();
 </script>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileTicketsLoad" async defer></script>
 <script>
-let ticketsTurnstileId = null;
-(window as any).openUnlockModal = (function(orig) {
+let ticketsTurnstileId: any = null;
+let turnstileTicketsReady = false;
+
+(window as any).onTurnstileTicketsLoad = function() {
+  turnstileTicketsReady = true;
+};
+
+(window as any).openUnlockModal = (function(orig: any) {
   return function() {
     orig();
-    if (window.turnstile && ticketsTurnstileId === null) {
-      ticketsTurnstileId = window.turnstile.render('#turnstile-tickets', {
-        sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
-        'refresh-expired': 'auto',
-      });
+    function tryRender() {
+      if (ticketsTurnstileId !== null) return;
+      if ((window as any).turnstile) {
+        ticketsTurnstileId = (window as any).turnstile.render('#turnstile-tickets', {
+          sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+          'refresh-expired': 'auto',
+        });
+      } else {
+        setTimeout(tryRender, 200);
+      }
     }
+    tryRender();
   };
 })((window as any).openUnlockModal);
 </script>
