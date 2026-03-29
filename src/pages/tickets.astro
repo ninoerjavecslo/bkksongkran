@@ -573,7 +573,25 @@ const unlockBtn = document.getElementById('unlock-btn')!;
 const unlockEmailEl = document.getElementById('unlock-email') as HTMLInputElement;
 const unlockError = document.getElementById('unlock-error')!;
 
-if (Object.keys(getRevealed()).length > 0) unlockBanner.classList.add('hidden');
+if (Object.keys(getRevealed()).length > 0) {
+  unlockBanner.classList.add('hidden');
+} else {
+  // Auto-unlock if user already verified email on meetup page
+  const sharedEmail = localStorage.getItem('meetup_unlock_email');
+  if (sharedEmail) {
+    fetch('/api/reveal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: sharedEmail, turnstileToken: '' }),
+    }).then(r => r.json()).then(data => {
+      if (data.contacts) {
+        saveRevealed(data.contacts);
+        unlockBanner.classList.add('hidden');
+        render();
+      }
+    }).catch(() => {});
+  }
+}
 
 function initUnlockTurnstile() {
   if ((window as any).__unlockTurnstileId !== null && (window as any).__unlockTurnstileId !== undefined) return;
@@ -627,6 +645,7 @@ unlockBtn.addEventListener('click', async () => {
     } else {
       saveRevealed(data.contacts || {});
       saveStoredEmail(email);
+      localStorage.setItem('meetup_unlock_email', email); // share unlock across pages
       closeUnlockModal();
       unlockBanner.classList.add('hidden');
       render();
