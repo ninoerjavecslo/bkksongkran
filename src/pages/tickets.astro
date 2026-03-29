@@ -32,9 +32,12 @@ export const prerender = false;
           <div class="font-bold text-sm mb-0.5" style="color:#003345;">Unlock all contact info</div>
           <div class="text-xs" style="color:#326177;">Enter your email once to reveal seller and buyer contacts across all listings.</div>
         </div>
-        <div class="flex gap-2 w-full sm:w-auto">
-          <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input flex-1 sm:w-52" style="padding:0.5rem 0.75rem;font-size:0.8125rem;" />
-          <button id="unlock-btn" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">Unlock</button>
+        <div class="flex flex-col gap-2 w-full sm:w-auto">
+          <div class="flex gap-2">
+            <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input flex-1 sm:w-52" style="padding:0.5rem 0.75rem;font-size:0.8125rem;" />
+            <button id="unlock-btn" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">Unlock</button>
+          </div>
+          <div id="turnstile-unlock"></div>
         </div>
       </div>
       <p id="unlock-error" class="hidden text-xs font-bold mt-2 ml-1" style="color:#b31b25;"></p>
@@ -435,18 +438,29 @@ unlockBtn.addEventListener('click', async () => {
     unlockError.classList.remove('hidden');
     return;
   }
+  const tsId = (window as any).__unlockTurnstileId;
+  const turnstileToken = (tsId !== undefined && tsId !== null && (window as any).turnstile)
+    ? (window as any).turnstile.getResponse(tsId) || ''
+    : '';
+  if (!turnstileToken) {
+    unlockError.textContent = 'Please complete the security check';
+    unlockError.classList.remove('hidden');
+    return;
+  }
   unlockBtn.textContent = '...';
   unlockBtn.setAttribute('disabled', 'true');
   try {
     const res = await fetch('/api/reveal', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, turnstileToken }),
     });
     const data = await res.json();
     if (!res.ok) {
       unlockError.textContent = data.error || 'Failed to unlock. Try again.';
       unlockError.classList.remove('hidden');
+      const _tsId = (window as any).__unlockTurnstileId;
+      if (_tsId !== null && _tsId !== undefined && (window as any).turnstile) (window as any).turnstile.reset(_tsId);
     } else {
       saveRevealed(data.contacts || {});
       unlockBanner.classList.add('hidden');
@@ -619,4 +633,24 @@ function ago(d:string) {
 }
 
 load();
+</script>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+(window as any).__unlockTurnstileId = null;
+function initUnlockTurnstile() {
+  if ((window as any).__unlockTurnstileId !== null) return;
+  if ((window as any).turnstile) {
+    (window as any).__unlockTurnstileId = (window as any).turnstile.render('#turnstile-unlock', {
+      sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+      theme: 'light',
+      size: 'compact',
+    });
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => setTimeout(initUnlockTurnstile, 500));
+} else {
+  setTimeout(initUnlockTurnstile, 500);
+}
 </script>
