@@ -1,6 +1,24 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 export const prerender = false;
+
+const buyingTips = [
+  { type: 'good', icon: 'check_circle', iconColor: '#16a34a', bg: 'rgba(52,199,89,0.06)',  border: 'rgba(52,199,89,0.15)',
+    title: 'Always verify before paying',
+    body:  'Ask the seller to show the ticket confirmation email or original purchase receipt.' },
+  { type: 'good', icon: 'check_circle', iconColor: '#16a34a', bg: 'rgba(52,199,89,0.06)',  border: 'rgba(52,199,89,0.15)',
+    title: "Check it's transferable",
+    body:  'GCircuit tickets are often non-transferable. Confirm the ticket can actually be transferred to your name.' },
+  { type: 'good', icon: 'check_circle', iconColor: '#16a34a', bg: 'rgba(52,199,89,0.06)',  border: 'rgba(52,199,89,0.15)',
+    title: 'Meet in person if possible',
+    body:  'Exchange in a public place. Pay only when you have the ticket in hand or confirmed in your account.' },
+  { type: 'warn', icon: 'warning',      iconColor: '#dc2626', bg: 'rgba(239,68,68,0.05)',   border: 'rgba(239,68,68,0.15)',
+    title: 'Never pay upfront to a stranger',
+    body:  "We don't process payments. Be cautious of anyone asking for full payment before you've seen proof of the ticket." },
+  { type: 'warn', icon: 'warning',      iconColor: '#dc2626', bg: 'rgba(239,68,68,0.05)',   border: 'rgba(239,68,68,0.15)',
+    title: 'Watch out for duplicate QR codes',
+    body:  'A seller could sell the same ticket to multiple people. Ask for it to be officially transferred, not just a screenshot.' },
+];
 ---
 
 <BaseLayout title="Songkran Ticket Exchange — Buy & Sell Festival Tickets" description="Buy and sell Songkran 2026 festival tickets directly. S2O, Siam Songkran, GCircuit — no middlemen, connect with sellers and buyers." canonical="https://bkksongkran.com/tickets">
@@ -14,12 +32,46 @@ export const prerender = false;
         <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">EXCHANGE</span>
       </h1>
       <p class="text-lg max-w-xl" style="color:#326177;">Buy and sell Songkran festival tickets. No middlemen, no Facebook groups — just connect directly.</p>
-      <div class="flex gap-3 mt-6">
+      <div class="flex flex-wrap gap-3 mt-6">
         <button class="btn-primary px-6 py-3 text-sm" id="btn-open-form">
           <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">add_circle</span>
           Post a Listing
         </button>
+        <button id="buying-tips-btn" onclick="document.getElementById('buying-tips-modal').classList.remove('hidden')" class="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold transition-all hover:opacity-80" style="background:rgba(168,85,247,0.1);color:#7c3aed;">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">info</span>
+          Buying Tips
+        </button>
       </div>
+
+  <!-- Buying tips modal -->
+  <div id="buying-tips-modal" class="hidden fixed inset-0 z-50" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="fixed inset-0" style="background:rgba(0,30,50,0.6);backdrop-filter:blur(8px);"></div>
+    <div class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4">
+      <div class="relative w-full max-w-md rounded-2xl p-6 space-y-4" style="background:white;border:1px solid rgba(168,85,247,0.2);">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined" style="color:#a855f7;font-variation-settings:'FILL' 1;">info</span>
+            <h3 class="font-headline font-bold text-lg" style="color:#003345;">Buying Tips</h3>
+          </div>
+          <button onclick="document.getElementById('buying-tips-modal').classList.add('hidden')" class="p-1 rounded-full hover:bg-gray-100">
+            <span class="material-symbols-outlined text-base" style="color:#6b8fa3;">close</span>
+          </button>
+        </div>
+        <div class="space-y-3">
+          {buyingTips.map(t => (
+            <div class="flex items-start gap-3 p-3 rounded-xl" style={`background:${t.bg};border:1px solid ${t.border};`}>
+              <span class="material-symbols-outlined flex-shrink-0 mt-0.5" style={`color:${t.iconColor};font-size:18px;font-variation-settings:'FILL' 1;`}>{t.icon}</span>
+              <div>
+                <p class="text-sm font-bold" style="color:#003345;">{t.title}</p>
+                <p class="text-xs mt-0.5" style="color:#326177;">{t.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p class="text-[11px] text-center pt-1" style="color:#6b8fa3;">This is a peer-to-peer board. We don't guarantee any transactions.</p>
+      </div>
+    </div>
+  </div>
     </div>
   </section>
 
