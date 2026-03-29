@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /delete-ticket
-
-Sitemap: https://bkksongkran.com/sitemap.xml
