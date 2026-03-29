@@ -39,7 +39,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
   </section>
 
   <!-- FILTER TABS -->
-  <section class="px-6 pb-4 sticky top-20 z-30" style="background:rgba(238,248,255,0.96);backdrop-filter:blur(12px);">
+  <section class="px-6 pb-4 sticky top-20 z-30" style="background:transparent;">
     <div class="max-w-7xl mx-auto">
       <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 pt-2">
         <button data-cat="all" onclick="filterCat('all')"
@@ -49,7 +49,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
         {guideCategories.map(c => (
           <button data-cat={c.id} onclick={`filterCat('${c.id}')`}
             class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all"
-            style="background:rgba(0,0,0,0.04);color:#6b8fa3;">
+            style="background:rgba(0,0,0,0.04);color:#003345;">
             <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
             {c.label}
           </button>
@@ -118,14 +118,6 @@ const places = JSON.parse(placesJson);
 const cats   = JSON.parse(catsJson);
 const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
 
-const CAT_EMOJIS = {
-  sightseeing: '📸', shopping: '🛍️', 'gay-bars': '🍸', 'gay-clubs': '🎉',
-  hotels: '🏨', food: '🍜', massage: '💆', shows: '🎭', saunas: '🧖', useful: '🏪',
-};
-
-let map, popupInstance, markerObjs = {};
-let currentCat = 'all';
-
 const CAT_MATERIAL = {
   sightseeing: 'photo_camera', shopping: 'shopping_bag', 'gay-bars': 'local_bar',
   'gay-clubs': 'nightlife', hotels: 'hotel', food: 'restaurant',
@@ -133,41 +125,44 @@ const CAT_MATERIAL = {
 };
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
+let map, popupInstance;
+let markerObjs = {};
 
 function makeMarkerEl(cat) {
   const c = catMap[cat];
   const color = c ? c.color : '#006479';
   const icon  = CAT_MATERIAL[cat] || 'place';
 
+  // Use absolute positioning — never relative — so Mapbox transform doesn't double-offset
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'width:36px;height:42px;cursor:pointer;pointer-events:all;position:relative;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.28));transition:filter .15s,transform .15s;';
+  wrap.style.cssText = 'width:32px;height:38px;cursor:pointer;pointer-events:all;position:absolute;';
 
-  // SVG teardrop
   const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 36 42');
-  svg.setAttribute('width', '36');
-  svg.setAttribute('height', '42');
+  svg.setAttribute('viewBox', '0 0 32 38');
+  svg.setAttribute('width', '32');
+  svg.setAttribute('height', '38');
   svg.style.cssText = 'position:absolute;top:0;left:0;';
-  const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('d', 'M18 0 C8.059 0 0 8.059 0 18 C0 31.5 18 42 18 42 C18 42 36 31.5 36 18 C36 8.059 27.941 0 18 0 Z');
-  path.setAttribute('fill', color);
-  const circle = document.createElementNS(SVG_NS, 'circle');
-  circle.setAttribute('cx', '18'); circle.setAttribute('cy', '17'); circle.setAttribute('r', '10');
-  circle.setAttribute('fill', 'rgba(255,255,255,0.18)');
-  svg.appendChild(path); svg.appendChild(circle);
 
-  // Material icon on top
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', 'M16 0C7.163 0 0 7.163 0 16c0 12 16 22 16 22s16-10 16-22C32 7.163 24.837 0 16 0z');
+  path.setAttribute('fill', color);
+  path.setAttribute('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.35))');
+
+  const circle = document.createElementNS(SVG_NS, 'circle');
+  circle.setAttribute('cx', '16'); circle.setAttribute('cy', '15'); circle.setAttribute('r', '9');
+  circle.setAttribute('fill', 'rgba(255,255,255,0.2)');
+
+  svg.appendChild(path);
+  svg.appendChild(circle);
+
   const iconEl = document.createElement('span');
   iconEl.className = 'material-symbols-outlined';
-  iconEl.style.cssText = 'position:absolute;top:7px;left:50%;transform:translateX(-50%);font-size:16px;color:white;line-height:1;pointer-events:none;user-select:none;';
+  iconEl.style.cssText = 'position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:14px;color:white;line-height:1;pointer-events:none;user-select:none;';
   iconEl.style.fontVariationSettings = "'FILL' 1";
   iconEl.textContent = icon;
 
   wrap.appendChild(svg);
   wrap.appendChild(iconEl);
-
-  wrap.addEventListener('mouseenter', () => { wrap.style.filter = 'drop-shadow(0 5px 12px rgba(0,0,0,0.4))'; wrap.style.transform = 'translateY(-3px)'; });
-  wrap.addEventListener('mouseleave', () => { wrap.style.filter = 'drop-shadow(0 3px 6px rgba(0,0,0,0.28))'; wrap.style.transform = 'translateY(0)'; });
   return wrap;
 }
 
@@ -176,26 +171,40 @@ function showPopup(place) {
   const cat = catMap[place.category];
   const color = cat ? cat.color : '#006479';
 
-  const nameEl   = document.createElement('strong');
+  const wrapper = document.createElement('div');
+
+  const nameEl = document.createElement('strong');
   nameEl.style.cssText = 'font-size:13px;color:#003345;display:block;';
   nameEl.textContent = place.name;
+  wrapper.appendChild(nameEl);
 
   const subEl = document.createElement('p');
   subEl.style.cssText = `margin:2px 0 0;font-size:11px;font-weight:600;color:${color};`;
   subEl.textContent = `${cat ? cat.label : ''} · ${place.area}`;
-
-  const wrapper = document.createElement('div');
-  wrapper.appendChild(nameEl);
   wrapper.appendChild(subEl);
 
   if (place.tip) {
     const tipEl = document.createElement('p');
-    tipEl.style.cssText = 'margin:4px 0 0;font-size:11px;color:#6b8fa3;';
+    tipEl.style.cssText = 'margin:4px 0 0;font-size:11px;color:#6b8fa3;line-height:1.4;';
     tipEl.textContent = place.tip;
     wrapper.appendChild(tipEl);
   }
 
-  popupInstance = new mapboxgl.Popup({ maxWidth: '260px', offset: 16 })
+  const dirBtn = document.createElement('a');
+  dirBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+  dirBtn.target = '_blank';
+  dirBtn.rel = 'noopener noreferrer';
+  dirBtn.style.cssText = 'display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:5px 10px;background:#006479;color:white;border-radius:20px;font-size:11px;font-weight:600;text-decoration:none;font-family:inherit;';
+  const dirIcon = document.createElement('span');
+  dirIcon.className = 'material-symbols-outlined';
+  dirIcon.style.cssText = 'font-size:13px;';
+  dirIcon.style.fontVariationSettings = "'FILL' 1";
+  dirIcon.textContent = 'directions';
+  dirBtn.appendChild(dirIcon);
+  dirBtn.appendChild(document.createTextNode('Get Directions'));
+  wrapper.appendChild(dirBtn);
+
+  popupInstance = new mapboxgl.Popup({ maxWidth: '260px', offset: [0, -38] })
     .setLngLat([place.lng, place.lat])
     .setDOMContent(wrapper)
     .addTo(map);
@@ -216,9 +225,12 @@ function initMap() {
     const m = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
       .setLngLat([p.lng, p.lat])
       .addTo(map);
-    // Attach click after addTo so Mapbox doesn't swallow it
-    m.getElement().addEventListener('click', (e) => { e.stopPropagation(); showPopup(p); });
-    markerObjs[p.id] = { marker: m, el, place: p };
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      map.flyTo({ center: [p.lng, p.lat], zoom: 17, duration: 600 });
+      setTimeout(() => showPopup(p), 650);
+    });
+    markerObjs[p.id] = { marker: m, place: p };
   });
 }
 
@@ -239,26 +251,18 @@ function updateMarkers(cat) {
 }
 
 window.filterCat = function(cat) {
-  currentCat = cat;
   document.querySelectorAll('.cat-btn').forEach(btn => {
     if (btn.getAttribute('data-cat') === cat) {
-      btn.classList.add('active-cat');
-      btn.style.background = '';
-      btn.style.color = '';
+      btn.classList.add('active-cat'); btn.style.background = ''; btn.style.color = '';
     } else {
-      btn.classList.remove('active-cat');
-      btn.style.background = 'rgba(0,0,0,0.04)';
-      btn.style.color = '#6b8fa3';
+      btn.classList.remove('active-cat'); btn.style.background = 'rgba(0,0,0,0.04)'; btn.style.color = '#003345';
     }
   });
 
   let visible = 0;
   document.querySelectorAll('.place-card').forEach(card => {
-    if (cat === 'all' || card.getAttribute('data-cat') === cat) {
-      card.classList.remove('hidden'); visible++;
-    } else {
-      card.classList.add('hidden');
-    }
+    if (cat === 'all' || card.getAttribute('data-cat') === cat) { card.classList.remove('hidden'); visible++; }
+    else { card.classList.add('hidden'); }
   });
 
   const countEl = document.getElementById('places-count');
@@ -269,9 +273,9 @@ window.filterCat = function(cat) {
 
 window.focusPlace = function(lat, lng, id) {
   if (!map) return;
-  map.flyTo({ center: [lng, lat], zoom: 17, duration: 800 });
+  map.flyTo({ center: [lng, lat], zoom: 17, duration: 600 });
   const obj = markerObjs[id];
-  if (obj) setTimeout(() => showPopup(obj.place), 850);
+  if (obj) setTimeout(() => showPopup(obj.place), 650);
   document.getElementById('guide-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 

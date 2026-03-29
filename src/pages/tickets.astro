@@ -23,6 +23,24 @@ export const prerender = false;
     </div>
   </section>
 
+  <!-- UNLOCK CONTACTS BANNER -->
+  <section class="px-6 pb-4" id="unlock-banner">
+    <div class="max-w-7xl mx-auto">
+      <div class="p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-3" style="background:rgba(225,243,255,0.8);border:1.5px solid rgba(64,206,243,0.4);">
+        <span class="material-symbols-outlined text-2xl flex-shrink-0" style="color:#006479;font-variation-settings:'FILL' 1;">lock</span>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-sm mb-0.5" style="color:#003345;">Unlock all contact info</div>
+          <div class="text-xs" style="color:#326177;">Enter your email once to reveal seller and buyer contacts across all listings.</div>
+        </div>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input flex-1 sm:w-52" style="padding:0.5rem 0.75rem;font-size:0.8125rem;" />
+          <button id="unlock-btn" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">Unlock</button>
+        </div>
+      </div>
+      <p id="unlock-error" class="hidden text-xs font-bold mt-2 ml-1" style="color:#b31b25;"></p>
+    </div>
+  </section>
+
   <!-- FILTERS -->
   <section class="px-6 pb-4">
     <div class="max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
@@ -77,47 +95,41 @@ export const prerender = false;
         <p class="tpl-note text-xs leading-relaxed hidden" style="color:#326177;"></p>
         <!-- Contact: locked state -->
         <div class="tpl-contact-locked pt-3 border-t" style="border-color:rgba(192,232,255,0.5);">
-          <div class="flex items-center gap-2 mb-2">
+          <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-sm" style="color:#86b3cc;font-variation-settings:'FILL' 1;">lock</span>
-            <span class="text-xs font-semibold" style="color:#326177;">Enter your email to see contact info</span>
+            <span class="text-xs" style="color:#86b3cc;">Unlock contacts above to reveal</span>
           </div>
-          <div class="flex gap-2">
-            <input type="email" placeholder="your@email.com" class="tpl-reveal-email form-input" style="padding:0.5rem 0.75rem;font-size:0.75rem;" />
-            <button type="button" class="tpl-reveal-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#006479,#40cef3);">Reveal</button>
-          </div>
-          <p class="tpl-reveal-error text-[10px] font-bold hidden mt-1" style="color:#b31b25;"></p>
         </div>
         <!-- Contact: revealed state -->
         <div class="tpl-contact-revealed hidden pt-2 border-t" style="border-color:rgba(192,232,255,0.5);">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="tpl-contact-icon material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;"></span>
-              <span class="tpl-contact text-sm font-bold" style="color:#003345;"></span>
-              <span class="tpl-contact-type text-[10px] px-1.5 py-0.5 rounded font-bold uppercase"></span>
-            </div>
-            <button class="tpl-remove-btn text-[10px] font-bold px-2 py-1 rounded-lg transition-all hover:bg-red-50" style="color:#86b3cc;" title="Remove listing">
-              <span class="material-symbols-outlined text-xs">delete</span>
-            </button>
+          <div class="flex items-center gap-2">
+            <span class="tpl-contact-icon material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;"></span>
+            <span class="tpl-contact text-sm font-bold" style="color:#003345;"></span>
+            <span class="tpl-contact-type text-[10px] px-1.5 py-0.5 rounded font-bold uppercase"></span>
           </div>
         </div>
       </div>
     </div>
   </template>
 
-  <!-- DELETE CONFIRM MODAL -->
-  <div id="delete-modal" class="modal-overlay hidden">
+  <!-- SUCCESS MODAL (shown after posting) -->
+  <div id="success-modal" class="modal-overlay hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-scroll">
       <div class="modal-center">
-        <div class="card w-full max-w-sm p-6 space-y-4 modal-card">
-          <h3 class="font-headline font-bold text-lg" style="color:#003345;">Remove Listing</h3>
-          <p class="text-sm" style="color:#326177;">Enter the email you used when posting to confirm removal.</p>
-          <input type="email" id="delete-email" placeholder="your@email.com" class="form-input" />
-          <div class="flex gap-3">
-            <button id="delete-cancel-btn" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold transition-all" style="background:rgba(225,243,255,0.7);border:1px solid rgba(192,232,255,0.8);color:#326177;">Cancel</button>
-            <button id="delete-confirm-btn" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all" style="background:#b31b25;">Remove</button>
+        <div class="card w-full max-w-md p-6 space-y-4 modal-card">
+          <div class="text-center">
+            <span class="material-symbols-outlined text-5xl mb-2" style="color:#006479;font-variation-settings:'FILL' 1;">check_circle</span>
+            <h3 class="font-headline font-bold text-xl" style="color:#003345;">Listing Posted!</h3>
+            <p class="text-sm mt-1" style="color:#326177;">Save the link below to delete your listing later.</p>
           </div>
-          <p id="delete-error" class="text-xs font-bold hidden" style="color:#b31b25;"></p>
+          <div class="p-3 rounded-xl text-xs font-mono break-all" style="background:rgba(225,243,255,0.8);border:1.5px solid rgba(64,206,243,0.4);color:#003345;" id="delete-link-display"></div>
+          <button id="copy-link-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white" style="background:linear-gradient(135deg,#006479,#40cef3);">
+            <span class="material-symbols-outlined text-base">content_copy</span>
+            Copy Delete Link
+          </button>
+          <p class="text-[11px] text-center" style="color:#86b3cc;">We also recommend saving it somewhere safe — you won't be able to recover it.</p>
+          <button id="success-close-btn" class="w-full px-4 py-2.5 rounded-xl text-sm font-bold transition-all" style="background:rgba(225,243,255,0.7);border:1px solid rgba(192,232,255,0.8);color:#326177;">Close</button>
         </div>
       </div>
     </div>
@@ -224,26 +236,30 @@ export const prerender = false;
             <!-- Contact -->
             <div class="mb-5">
               <label class="form-label">Contact <span class="req">*</span></label>
-              <div class="grid grid-cols-3 gap-2 mb-2">
+              <div class="grid grid-cols-4 gap-2 mb-2">
                 <label>
-                  <input type="radio" name="contactType" value="instagram" class="peer hidden" checked />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Instagram</div>
+                  <input type="radio" name="contact_type" value="telegram" class="peer hidden" checked />
+                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Telegram</div>
                 </label>
                 <label>
-                  <input type="radio" name="contactType" value="line" class="peer hidden" />
+                  <input type="radio" name="contact_type" value="line" class="peer hidden" />
                   <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Line</div>
                 </label>
                 <label>
-                  <input type="radio" name="contactType" value="whatsapp" class="peer hidden" />
+                  <input type="radio" name="contact_type" value="whatsapp" class="peer hidden" />
                   <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">WhatsApp</div>
                 </label>
+                <label>
+                  <input type="radio" name="contact_type" value="email" class="peer hidden" />
+                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Email</div>
+                </label>
               </div>
-              <input type="text" name="contact" placeholder="@username or phone number" class="form-input" />
+              <input type="text" name="contact" placeholder="@username, phone, or email" class="form-input" />
             </div>
 
             <!-- Email -->
             <div class="mb-5">
-              <label class="form-label">Your Email <span class="req">*</span> <span style="font-weight:400;text-transform:none;color:#86b3cc;">(private — used to manage your listing)</span></label>
+              <label class="form-label">Your Email <span class="req">*</span> <span style="font-weight:400;text-transform:none;color:#86b3cc;">(private — for listing management only)</span></label>
               <input type="email" name="email" placeholder="your@email.com" class="form-input" />
             </div>
 
@@ -322,11 +338,18 @@ const FC: Record<string,{c:string;d:string}> = {
   'Siam Songkran': {c:'#ff8eb2',d:'#b4005d'},
   'GCircuit':      {c:'#c084fc',d:'#7c3aed'},
 };
-const CI: Record<string,string> = { instagram:'photo_camera', line:'chat', whatsapp:'call' };
+const CI: Record<string,string> = { telegram:'send', line:'chat', whatsapp:'call', email:'mail' };
 
 let tickets: any[] = [];
 let fType = 'all', fFest = 'all';
-let deleteId = '';
+
+// Revealed contacts: id → { contact, contact_type }
+function getRevealed(): Record<string,{contact:string;contact_type:string}> {
+  try { return JSON.parse(localStorage.getItem('revealed_tickets') || '{}'); } catch { return {}; }
+}
+function saveRevealed(r: Record<string,{contact:string;contact_type:string}>) {
+  localStorage.setItem('revealed_tickets', JSON.stringify(r));
+}
 
 // --- Custom selects ---
 const csValues: Record<string,string> = { tier: 'GA' };
@@ -387,12 +410,14 @@ function hideModal(id: string) { document.getElementById(id)!.classList.add('hid
 const postSection = document.getElementById('post-modal')!;
 const listingsSection = document.querySelector('#listings-grid')!.closest('section')!;
 const filtersSection = document.querySelector('[data-filter-type]')!.closest('section')!;
+const unlockBanner = document.getElementById('unlock-banner')!;
 const headerBtn = document.getElementById('btn-open-form')!;
 
 function openForm() {
   postSection.classList.remove('hidden');
   listingsSection.classList.add('hidden');
   filtersSection.classList.add('hidden');
+  unlockBanner.classList.add('hidden');
   headerBtn.classList.add('hidden');
   postSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -400,27 +425,72 @@ function closeFormView() {
   postSection.classList.add('hidden');
   listingsSection.classList.remove('hidden');
   filtersSection.classList.remove('hidden');
+  unlockBanner.classList.remove('hidden');
   headerBtn.classList.remove('hidden');
 }
 
 document.getElementById('btn-open-form')!.addEventListener('click', openForm);
 document.getElementById('close-form-btn')!.addEventListener('click', closeFormView);
 
-// Delete modal
-document.getElementById('delete-cancel-btn')!.addEventListener('click', () => hideModal('delete-modal'));
-document.querySelector('#delete-modal .modal-backdrop')!.addEventListener('click', () => hideModal('delete-modal'));
-document.getElementById('delete-confirm-btn')!.addEventListener('click', async () => {
-  const email = (document.getElementById('delete-email') as HTMLInputElement).value.trim();
-  const errEl = document.getElementById('delete-error')!;
-  if (!email) { errEl.textContent = 'Enter your email'; errEl.classList.remove('hidden'); return; }
+// Success modal
+document.getElementById('success-close-btn')!.addEventListener('click', () => hideModal('success-modal'));
+document.querySelector('#success-modal .modal-backdrop')!.addEventListener('click', () => hideModal('success-modal'));
+document.getElementById('copy-link-btn')!.addEventListener('click', () => {
+  const link = document.getElementById('delete-link-display')!.textContent || '';
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.getElementById('copy-link-btn')!;
+    btn.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.textContent = '';
+      const ic = document.createElement('span'); ic.className='material-symbols-outlined text-base'; ic.textContent='content_copy'; btn.appendChild(ic); btn.appendChild(document.createTextNode(' Copy Delete Link'));
+    }, 1500);
+  });
+});
+
+// --- Unlock contacts ---
+const unlockBtn = document.getElementById('unlock-btn')!;
+const unlockEmail = document.getElementById('unlock-email') as HTMLInputElement;
+const unlockError = document.getElementById('unlock-error')!;
+
+// Hide banner if already unlocked
+function updateUnlockBanner() {
+  const r = getRevealed();
+  if (Object.keys(r).length > 0) unlockBanner.classList.add('hidden');
+}
+updateUnlockBanner();
+
+unlockBtn.addEventListener('click', async () => {
+  const email = unlockEmail.value.trim();
+  unlockError.classList.add('hidden');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    unlockError.textContent = 'Please enter a valid email address';
+    unlockError.classList.remove('hidden');
+    return;
+  }
+  unlockBtn.textContent = '...';
+  unlockBtn.setAttribute('disabled', 'true');
   try {
-    const res = await fetch(`/api/tickets?id=${encodeURIComponent(deleteId)}&email=${encodeURIComponent(email)}`, { method: 'DELETE' });
-    if (!res.ok) { const d = await res.json(); errEl.textContent = d.error || 'Failed'; errEl.classList.remove('hidden'); return; }
-    hideModal('delete-modal');
-    (document.getElementById('delete-email') as HTMLInputElement).value = '';
-    errEl.classList.add('hidden');
-    await load();
-  } catch { errEl.textContent = 'Connection error'; errEl.classList.remove('hidden'); }
+    const res = await fetch('/api/reveal', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      unlockError.textContent = data.error || 'Failed to unlock. Try again.';
+      unlockError.classList.remove('hidden');
+    } else {
+      // Store all contacts in localStorage
+      saveRevealed(data.contacts || {});
+      unlockBanner.classList.add('hidden');
+      render();
+    }
+  } catch {
+    unlockError.textContent = 'Connection error. Try again.';
+    unlockError.classList.remove('hidden');
+  }
+  unlockBtn.textContent = 'Unlock';
+  unlockBtn.removeAttribute('disabled');
 });
 
 // --- Submit ---
@@ -467,7 +537,9 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
 
   try {
     const res = await fetch('/api/tickets', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(fd) });
-    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+
     form.reset();
     // Reset custom selects visually
     document.querySelectorAll('.cs-wrap').forEach(w => {
@@ -482,7 +554,14 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
     csValues.tier = 'GA';
     closeFormView();
     await load();
-  } catch { alert('Something went wrong. Try again.'); }
+
+    // Show success modal with delete link
+    const deleteLink = `${location.origin}/api/tickets?id=${encodeURIComponent(data.id)}&token=${encodeURIComponent(data.deleteToken)}`;
+    document.getElementById('delete-link-display')!.textContent = deleteLink;
+    showModal('success-modal');
+  } catch (err: any) {
+    alert(err.message || 'Something went wrong. Try again.');
+  }
 
   btn.removeAttribute('disabled');
   btn.textContent = '';
@@ -515,6 +594,8 @@ function render() {
   if (!list.length) { empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
 
+  const revealed = getRevealed();
+
   list.forEach((t:any) => {
     const fc = FC[t.festival] || {c:'#40cef3',d:'#006479'};
     const sell = t.type === 'selling';
@@ -536,7 +617,7 @@ function render() {
     fb.style.cssText = `background:${fc.c}15;color:${fc.d};`;
     fb.textContent = t.festival;
 
-    (clone.querySelector('.tpl-time') as HTMLElement).textContent = ago(t.createdAt);
+    (clone.querySelector('.tpl-time') as HTMLElement).textContent = ago(t.created_at);
     (clone.querySelector('.tpl-meta') as HTMLElement).textContent = `${t.dates} · ${t.tier}`;
     const pe = clone.querySelector('.tpl-price') as HTMLElement;
     pe.style.color = fc.d;
@@ -546,85 +627,24 @@ function render() {
     const ne = clone.querySelector('.tpl-note') as HTMLElement;
     if (t.note) { ne.textContent = t.note; ne.classList.remove('hidden'); }
 
-    // Check if already revealed (localStorage)
-    const revealed = getRevealed();
-    const isRevealed = revealed[t.id];
-
     const lockedEl = clone.querySelector('.tpl-contact-locked') as HTMLElement;
     const revealedEl = clone.querySelector('.tpl-contact-revealed') as HTMLElement;
+    const rev = revealed[t.id];
 
-    if (isRevealed) {
-      // Already unlocked — show contact
+    if (rev) {
       lockedEl.classList.add('hidden');
       revealedEl.classList.remove('hidden');
       const ci = revealedEl.querySelector('.tpl-contact-icon') as HTMLElement;
-      ci.textContent = CI[isRevealed.contactType] || 'link';
+      ci.textContent = CI[rev.contact_type] || 'link';
       ci.style.color = fc.d;
-      (revealedEl.querySelector('.tpl-contact') as HTMLElement).textContent = isRevealed.contact;
+      (revealedEl.querySelector('.tpl-contact') as HTMLElement).textContent = rev.contact;
       const ct = revealedEl.querySelector('.tpl-contact-type') as HTMLElement;
-      ct.textContent = isRevealed.contactType;
+      ct.textContent = rev.contact_type;
       ct.style.cssText = `background:${fc.c}15;color:${fc.d};`;
     }
 
-    // Reveal button handler
-    const revealBtn = clone.querySelector('.tpl-reveal-btn') as HTMLElement;
-    const revealEmail = clone.querySelector('.tpl-reveal-email') as HTMLInputElement;
-    const revealError = clone.querySelector('.tpl-reveal-error') as HTMLElement;
-
-    revealBtn.addEventListener('click', async () => {
-      const email = revealEmail.value.trim();
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        revealError.textContent = 'Enter a valid email';
-        revealError.classList.remove('hidden');
-        return;
-      }
-      revealBtn.textContent = '...';
-      try {
-        const res = await fetch('/api/reveal', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ ticketId: t.id, email }),
-        });
-        const data = await res.json();
-        if (!res.ok) { revealError.textContent = data.error; revealError.classList.remove('hidden'); revealBtn.textContent = 'Reveal'; return; }
-
-        // Save to localStorage
-        const r = getRevealed();
-        r[t.id] = { contact: data.contact, contactType: data.contactType };
-        localStorage.setItem('revealed_tickets', JSON.stringify(r));
-
-        // Show contact
-        lockedEl.classList.add('hidden');
-        revealedEl.classList.remove('hidden');
-        const ci = revealedEl.querySelector('.tpl-contact-icon') as HTMLElement;
-        ci.textContent = CI[data.contactType] || 'link';
-        ci.style.color = fc.d;
-        (revealedEl.querySelector('.tpl-contact') as HTMLElement).textContent = data.contact;
-        const ct = revealedEl.querySelector('.tpl-contact-type') as HTMLElement;
-        ct.textContent = data.contactType;
-        ct.style.cssText = `background:${fc.c}15;color:${fc.d};`;
-      } catch {
-        revealError.textContent = 'Connection error';
-        revealError.classList.remove('hidden');
-        revealBtn.textContent = 'Reveal';
-      }
-    });
-
-    // Delete button (only visible when revealed)
-    const rmBtn = clone.querySelector('.tpl-remove-btn') as HTMLElement;
-    rmBtn.addEventListener('click', () => {
-      deleteId = t.id;
-      (document.getElementById('delete-email') as HTMLInputElement).value = '';
-      document.getElementById('delete-error')!.classList.add('hidden');
-      showModal('delete-modal');
-    });
-
     grid.appendChild(clone);
   });
-}
-
-function getRevealed(): Record<string,{contact:string;contactType:string}> {
-  try { return JSON.parse(localStorage.getItem('revealed_tickets') || '{}'); } catch { return {}; }
 }
 
 function ago(d:string) {

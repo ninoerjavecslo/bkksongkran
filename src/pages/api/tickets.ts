@@ -1,13 +1,10 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { supabase } from '../../lib/supabase';
 
-const DATA_PATH = join(process.cwd(), 'data', 'tickets.json');
-
-const ALLOWED_FESTIVALS = ['S2O', 'Siam Songkran', 'GCircuit', 'Other'];
-const ALLOWED_TYPES = ['selling', 'buying'];
+const ALLOWED_FESTIVALS    = ['S2O', 'Siam Songkran', 'GCircuit', 'Other'];
+const ALLOWED_TYPES        = ['selling', 'buying'];
 const ALLOWED_CONTACT_TYPES = ['telegram', 'line', 'whatsapp', 'email'];
 
 // Rate limiter: max 5 POSTs per IP per hour
@@ -15,125 +12,91 @@ const postRateMap = new Map<string, { count: number; reset: number }>();
 function isPostRateLimited(ip: string): boolean {
   const now = Date.now();
   const entry = postRateMap.get(ip);
-  if (!entry || now > entry.reset) {
-    postRateMap.set(ip, { count: 1, reset: now + 3_600_000 });
-    return false;
-  }
+  if (!entry || now > entry.reset) { postRateMap.set(ip, { count: 1, reset: now + 3_600_000 }); return false; }
   if (entry.count >= 5) return true;
   entry.count++;
   return false;
 }
 
-function readTickets() {
-  try {
-    return JSON.parse(readFileSync(DATA_PATH, 'utf-8'));
-  } catch {
-    return [];
-  }
+function json(data: unknown, status = 200) {
+  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 }
 
-function writeTickets(tickets: any[]) {
-  writeFileSync(DATA_PATH, JSON.stringify(tickets, null, 2));
-}
-
+// GET — return listings without email / contact / delete_token
 export const GET: APIRoute = async () => {
-  const tickets = readTickets().map((t: any) => {
-    const { email, contact, contactType, ...rest } = t;
-    return { ...rest, contactType };
-  });
-  return new Response(JSON.stringify(tickets), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const { data, error } = await supabase
+    .from('tickets')
+    .select('id, type, festival, dates, tier, quantity, price, contact_type, note, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) return json({ error: error.message }, 500);
+  return json(data);
 };
 
+// POST — create listing, return delete link token
 export const POST: APIRoute = async ({ request }) => {
-  try {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
-    if (isPostRateLimited(ip)) {
-      return new Response(JSON.stringify({ error: 'Too many requests — try again later' }), { status: 429 });
-    }
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+  if (isPostRateLimited(ip)) return json({ error: 'Too many requests — try again later' }, 429);
 
-    const body = await request.json();
-    const { type, festival, dates, tier, quantity, price, contact, contactType, email, note } = body;
+  let body: any;
+  try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
 
-    if (!type || !festival || !dates || !tier || !quantity || !price || !contact || !contactType || !email) {
-      return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
-    }
+  const { type, festival, dates, tier, quantity, price, contact, contact_type, email, note } = body;
 
-    // Allowlist validation
-    if (!ALLOWED_TYPES.includes(type)) {
-      return new Response(JSON.stringify({ error: 'Invalid type' }), { status: 400 });
-    }
-    if (!ALLOWED_FESTIVALS.includes(festival)) {
-      return new Response(JSON.stringify({ error: 'Invalid festival' }), { status: 400 });
-    }
-    if (!ALLOWED_CONTACT_TYPES.includes(contactType)) {
-      return new Response(JSON.stringify({ error: 'Invalid contactType' }), { status: 400 });
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return new Response(JSON.stringify({ error: 'Invalid email' }), { status: 400 });
-    }
+  if (!type || !festival || !dates || !tier || !quantity || !price || !contact || !contact_type || !email)
+    return json({ error: 'Missing required fields' }, 400);
 
-    // Length limits
-    const str = (v: unknown, max: number) => String(v ?? '').slice(0, max);
-    const qty = Math.min(Math.max(1, Number(quantity)), 20);
-    const prc = Math.min(Math.max(0, Number(price)), 999999);
-    if (isNaN(qty) || isNaN(prc)) {
-      return new Response(JSON.stringify({ error: 'Invalid quantity or price' }), { status: 400 });
-    }
+  if (!ALLOWED_TYPES.includes(type))         return json({ error: 'Invalid type' }, 400);
+  if (!ALLOWED_FESTIVALS.includes(festival)) return json({ error: 'Invalid festival' }, 400);
+  if (!ALLOWED_CONTACT_TYPES.includes(contact_type)) return json({ error: 'Invalid contact_type' }, 400);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Invalid email' }, 400);
 
-    const ticket = {
-      id: `t-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  const str = (v: unknown, max: number) => String(v ?? '').slice(0, max);
+  const qty = Math.min(Math.max(1, Number(quantity)), 20);
+  const prc = Math.min(Math.max(0, Number(price)), 999_999);
+  if (isNaN(qty) || isNaN(prc)) return json({ error: 'Invalid quantity or price' }, 400);
+
+  const { data, error } = await supabase
+    .from('tickets')
+    .insert({
       type,
       festival,
-      dates: str(dates, 100),
-      tier: str(tier, 100),
-      quantity: qty,
-      price: prc,
-      contact: str(contact, 200),
-      contactType,
-      email: str(email, 254),
-      note: str(note, 500),
-      createdAt: new Date().toISOString(),
-    };
+      dates:        str(dates, 100),
+      tier:         str(tier, 100),
+      quantity:     qty,
+      price:        prc,
+      contact:      str(contact, 200),
+      contact_type,
+      email:        str(email, 254),
+      note:         str(note, 500),
+    })
+    .select('id, delete_token')
+    .single();
 
-    const tickets = readTickets();
-    tickets.unshift(ticket);
-    writeTickets(tickets);
+  if (error) return json({ error: error.message }, 500);
 
-    const { email: _, ...safe } = ticket;
-    return new Response(JSON.stringify(safe), {
-      status: 201,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
-  }
+  // Return the delete token — frontend shows a link the user can bookmark/email
+  return json({ id: data.id, deleteToken: data.delete_token }, 201);
 };
 
+// DELETE — remove listing by id + delete_token
 export const DELETE: APIRoute = async ({ url }) => {
-  const id = url.searchParams.get('id');
-  const email = url.searchParams.get('email');
+  const id          = url.searchParams.get('id');
+  const deleteToken = url.searchParams.get('token');
 
-  if (!id || !email) {
-    return new Response(JSON.stringify({ error: 'Missing id or email' }), { status: 400 });
-  }
+  if (!id || !deleteToken) return json({ error: 'Missing id or token' }, 400);
 
-  const tickets = readTickets();
-  const ticket = tickets.find((t: any) => t.id === id);
+  const { data: ticket, error: fetchErr } = await supabase
+    .from('tickets')
+    .select('id, delete_token')
+    .eq('id', id)
+    .single();
 
-  if (!ticket) {
-    return new Response(JSON.stringify({ error: 'Listing not found' }), { status: 404 });
-  }
+  if (fetchErr || !ticket) return json({ error: 'Listing not found' }, 404);
+  if (ticket.delete_token !== deleteToken) return json({ error: 'Invalid token' }, 403);
 
-  if (ticket.email !== email) {
-    return new Response(JSON.stringify({ error: 'Email does not match' }), { status: 403 });
-  }
+  const { error } = await supabase.from('tickets').delete().eq('id', id);
+  if (error) return json({ error: error.message }, 500);
 
-  const filtered = tickets.filter((t: any) => t.id !== id);
-  writeTickets(filtered);
-
-  return new Response(JSON.stringify({ success: true }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return json({ success: true });
 };

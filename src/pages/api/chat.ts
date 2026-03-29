@@ -5,19 +5,49 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({ apiKey: import.meta.env.OPENAI_API_KEY });
 
-// Simple in-memory rate limiter: max 10 requests per IP per minute
-const rateLimitMap = new Map<string, { count: number; reset: number }>();
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.reset) {
-    rateLimitMap.set(ip, { count: 1, reset: now + 60_000 });
-    return false;
-  }
-  if (entry.count >= 10) return true;
-  entry.count++;
-  return false;
+// ── Rate limiting ─────────────────────────────────────────────
+// Per-IP: max 10 requests per minute + 50 per day
+interface IpRecord {
+  minuteCount: number;
+  minuteReset: number;
+  dayCount: number;
+  dayReset: number;
 }
+const ipMap = new Map<string, IpRecord>();
+
+function checkRateLimit(ip: string): { blocked: boolean; reason?: string } {
+  const now = Date.now();
+  let rec = ipMap.get(ip);
+  if (!rec) {
+    rec = { minuteCount: 0, minuteReset: now + 60_000, dayCount: 0, dayReset: now + 86_400_000 };
+    ipMap.set(ip, rec);
+  }
+
+  // Reset windows if expired
+  if (now > rec.minuteReset) { rec.minuteCount = 0; rec.minuteReset = now + 60_000; }
+  if (now > rec.dayReset)    { rec.dayCount = 0;    rec.dayReset = now + 86_400_000; }
+
+  if (rec.minuteCount >= 10) return { blocked: true, reason: 'Too many requests — wait a minute.' };
+  if (rec.dayCount >= 50)    return { blocked: true, reason: 'Daily limit reached. Come back tomorrow!' };
+
+  rec.minuteCount++;
+  rec.dayCount++;
+  return { blocked: false };
+}
+
+// Cleanup old entries every hour to prevent memory growth
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, rec] of ipMap) {
+    if (now > rec.dayReset) ipMap.delete(ip);
+  }
+}, 3_600_000);
+
+// ── Allowed origins ───────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  'https://bkksongkran.com',
+  'https://www.bkksongkran.com',
+];
 
 const SYSTEM_PROMPT = `You are Nong, a warm, fun, and knowledgeable Songkran 2026 festival guide AI. You are embedded in bkksongkran.com, a Bangkok Songkran festival website.
 
@@ -75,25 +105,37 @@ function jsonError(message: string, status: number) {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
-    if (isRateLimited(ip)) {
-      return jsonError('Too many requests — please wait a minute', 429);
+    // ── Origin check (blocks direct API hammering from scripts) ──
+    const origin = request.headers.get('origin') ?? '';
+    if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+      return jsonError('Forbidden', 403);
     }
 
-    const { messages } = await request.json();
+    // ── IP rate limit ─────────────────────────────────────────
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+    const { blocked, reason } = checkRateLimit(ip);
+    if (blocked) return jsonError(reason!, 429);
 
-    if (!Array.isArray(messages) || messages.length === 0 || messages.length > 20) {
+    // ── Parse & validate body ─────────────────────────────────
+    let body: any;
+    try { body = await request.json(); } catch { return jsonError('Invalid JSON', 400); }
+
+    const { messages } = body;
+    if (!Array.isArray(messages) || messages.length === 0 || messages.length > 10) {
       return jsonError('Invalid request', 400);
     }
 
-    const safeMessages = messages.map((m: any) => {
-      const content = String(m.content ?? '').slice(0, 2000);
-      return { role: m.role === 'user' ? 'user' : 'assistant', content } as const;
-    });
+    // Sanitize: only user/assistant roles, max 500 chars per message
+    const safeMessages = messages.map((m: any) => ({
+      role: m.role === 'user' ? 'user' : 'assistant' as const,
+      content: String(m.content ?? '').slice(0, 500),
+    }));
 
+    // ── OpenAI call ───────────────────────────────────────────
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      max_tokens: 1000,
+      model: 'gpt-4o-mini',   // cheaper, fast enough for this use case
+      max_tokens: 400,         // ~300 words max output
+      temperature: 0.7,
       messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...safeMessages],
     });
 
@@ -102,7 +144,7 @@ export const POST: APIRoute = async ({ request }) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (e: any) {
+  } catch {
     return jsonError('API error', 500);
   }
 };

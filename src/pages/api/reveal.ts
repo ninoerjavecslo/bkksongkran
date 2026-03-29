@@ -1,74 +1,51 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { supabase } from '../../lib/supabase';
 
-const TICKETS_PATH = join(process.cwd(), 'data', 'tickets.json');
-const LEADS_PATH = join(process.cwd(), 'data', 'leads.json');
-
-// Rate limiter: max 20 reveals per IP per hour
+// Rate limiter: max 30 reveals per IP per hour
 const revealRateMap = new Map<string, { count: number; reset: number }>();
-function isRevealRateLimited(ip: string): boolean {
+function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const entry = revealRateMap.get(ip);
-  if (!entry || now > entry.reset) {
-    revealRateMap.set(ip, { count: 1, reset: now + 3_600_000 });
-    return false;
-  }
-  if (entry.count >= 20) return true;
+  if (!entry || now > entry.reset) { revealRateMap.set(ip, { count: 1, reset: now + 3_600_000 }); return false; }
+  if (entry.count >= 30) return true;
   entry.count++;
   return false;
 }
 
-function readLeads(): any[] {
-  try {
-    if (!existsSync(LEADS_PATH)) return [];
-    return JSON.parse(readFileSync(LEADS_PATH, 'utf-8'));
-  } catch {
-    return [];
-  }
+function json(data: unknown, status = 200) {
+  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 }
 
+// POST — given a valid email, return ALL contacts (one-time unlock stored client-side)
 export const POST: APIRoute = async ({ request }) => {
-  try {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
-    if (isRevealRateLimited(ip)) {
-      return new Response(JSON.stringify({ error: 'Too many requests — try again later' }), { status: 429 });
-    }
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+  if (isRateLimited(ip)) return json({ error: 'Too many requests — try again later' }, 429);
 
-    const { ticketId, email } = await request.json();
+  let body: any;
+  try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
 
-    if (!ticketId || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return new Response(JSON.stringify({ error: 'Valid email required' }), { status: 400 });
-    }
+  const { email } = body;
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return json({ error: 'Valid email required' }, 400);
 
-    // Find the ticket
-    const tickets = JSON.parse(readFileSync(TICKETS_PATH, 'utf-8'));
-    const ticket = tickets.find((t: any) => t.id === ticketId);
-    if (!ticket) {
-      return new Response(JSON.stringify({ error: 'Listing not found' }), { status: 404 });
-    }
+  // Fetch all contacts
+  const { data: tickets, error } = await supabase
+    .from('tickets')
+    .select('id, contact, contact_type')
+    .order('created_at', { ascending: false });
 
-    // Store the lead
-    const leads = readLeads();
-    leads.push({
-      email,
-      ticketId,
-      festival: ticket.festival,
-      type: ticket.type,
-      createdAt: new Date().toISOString(),
-    });
-    writeFileSync(LEADS_PATH, JSON.stringify(leads, null, 2));
+  if (error) return json({ error: error.message }, 500);
 
-    // Return contact info
-    return new Response(JSON.stringify({
-      contact: ticket.contact,
-      contactType: ticket.contactType,
-    }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+  // Log the lead (best-effort, don't fail if it errors)
+  await supabase.from('leads').insert({ email, ticket_id: null });
+
+  // Return map of id → { contact, contact_type }
+  const contacts: Record<string, { contact: string; contact_type: string }> = {};
+  for (const t of tickets ?? []) {
+    contacts[t.id] = { contact: t.contact, contact_type: t.contact_type };
   }
+
+  return json({ contacts });
 };
