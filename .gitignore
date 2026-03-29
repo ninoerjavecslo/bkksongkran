@@ -7,3 +7,4 @@ dist/
 .claude/
 *.xlsx
 file.jpg
+.netlify/
