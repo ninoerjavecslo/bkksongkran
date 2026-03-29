@@ -39,7 +39,7 @@ export const festivals = [
     colorDark: '#006479',
     type: 'edm',
     featured: true,
-    url: 'https://eventpop.me',
+    url: 'https://www.eventpop.me/e/87299/s2o2026',
     crowd: 'insane',
     description: 'Massive water cannons fire on every drop. Lonely Club (Alan Walker b2b Steve Aoki) World Premiere, Zedd, Kygo, Lost Frequencies and more. New venue S2O Land near MRT Cultural Centre.',
     timetableNote: 'Full timetable coming soon — set times will be added here.',
