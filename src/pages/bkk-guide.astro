@@ -2,8 +2,9 @@
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import { guidePlaces, guideCategories } from '../data/bkkGuide';
 
-const placesJson = JSON.stringify(guidePlaces);
-const catsJson   = JSON.stringify(guideCategories);
+const placesJson  = JSON.stringify(guidePlaces);
+const catsJson    = JSON.stringify(guideCategories);
+const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
 ---
 
 <BaseLayout
@@ -24,8 +25,6 @@ const catsJson   = JSON.stringify(guideCategories);
         Community-curated Bangkok guide. Gay bars, clubs, saunas, sightseeing, food & more.
         <span class="font-semibold" style="color:#b4005d;">60,000+ views</span> on the original map.
       </p>
-
-      <!-- Stats row -->
       <div class="flex flex-wrap gap-6 mt-6">
         {guideCategories.map(c => (
           <div class="flex items-center gap-2">
@@ -43,21 +42,14 @@ const catsJson   = JSON.stringify(guideCategories);
   <section class="px-6 pb-4 sticky top-20 z-30" style="background:rgba(238,248,255,0.96);backdrop-filter:blur(12px);">
     <div class="max-w-7xl mx-auto">
       <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 pt-2">
-        <button
-          data-cat="all"
-          onclick="filterCat('all')"
-          class="cat-btn active-cat flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all"
-        >
-          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">apps</span>
-          All
+        <button data-cat="all" onclick="filterCat('all')"
+          class="cat-btn active-cat flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">apps</span>All
         </button>
         {guideCategories.map(c => (
-          <button
-            data-cat={c.id}
-            onclick={`filterCat('${c.id}')`}
+          <button data-cat={c.id} onclick={`filterCat('${c.id}')`}
             class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all"
-            style="background:rgba(0,0,0,0.04);color:#6b8fa3;"
-          >
+            style="background:rgba(0,0,0,0.04);color:#6b8fa3;">
             <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
             {c.label}
           </button>
@@ -69,7 +61,7 @@ const catsJson   = JSON.stringify(guideCategories);
   <!-- MAP -->
   <section class="px-6 pb-6">
     <div class="max-w-7xl mx-auto">
-      <div id="guide-map" class="rounded-2xl overflow-hidden" style="height:420px;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);"></div>
+      <div id="guide-map" class="rounded-2xl overflow-hidden" style="height:460px;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);"></div>
     </div>
   </section>
 
@@ -111,96 +103,112 @@ const catsJson   = JSON.stringify(guideCategories);
 
 </BaseLayout>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
 
 <style>
   .cat-btn { border: 1px solid transparent; }
   .active-cat { background: #003345 !important; color: white !important; border-color: #003345 !important; }
   .place-card.hidden { display: none; }
-  .custom-pin { display:flex;align-items:center;justify-content:center;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);font-size:13px;cursor:pointer;transition:transform .15s; }
-  .custom-pin:hover { transform:scale(1.2); }
+  .mapboxgl-popup-content { border-radius: 12px !important; padding: 12px 14px !important; box-shadow: 0 4px 24px rgba(0,100,121,0.15) !important; font-family: 'Be Vietnam Pro', sans-serif; min-width: 180px; }
+  .mapboxgl-popup-close-button { font-size: 16px; color: #6b8fa3; }
 </style>
 
-<script define:vars={{ placesJson, catsJson }}>
+<script define:vars={{ placesJson, catsJson, mapboxToken }}>
 const places = JSON.parse(placesJson);
 const cats   = JSON.parse(catsJson);
+const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
 
-const catMap = {};
-cats.forEach(c => { catMap[c.id] = c; });
-
-let map = null;
-let markerMap = {};
-let currentCat = 'all';
-
-const CAT_ICONS = {
+const CAT_EMOJIS = {
   sightseeing: '📸', shopping: '🛍️', 'gay-bars': '🍸', 'gay-clubs': '🎉',
   hotels: '🏨', food: '🍜', massage: '💆', shows: '🎭', saunas: '🧖', useful: '🏪',
 };
 
-function buildIcon(cat, size = 28) {
+let map, popupInstance, markerObjs = {};
+let currentCat = 'all';
+
+function makeMarkerEl(cat) {
   const c = catMap[cat];
-  const color = c ? c.color : '#006479';
-  const emoji = CAT_ICONS[cat] || '📍';
-  return L.divIcon({
-    className: '',
-    html: `<div class="custom-pin" style="width:${size}px;height:${size}px;background:${color};">${emoji}</div>`,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-  });
+  const el = document.createElement('div');
+  el.style.cssText = `width:32px;height:32px;border-radius:50%;background:${c ? c.color : '#006479'};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:transform .15s;`;
+  el.textContent = CAT_EMOJIS[cat] || '📍';
+  el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.2)'; });
+  el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+  return el;
+}
+
+function showPopup(place) {
+  if (popupInstance) popupInstance.remove();
+  const cat = catMap[place.category];
+  const color = cat ? cat.color : '#006479';
+
+  const nameEl   = document.createElement('strong');
+  nameEl.style.cssText = 'font-size:13px;color:#003345;display:block;';
+  nameEl.textContent = place.name;
+
+  const subEl = document.createElement('p');
+  subEl.style.cssText = `margin:2px 0 0;font-size:11px;font-weight:600;color:${color};`;
+  subEl.textContent = `${cat ? cat.label : ''} · ${place.area}`;
+
+  const wrapper = document.createElement('div');
+  wrapper.appendChild(nameEl);
+  wrapper.appendChild(subEl);
+
+  if (place.tip) {
+    const tipEl = document.createElement('p');
+    tipEl.style.cssText = 'margin:4px 0 0;font-size:11px;color:#6b8fa3;';
+    tipEl.textContent = place.tip;
+    wrapper.appendChild(tipEl);
+  }
+
+  popupInstance = new mapboxgl.Popup({ maxWidth: '260px', offset: 16 })
+    .setLngLat([place.lng, place.lat])
+    .setDOMContent(wrapper)
+    .addTo(map);
 }
 
 function initMap() {
-  if (map) return;
-  map = L.map('guide-map').setView([13.7270, 100.5290], 14);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© <a href="https://carto.com/">CARTO</a>',
-    maxZoom: 19,
-  }).addTo(map);
+  mapboxgl.accessToken = mapboxToken;
+  map = new mapboxgl.Map({
+    container: 'guide-map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [100.5290, 13.7270],
+    zoom: 13.5,
+  });
+  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
   places.forEach(p => {
-    const m = L.marker([p.lat, p.lng], { icon: buildIcon(p.category) }).addTo(map);
-    const cat = catMap[p.category];
-    const tipHtml = p.tip ? `<p style="margin:4px 0 0;font-size:11px;color:#6b8fa3;">${p.tip}</p>` : '';
-    m.bindPopup(
-      `<div style="font-family:'Be Vietnam Pro',sans-serif;min-width:180px;">
-        <strong style="font-size:13px;color:#003345;">${p.name}</strong>
-        <p style="margin:2px 0 0;font-size:11px;font-weight:600;color:${cat ? cat.color : '#006479'};">${cat ? cat.label : ''} · ${p.area}</p>
-        ${tipHtml}
-      </div>`,
-      { maxWidth: 260 }
-    );
-    markerMap[p.id] = m;
+    const el = makeMarkerEl(p.category);
+    const m = new mapboxgl.Marker({ element: el })
+      .setLngLat([p.lng, p.lat])
+      .addTo(map);
+    el.addEventListener('click', () => showPopup(p));
+    markerObjs[p.id] = { marker: m, el, place: p };
   });
 }
 
 function updateMarkers(cat) {
   if (!map) return;
-  places.forEach(p => {
-    const m = markerMap[p.id];
-    if (!m) return;
-    if (cat === 'all' || p.category === cat) {
-      m.addTo(map);
+  const bounds = new mapboxgl.LngLatBounds();
+  let count = 0;
+  Object.values(markerObjs).forEach(({ marker, place }) => {
+    if (cat === 'all' || place.category === cat) {
+      marker.addTo(map);
+      bounds.extend([place.lng, place.lat]);
+      count++;
     } else {
-      m.remove();
+      marker.remove();
     }
   });
-
-  // Fit bounds to visible markers
-  const visible = places.filter(p => cat === 'all' || p.category === cat);
-  if (visible.length > 0) {
-    const bounds = L.latLngBounds(visible.map(p => [p.lat, p.lng]));
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
-  }
+  if (count > 0) map.fitBounds(bounds, { padding: 60, maxZoom: 16, duration: 800 });
 }
 
 window.filterCat = function(cat) {
   currentCat = cat;
-
-  // Update button styles
   document.querySelectorAll('.cat-btn').forEach(btn => {
-    const btnCat = btn.getAttribute('data-cat');
-    if (btnCat === cat) {
+    if (btn.getAttribute('data-cat') === cat) {
       btn.classList.add('active-cat');
+      btn.style.background = '';
+      btn.style.color = '';
     } else {
       btn.classList.remove('active-cat');
       btn.style.background = 'rgba(0,0,0,0.04)';
@@ -208,43 +216,36 @@ window.filterCat = function(cat) {
     }
   });
 
-  // Filter cards
-  const cards = document.querySelectorAll('.place-card');
   let visible = 0;
-  cards.forEach(card => {
+  document.querySelectorAll('.place-card').forEach(card => {
     if (cat === 'all' || card.getAttribute('data-cat') === cat) {
-      card.classList.remove('hidden');
-      visible++;
+      card.classList.remove('hidden'); visible++;
     } else {
       card.classList.add('hidden');
     }
   });
 
-  // Update count
   const countEl = document.getElementById('places-count');
-  if (countEl) {
-    const label = cat === 'all' ? 'all places' : (catMap[cat]?.label || cat);
-    countEl.textContent = `Showing ${visible} ${label}`;
-  }
+  if (countEl) countEl.textContent = `Showing ${visible} ${cat === 'all' ? 'places' : (catMap[cat]?.label || cat)}`;
 
   updateMarkers(cat);
 };
 
 window.focusPlace = function(lat, lng, id) {
   if (!map) return;
-  map.flyTo([lat, lng], 17, { duration: 0.8 });
-  const m = markerMap[id];
-  if (m) setTimeout(() => m.openPopup(), 900);
+  map.flyTo({ center: [lng, lat], zoom: 17, duration: 800 });
+  const obj = markerObjs[id];
+  if (obj) setTimeout(() => showPopup(obj.place), 850);
   document.getElementById('guide-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
-function loadLeaflet(cb) {
-  if (window.L) { cb(); return; }
+function loadMapbox(cb) {
+  if (window.mapboxgl) { cb(); return; }
   const s = document.createElement('script');
-  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  s.src = 'https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js';
   s.onload = cb;
   document.head.appendChild(s);
 }
 
-document.addEventListener('DOMContentLoaded', () => loadLeaflet(initMap));
+document.addEventListener('DOMContentLoaded', () => loadMapbox(initMap));
 </script>

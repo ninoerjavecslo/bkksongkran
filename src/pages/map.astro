@@ -14,11 +14,12 @@ const festivalMarkers = [
   { id: 'gcircuit', name: 'GCircuit 20th',   dates: 'Apr 10–13', venue: 'UOB Live Hall, Emsphere', lat: 13.7270, lng: 100.5697, color: '#b4005d', price: '฿2,800+' },
 ];
 
-const zonesJson = JSON.stringify(waterFightZones.map(z => ({
+const zonesJson     = JSON.stringify(waterFightZones.map(z => ({
   id: z.id, name: z.name, lat: z.lat, lng: z.lng,
   crowd: z.crowd, area: z.area, desc: z.desc, bestTime: z.bestTime,
 })));
 const festivalsJson = JSON.stringify(festivalMarkers);
+const mapboxToken   = import.meta.env.PUBLIC_MAPBOX_TOKEN;
 ---
 
 <BaseLayout title="Bangkok Songkran 2026 Map — Festival Venues & Water Fight Zones" description="Interactive map of Songkran 2026 Bangkok. Festival venues, water fight zones, and the ultimate BKK guide map." canonical="https://bkksongkran.com/map">
@@ -72,7 +73,7 @@ const festivalsJson = JSON.stringify(festivalMarkers);
         </div>
 
         <!-- Map -->
-        <div id="leaflet-map" class="rounded-2xl overflow-hidden" style="height:520px;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);"></div>
+        <div id="festival-map" class="rounded-2xl overflow-hidden" style="height:520px;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);"></div>
 
         <!-- Info card shown on marker click -->
         <div id="map-popup" class="hidden mt-4 rounded-2xl p-5" style="background:white;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 24px rgba(0,100,121,0.1);">
@@ -159,17 +160,17 @@ const festivalsJson = JSON.stringify(festivalMarkers);
 
 </BaseLayout>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
 
 <style>
   .tab-btn { border-bottom: 2px solid transparent; }
   .active-tab { border-bottom-color: #006479 !important; color: #006479 !important; }
-  .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 4px 24px rgba(0,100,121,0.15); }
-  .custom-pin { display:flex;align-items:center;justify-content:center;border-radius:50%;border:3px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.2);font-size:15px;cursor:pointer;transition:transform .15s; }
-  .custom-pin:hover { transform:scale(1.15); }
+  .mapboxgl-popup-content { border-radius: 12px !important; padding: 12px 14px !important; box-shadow: 0 4px 24px rgba(0,100,121,0.15) !important; font-family: 'Be Vietnam Pro', sans-serif; }
+  .map-pin { display:flex;align-items:center;justify-content:center;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.2);font-size:15px;cursor:pointer;transition:transform .15s; }
+  .map-pin:hover { transform:scale(1.18); }
 </style>
 
-<script define:vars={{ zonesJson, festivalsJson }}>
+<script define:vars={{ zonesJson, festivalsJson, mapboxToken }}>
 const zones    = JSON.parse(zonesJson);
 const festivals = JSON.parse(festivalsJson);
 
@@ -179,16 +180,14 @@ const CROWD = {
   medium: { color: '#34C759', label: 'CHILL' },
 };
 
-let map = null;
+let map = null, activePopup = null;
 
-function buildIcon(emoji, color, size) {
-  return L.divIcon({
-    className: '',
-    html: `<div class="custom-pin" style="width:${size}px;height:${size}px;background:${color};">${emoji}</div>`,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-    popupAnchor: [0, -(size / 2) - 4],
-  });
+function makePin(emoji, color, size) {
+  const el = document.createElement('div');
+  el.className = 'map-pin';
+  el.style.cssText = `width:${size}px;height:${size}px;background:${color};`;
+  el.textContent = emoji;
+  return el;
 }
 
 function showCard(data, type) {
@@ -200,11 +199,7 @@ function showCard(data, type) {
   const extra  = document.getElementById('popup-extra');
 
   popup.classList.remove('hidden');
-
-  // Use textContent for all user-visible text to avoid XSS
   nameEl.textContent = data.name;
-
-  // Clear extra
   while (extra.firstChild) extra.removeChild(extra.firstChild);
 
   if (type === 'zone') {
@@ -213,68 +208,68 @@ function showCard(data, type) {
     badge.textContent = c.label;
     badge.style.cssText = `background:${c.color}20;color:${c.color};`;
     descEl.textContent = data.desc;
-    const timeSpan = document.createElement('span');
-    timeSpan.textContent = '⏰ Best time: ' + data.bestTime;
-    extra.appendChild(timeSpan);
+    const t = document.createElement('span');
+    t.textContent = '⏰ Best time: ' + data.bestTime;
+    extra.appendChild(t);
   } else {
     subEl.textContent = data.venue;
     badge.textContent = data.dates;
     badge.style.cssText = `background:${data.color}20;color:${data.color};`;
     descEl.textContent = data.venue + ' · ' + data.dates;
-    const priceSpan = document.createElement('span');
-    priceSpan.textContent = '🎟 From ' + data.price;
-    const link = document.createElement('a');
-    link.href = '/events#' + data.id;
-    link.textContent = 'View lineup →';
-    link.style.cssText = 'color:#006479;text-decoration:underline;';
-    extra.appendChild(priceSpan);
-    extra.appendChild(link);
+    const ps = document.createElement('span');
+    ps.textContent = '🎟 From ' + data.price;
+    const lk = document.createElement('a');
+    lk.href = '/events#' + data.id;
+    lk.textContent = 'View lineup →';
+    lk.style.cssText = 'color:#006479;text-decoration:underline;';
+    extra.appendChild(ps);
+    extra.appendChild(lk);
   }
-
   popup.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function initMap() {
   if (map) return;
+  mapboxgl.accessToken = mapboxToken;
+  map = new mapboxgl.Map({
+    container: 'festival-map',
+    style: 'mapbox://styles/mapbox/light-v11',
+    center: [100.525, 13.745],
+    zoom: 12.5,
+  });
+  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-  map = L.map('leaflet-map', { zoomControl: true }).setView([13.745, 100.525], 13);
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© <a href="https://carto.com/">CARTO</a>',
-    maxZoom: 19,
-  }).addTo(map);
-
-  // Water fight zones
   zones.forEach(z => {
     const c = CROWD[z.crowd] || CROWD.medium;
-    const m = L.marker([z.lat, z.lng], { icon: buildIcon('💧', c.color, 32) }).addTo(map);
-    m.on('click', () => showCard(z, 'zone'));
+    const el = makePin('💧', c.color, 32);
+    el.addEventListener('click', () => showCard(z, 'zone'));
+    new mapboxgl.Marker({ element: el }).setLngLat([z.lng, z.lat]).addTo(map);
   });
 
-  // Festival venues
   festivals.forEach(f => {
-    const m = L.marker([f.lat, f.lng], { icon: buildIcon('🎪', f.color, 38) }).addTo(map);
-    m.on('click', () => showCard(f, 'festival'));
+    const el = makePin('🎪', f.color, 38);
+    el.addEventListener('click', () => showCard(f, 'festival'));
+    new mapboxgl.Marker({ element: el }).setLngLat([f.lng, f.lat]).addTo(map);
   });
 }
 
 window.focusZone = function(lat, lng, id) {
-  if (!map) { loadLeaflet(() => { initMap(); doFocus(lat, lng, id); }); return; }
+  if (!map) { loadMapbox(() => { initMap(); doFocus(lat, lng, id); }); return; }
   doFocus(lat, lng, id);
 };
 
 function doFocus(lat, lng, id) {
-  map.flyTo([lat, lng], 15, { duration: 0.8 });
+  map.flyTo({ center: [lng, lat], zoom: 15, duration: 800 });
   const zone = zones.find(z => z.id === id);
   if (zone) showCard(zone, 'zone');
-  document.getElementById('leaflet-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('festival-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 window.switchTab = function(tab) {
   const panelFestival = document.getElementById('panel-festival');
-  const panelBkk     = document.getElementById('panel-bkk');
-  const tabFestival  = document.getElementById('tab-festival');
-  const tabBkk       = document.getElementById('tab-bkk');
+  const panelBkk      = document.getElementById('panel-bkk');
+  const tabFestival   = document.getElementById('tab-festival');
+  const tabBkk        = document.getElementById('tab-bkk');
 
   if (tab === 'festival') {
     panelFestival.classList.remove('hidden');
@@ -294,13 +289,13 @@ window.switchTab = function(tab) {
   }
 };
 
-function loadLeaflet(cb) {
-  if (window.L) { cb(); return; }
+function loadMapbox(cb) {
+  if (window.mapboxgl) { cb(); return; }
   const s = document.createElement('script');
-  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  s.src = 'https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js';
   s.onload = cb;
   document.head.appendChild(s);
 }
 
-document.addEventListener('DOMContentLoaded', () => loadLeaflet(initMap));
+document.addEventListener('DOMContentLoaded', () => loadMapbox(initMap));
 </script>
