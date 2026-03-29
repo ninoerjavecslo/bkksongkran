@@ -182,14 +182,29 @@ const CROWD = {
 
 let map = null, activePopup = null;
 
-function makePin(emoji, color, size) {
-  const el = document.createElement('div');
-  el.className = 'map-pin';
-  el.style.cssText = `width:${size}px;height:${size}px;background:${color};pointer-events:all;`;
-  el.textContent = emoji;
-  el.addEventListener('mouseenter', () => { el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.35)'; });
-  el.addEventListener('mouseleave', () => { el.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)'; });
-  return el;
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function makePin(iconName, color) {
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'width:36px;height:42px;cursor:pointer;pointer-events:all;position:relative;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.28));transition:filter .15s,transform .15s;';
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 36 42'); svg.setAttribute('width', '36'); svg.setAttribute('height', '42');
+  svg.style.cssText = 'position:absolute;top:0;left:0;';
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', 'M18 0 C8.059 0 0 8.059 0 18 C0 31.5 18 42 18 42 C18 42 36 31.5 36 18 C36 8.059 27.941 0 18 0 Z');
+  path.setAttribute('fill', color);
+  const circle = document.createElementNS(SVG_NS, 'circle');
+  circle.setAttribute('cx', '18'); circle.setAttribute('cy', '17'); circle.setAttribute('r', '10');
+  circle.setAttribute('fill', 'rgba(255,255,255,0.18)');
+  svg.appendChild(path); svg.appendChild(circle);
+  const iconEl = document.createElement('span');
+  iconEl.className = 'material-symbols-outlined';
+  iconEl.style.cssText = 'position:absolute;top:7px;left:50%;transform:translateX(-50%);font-size:16px;color:white;line-height:1;pointer-events:none;user-select:none;';
+  iconEl.style.fontVariationSettings = "'FILL' 1";
+  iconEl.textContent = iconName;
+  wrap.appendChild(svg); wrap.appendChild(iconEl);
+  wrap.addEventListener('mouseenter', () => { wrap.style.filter = 'drop-shadow(0 5px 12px rgba(0,0,0,0.4))'; wrap.style.transform = 'translateY(-3px)'; });
+  wrap.addEventListener('mouseleave', () => { wrap.style.filter = 'drop-shadow(0 3px 6px rgba(0,0,0,0.28))'; wrap.style.transform = 'translateY(0)'; });
+  return wrap;
 }
 
 function showCard(data, type) {
@@ -243,15 +258,15 @@ function initMap() {
 
   zones.forEach(z => {
     const c = CROWD[z.crowd] || CROWD.medium;
-    const el = makePin('💧', c.color, 32);
-    el.addEventListener('click', () => showCard(z, 'zone'));
-    new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat([z.lng, z.lat]).addTo(map);
+    const el = makePin('water_drop', c.color);
+    const m = new mapboxgl.Marker({ element: el, anchor: 'bottom' }).setLngLat([z.lng, z.lat]).addTo(map);
+    m.getElement().addEventListener('click', (e) => { e.stopPropagation(); showCard(z, 'zone'); });
   });
 
   festivals.forEach(f => {
-    const el = makePin('🎪', f.color, 38);
-    el.addEventListener('click', () => showCard(f, 'festival'));
-    new mapboxgl.Marker({ element: el, anchor: 'center' }).setLngLat([f.lng, f.lat]).addTo(map);
+    const el = makePin('festival', f.color);
+    const m = new mapboxgl.Marker({ element: el, anchor: 'bottom' }).setLngLat([f.lng, f.lat]).addTo(map);
+    m.getElement().addEventListener('click', (e) => { e.stopPropagation(); showCard(f, 'festival'); });
   });
 }
 

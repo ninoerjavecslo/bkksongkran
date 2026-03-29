@@ -126,15 +126,49 @@ const CAT_EMOJIS = {
 let map, popupInstance, markerObjs = {};
 let currentCat = 'all';
 
-function makeMarkerEl(cat, onClickFn) {
+const CAT_MATERIAL = {
+  sightseeing: 'photo_camera', shopping: 'shopping_bag', 'gay-bars': 'local_bar',
+  'gay-clubs': 'nightlife', hotels: 'hotel', food: 'restaurant',
+  massage: 'self_improvement', shows: 'theater_comedy', saunas: 'hot_tub', useful: 'storefront',
+};
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function makeMarkerEl(cat) {
   const c = catMap[cat];
-  const el = document.createElement('div');
-  el.style.cssText = `width:32px;height:32px;border-radius:50%;background:${c ? c.color : '#006479'};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;pointer-events:all;transition:box-shadow .15s;`;
-  el.textContent = CAT_EMOJIS[cat] || '📍';
-  el.addEventListener('mouseenter', () => { el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.35)'; });
-  el.addEventListener('mouseleave', () => { el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.22)'; });
-  el.addEventListener('click', onClickFn);
-  return el;
+  const color = c ? c.color : '#006479';
+  const icon  = CAT_MATERIAL[cat] || 'place';
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'width:36px;height:42px;cursor:pointer;pointer-events:all;position:relative;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.28));transition:filter .15s,transform .15s;';
+
+  // SVG teardrop
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 36 42');
+  svg.setAttribute('width', '36');
+  svg.setAttribute('height', '42');
+  svg.style.cssText = 'position:absolute;top:0;left:0;';
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', 'M18 0 C8.059 0 0 8.059 0 18 C0 31.5 18 42 18 42 C18 42 36 31.5 36 18 C36 8.059 27.941 0 18 0 Z');
+  path.setAttribute('fill', color);
+  const circle = document.createElementNS(SVG_NS, 'circle');
+  circle.setAttribute('cx', '18'); circle.setAttribute('cy', '17'); circle.setAttribute('r', '10');
+  circle.setAttribute('fill', 'rgba(255,255,255,0.18)');
+  svg.appendChild(path); svg.appendChild(circle);
+
+  // Material icon on top
+  const iconEl = document.createElement('span');
+  iconEl.className = 'material-symbols-outlined';
+  iconEl.style.cssText = 'position:absolute;top:7px;left:50%;transform:translateX(-50%);font-size:16px;color:white;line-height:1;pointer-events:none;user-select:none;';
+  iconEl.style.fontVariationSettings = "'FILL' 1";
+  iconEl.textContent = icon;
+
+  wrap.appendChild(svg);
+  wrap.appendChild(iconEl);
+
+  wrap.addEventListener('mouseenter', () => { wrap.style.filter = 'drop-shadow(0 5px 12px rgba(0,0,0,0.4))'; wrap.style.transform = 'translateY(-3px)'; });
+  wrap.addEventListener('mouseleave', () => { wrap.style.filter = 'drop-shadow(0 3px 6px rgba(0,0,0,0.28))'; wrap.style.transform = 'translateY(0)'; });
+  return wrap;
 }
 
 function showPopup(place) {
@@ -178,10 +212,12 @@ function initMap() {
   map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
   places.forEach(p => {
-    const el = makeMarkerEl(p.category, () => showPopup(p));
-    const m = new mapboxgl.Marker({ element: el, anchor: 'center' })
+    const el = makeMarkerEl(p.category);
+    const m = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
       .setLngLat([p.lng, p.lat])
       .addTo(map);
+    // Attach click after addTo so Mapbox doesn't swallow it
+    m.getElement().addEventListener('click', (e) => { e.stopPropagation(); showPopup(p); });
     markerObjs[p.id] = { marker: m, el, place: p };
   });
 }
