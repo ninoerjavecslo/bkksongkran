@@ -177,6 +177,7 @@ const partiesJson = JSON.stringify(parties);
           <input id="custom-event-gdpr" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-pink-600" />
           <span class="text-xs" style="color:#6b8fa3;">I agree that my nickname and contact handle will be shown publicly on this page so others can join my event. My email is stored privately and will not be shared. I confirm this is a personal meetup, not a promotion.</span>
         </label>
+        <div id="turnstile-meetup"></div>
         <p id="custom-event-error" class="text-xs font-semibold hidden" style="color:#ef4444;"></p>
         <div class="flex items-center gap-3 pt-1">
           <button id="custom-event-submit" onclick="submitCustomEvent()" class="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
@@ -871,6 +872,7 @@ window.closeAddEvent = function() {
   const dayInput = document.getElementById('custom-event-day'); if (dayInput) dayInput.value = 'apr11';
   const dayLabel = document.querySelector('#day-select-wrap [id$="-select-label"]'); if (dayLabel) dayLabel.textContent = 'April 11 — Friday';
   const gdprEl = document.getElementById('custom-event-gdpr'); if (gdprEl) gdprEl.checked = false;
+  if (window.turnstile && meetupTurnstileId !== null) window.turnstile.reset(meetupTurnstileId);
   document.getElementById('custom-event-error').classList.add('hidden');
 };
 window.submitCustomEvent = async function() {
@@ -904,6 +906,9 @@ window.submitCustomEvent = async function() {
   if (contactErr) { errEl.textContent = contactErr; errEl.classList.remove('hidden'); contactEl.focus(); return; }
 
   if (sessionSubmits >= MAX_SUBMITS) { errEl.textContent = 'You\'ve reached the maximum of 3 sign-ups per session.'; errEl.classList.remove('hidden'); return; }
+
+  const turnstileToken = (window.turnstile && meetupTurnstileId !== null) ? window.turnstile.getResponse(meetupTurnstileId) : '';
+  if (!turnstileToken) { errEl.textContent = 'Please complete the security check.'; errEl.classList.remove('hidden'); return; }
 
   subBtn.disabled = true; subBtn.style.opacity = '0.6';
   try {
@@ -989,4 +994,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   load();
 });
+</script>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+let meetupTurnstileId = null;
+window.openAddEvent = (function(orig) {
+  return function() {
+    orig();
+    if (window.turnstile && meetupTurnstileId === null) {
+      meetupTurnstileId = window.turnstile.render('#turnstile-meetup', {
+        sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+        'refresh-expired': 'auto',
+      });
+    }
+  };
+})(window.openAddEvent);
 </script>

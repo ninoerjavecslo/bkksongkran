@@ -61,6 +61,7 @@ export const prerender = false;
         <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
         Unlock all contacts
       </button>
+      <div id="turnstile-tickets" class="mt-3"></div>
       <p class="text-[10px] text-center mt-3" style="color:#6b8fa3;">Your email is stored privately and never shared.</p>
     </div>
   </div>
@@ -107,7 +108,7 @@ export const prerender = false;
         <div class="flex items-start justify-between gap-2">
           <div class="flex items-center gap-2">
             <span class="tpl-type-badge inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase"></span>
-            <span class="tpl-fest-badge inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold"></span>
+            <span class="tpl-fest-badge inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wide"></span>
           </div>
           <span class="tpl-time text-[10px] font-medium" style="color:#86b3cc;"></span>
         </div>
@@ -489,6 +490,7 @@ updateUnlockBanner();
   document.getElementById('unlock-modal')!.classList.add('hidden');
   unlockError.classList.add('hidden');
   (document.getElementById('unlock-email') as HTMLInputElement).value = '';
+  if (window.turnstile && ticketsTurnstileId !== null) window.turnstile.reset(ticketsTurnstileId);
 };
 document.getElementById('unlock-modal')!.addEventListener('click', (e) => {
   if (e.target === e.currentTarget) (window as any).closeUnlockModal();
@@ -504,13 +506,19 @@ document.getElementById('unlock-modal')!.addEventListener('click', (e) => {
     unlockError.classList.remove('hidden');
     return;
   }
+  const turnstileToken = (window.turnstile && ticketsTurnstileId !== null) ? window.turnstile.getResponse(ticketsTurnstileId) : '';
+  if (!turnstileToken) {
+    unlockError.textContent = 'Please complete the security check.';
+    unlockError.classList.remove('hidden');
+    return;
+  }
   submitBtn.textContent = 'Unlocking...';
   submitBtn.setAttribute('disabled', 'true');
   try {
     const res = await fetch('/api/reveal', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, turnstileToken }),
     });
     const data = await res.json();
     if (!res.ok) {
@@ -651,7 +659,7 @@ function render() {
     tb.appendChild(document.createTextNode(sell ? ' Selling' : ' Buying'));
 
     const fb = clone.querySelector('.tpl-fest-badge') as HTMLElement;
-    fb.style.cssText = `background:${fc.c}15;color:${fc.d};`;
+    fb.style.cssText = `background:${fc.c}25;color:${fc.d};border:1.5px solid ${fc.c}50;`;
     fb.textContent = t.festival;
 
     (clone.querySelector('.tpl-time') as HTMLElement).textContent = ago(t.created_at);
@@ -694,4 +702,20 @@ function ago(d:string) {
 }
 
 load();
+</script>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+let ticketsTurnstileId = null;
+(window as any).openUnlockModal = (function(orig) {
+  return function() {
+    orig();
+    if (window.turnstile && ticketsTurnstileId === null) {
+      ticketsTurnstileId = window.turnstile.render('#turnstile-tickets', {
+        sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+        'refresh-expired': 'auto',
+      });
+    }
+  };
+})((window as any).openUnlockModal);
 </script>

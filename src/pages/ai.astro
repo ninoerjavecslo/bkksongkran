@@ -171,6 +171,9 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 
 </BaseLayout>
 
+<div id="turnstile-chat" style="display:none;"></div>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+
 <script>
 
 const history: { role: 'user' | 'assistant'; content: string }[] = [];
@@ -277,10 +280,24 @@ async function sendMessage() {
   addTyping(typingId);
 
   try {
+    let turnstileToken = '';
+    try {
+      turnstileToken = await (window as any).turnstile?.getResponse?.() || '';
+      if (!turnstileToken && (window as any).turnstile) {
+        turnstileToken = await new Promise(resolve => {
+          (window as any).turnstile.render('#turnstile-chat', {
+            sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+            callback: resolve,
+            'refresh-expired': 'auto',
+          });
+        });
+      }
+    } catch { turnstileToken = ''; }
+
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history.slice(-20) }),
+      body: JSON.stringify({ messages: history.slice(-20), turnstileToken }),
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);

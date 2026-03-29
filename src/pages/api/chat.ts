@@ -103,6 +103,19 @@ function jsonError(message: string, status: number) {
   });
 }
 
+const TURNSTILE_SECRET = import.meta.env.TURNSTILE_SECRET_KEY;
+
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  if (!TURNSTILE_SECRET) return true; // skip in dev if not set
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ secret: TURNSTILE_SECRET, response: token, remoteip: ip }),
+  });
+  const data: any = await res.json();
+  return data.success === true;
+}
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     // ── Origin check (blocks direct API hammering from scripts) ──
@@ -120,7 +133,13 @@ export const POST: APIRoute = async ({ request }) => {
     let body: any;
     try { body = await request.json(); } catch { return jsonError('Invalid JSON', 400); }
 
-    const { messages } = body;
+    // ── Turnstile verification ────────────────────────────────
+    const { messages, turnstileToken } = body;
+    if (TURNSTILE_SECRET) {
+      if (!turnstileToken) return jsonError('Bot check required.', 403);
+      const valid = await verifyTurnstile(turnstileToken, ip);
+      if (!valid) return jsonError('Bot check failed. Please try again.', 403);
+    }
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 10) {
       return jsonError('Invalid request', 400);
     }
