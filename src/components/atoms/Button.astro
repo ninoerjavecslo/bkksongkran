@@ -1,0 +1,57 @@
+---
+// Button atom — handles all variants
+interface Props {
+  variant?: 'primary' | 'ghost' | 'outline' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  external?: boolean;
+  class?: string;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  id?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  external = false,
+  class: className = '',
+  disabled = false,
+  type = 'button',
+  id,
+} = Astro.props;
+
+const sizes = {
+  sm: 'px-4 py-2 text-sm gap-1.5',
+  md: 'px-6 py-3 text-sm gap-2',
+  lg: 'px-8 py-4 text-base gap-2.5',
+};
+
+const variants = {
+  primary: 'liquid-gradient text-white shadow-glow-cyan hover:scale-105 hover:shadow-lg',
+  ghost: 'glass text-primary border border-primary/20 hover:bg-white/80 hover:scale-105',
+  outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+  danger: 'bg-error text-error-on hover:scale-105',
+};
+
+const base = 'inline-flex items-center justify-center font-headline font-bold rounded-full transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none';
+const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
+
+const tag = href ? 'a' : 'button';
+const linkProps = href ? {
+  href,
+  target: external ? '_blank' : undefined,
+  rel: external ? 'noopener noreferrer' : undefined,
+} : {};
+---
+
+{href ? (
+  <a class={classes} {...linkProps} id={id}>
+    <slot />
+  </a>
+) : (
+  <button class={classes} type={type} disabled={disabled} id={id}>
+    <slot />
+  </button>
+)}

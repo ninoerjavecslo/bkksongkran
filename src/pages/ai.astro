@@ -1,0 +1,342 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+---
+
+<BaseLayout title="AI Songkran Guide — Ask Nong About Bangkok 2026" description="Ask our AI guide anything about Songkran 2026. Get personalized day plans, festival comparisons, LGBTQ+ spots, and real-time tips." canonical="https://bangkoksongkran.com/ai">
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-8 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8">
+        <div class="flex-1">
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#b4005d;">Live Festival Concierge</div>
+          <h1 class="font-headline font-extrabold tracking-tighter mb-3" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.9;">
+            Meet<br/><span style="background:linear-gradient(135deg,#b4005d,#ff8eb2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Nong</span>
+          </h1>
+          <p class="text-lg max-w-lg" style="color:#326177;line-height:1.6;">
+            Your Songkran AI — knows every 2026 lineup, every LGBTQ+ spot, every venue. Ask anything and get a real answer.
+          </p>
+        </div>
+
+        <!-- Avatar -->
+        <div class="relative flex-shrink-0">
+          <div class="w-32 h-32 rounded-full flex items-center justify-center relative" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 0 40px rgba(64,206,243,0.4);">
+            <span class="material-symbols-outlined text-white" style="font-size:40px;font-variation-settings:'FILL' 1;">water_drop</span>
+            <div class="absolute inset-0 rounded-full" style="background:linear-gradient(135deg,#006479,#40cef3);opacity:0.3;animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
+          </div>
+          <div class="absolute -bottom-2 -right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-lg" style="background:#fff;border:1px solid rgba(192,232,255,0.6);">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-xs font-bold" style="color:#003345;">Online Now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT + SIDEBAR -->
+  <section class="px-6 pb-20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- CHAT -->
+      <div class="lg:col-span-8 flex flex-col" style="height:680px;">
+        <div class="card flex flex-col h-full overflow-hidden">
+
+          <!-- Chat header -->
+          <div class="flex items-center gap-3 px-6 py-4 border-b" style="border-color:rgba(192,232,255,0.4);background:rgba(225,243,255,0.4);">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#006479,#40cef3);">
+              <span class="material-symbols-outlined text-white" style="font-size:18px;font-variation-settings:'FILL' 1;">water_drop</span>
+            </div>
+            <div>
+              <div class="font-headline font-bold text-sm" style="color:#003345;">Nong — Songkran Expert</div>
+              <div class="text-xs" style="color:#326177;">Knows every 2026 lineup · Real-time festival guide</div>
+            </div>
+            <div class="ml-auto flex items-center gap-1.5 text-xs font-bold" style="color:#34C759;">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Live
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar" id="chat-messages">
+            <!-- Initial greeting -->
+            <div class="flex gap-3 items-end">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#006479,#40cef3);">
+                <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1;">water_drop</span>
+              </div>
+              <div class="max-w-[80%] p-4 rounded-t-2xl rounded-br-2xl shadow-sm text-sm leading-relaxed" style="background:#fff;border:1px solid rgba(192,232,255,0.4);color:#003345;">
+                Sawadee krap! I'm Nong — your Songkran 2026 guide.<br/><br/>
+                I know every confirmed lineup: <strong style="color:#006479;">Alan Walker × Steve Aoki</strong> at S2O, <strong style="color:#b4005d;">Martin Garrix</strong> closing Siam Songkran, and <strong style="color:#7c3aed;">GCircuit's</strong> full 4-night schedule at Emsphere.<br/><br/>
+                Ask me to plan your day, compare festivals, find the best LGBTQ+ spots, or anything else. What do you want to know?
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggestions -->
+          <div class="px-5 py-3 border-t flex gap-2 overflow-x-auto no-scrollbar" style="border-color:rgba(192,232,255,0.4);" id="suggestions">
+            {[
+              'Plan my Apr 12 full day',
+              'S2O vs Siam Songkran?',
+              'Best LGBTQ+ spots',
+              'GCircuit first-timer tips',
+              'Where after midnight?',
+              'What to wear to GCircuit?',
+              'Best hotels near S2O',
+            ].map(s => (
+              <button
+                class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold border transition-all hover:border-primary hover:text-primary"
+                style="background:rgba(225,243,255,0.7);border-color:rgba(192,232,255,0.6);color:#326177;white-space:nowrap;"
+                onclick={`quickAsk(\`${s}\`)`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <!-- Input -->
+          <div class="px-5 pb-5 pt-3 flex gap-3 items-end">
+            <textarea
+              id="chat-input"
+              placeholder="Ask anything about Songkran 2026..."
+              rows="1"
+              class="flex-1 px-5 py-3 rounded-2xl text-sm outline-none resize-none transition-all"
+              style="background:rgba(225,243,255,0.7);border:1.5px solid rgba(192,232,255,0.8);color:#003345;max-height:120px;font-family:'Be Vietnam Pro',sans-serif;"
+            ></textarea>
+            <button
+              id="send-btn"
+              class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
+              style="background:linear-gradient(135deg,#006479,#40cef3);color:#fff;"
+              onclick="sendMessage()"
+            >
+              <span class="material-symbols-outlined text-xl">send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="lg:col-span-4 space-y-5">
+
+        <!-- What Nong knows -->
+        <div class="card p-5 space-y-4">
+          <h3 class="font-headline font-bold text-sm uppercase tracking-wider" style="color:#003345;">What Nong Knows</h3>
+          {[
+            {icon:'music_note',label:'Full 2026 Lineups',detail:'S2O, Siam Songkran, GCircuit day by day',color:'#006479'},
+            {icon:'favorite',label:'LGBTQ+ Scene',detail:'GCircuit, Silom Soi 2&4, gay bars, Bear Week',color:'#9B59B6'},
+            {icon:'schedule',label:'Day Planning',detail:'Build full itineraries for any date',color:'#FF9F0A'},
+            {icon:'hotel',label:'Where to Stay',detail:'Hotels by venue, vibe, and budget',color:'#b4005d'},
+            {icon:'directions_transit',label:'Getting Around',detail:'BTS routes, MRT stops, Grab tips',color:'#34C759'},
+            {icon:'checklist',label:'Survival Tips',detail:'What to pack, carry, wear',color:'#FF6B35'},
+          ].map(k => (
+            <div class="flex gap-3 items-start">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={`background:${k.color}15;`}>
+                <span class="material-symbols-outlined text-sm" style={`color:${k.color};font-variation-settings:'FILL' 1;`}>{k.icon}</span>
+              </div>
+              <div>
+                <div class="font-semibold text-sm" style="color:#003345;">{k.label}</div>
+                <div class="text-xs" style="color:#326177;">{k.detail}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Popular questions -->
+        <div class="card p-5 space-y-3">
+          <h3 class="font-headline font-bold text-sm uppercase tracking-wider" style="color:#003345;">Popular Questions</h3>
+          {[
+            "Who's headlining S2O on Apr 12?",
+            "GCircuit pool party times?",
+            "Is Songkran LGBTQ+ friendly?",
+            "Best area to stay in Bangkok?",
+            "How to get to Emsphere?",
+          ].map(q => (
+            <button
+              onclick={`quickAsk(\`${q}\`)`}
+              class="w-full text-left p-3 rounded-xl text-sm font-medium transition-all hover:shadow-sm"
+              style="background:rgba(225,243,255,0.7);color:#003345;border:1px solid rgba(192,232,255,0.5);"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+
+      </aside>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+const AI_SYSTEM = `You are Nong, a warm, fun, and knowledgeable Songkran 2026 festival guide AI. You are embedded in siamsplash.com, a Bangkok Songkran festival website.
+
+CONFIRMED 2026 LINEUPS:
+
+S2O Songkran 2026 (Apr 11-13, S2O Land, Ratchada Rd, MRT Thailand Cultural Centre, ฿1,800-2,500):
+- Apr 11: AC Slater → William Black → I Hate Models → Lost Frequencies → Alan Walker × Steve Aoki HEADLINER ("Lonely Club" world premiere)
+- Apr 12: Marie Vaunt → Dabin → SIDEPIECE → Don Diablo (CTRL ALT DELETE Asia debut) → Zedd HEADLINER
+- Apr 13: Da Tweekaz → Ray Volpe → GRYFFIN → Kygo HEADLINER
+
+Siam Songkran "The Melora" 2026 (Apr 11-14, Bravo BKK Arena, RCA, ฿1,500-2,000):
+- Apr 11: 22Bullets → Andromedik → Ben Nicky → Afrojack b2b R3HAB HEADLINER
+- Apr 12: Arcando → Slushii → Third Party b3b DubVision b3b Matisse&Sadko → Alok (Urban Theory Show) → Marshmello HEADLINER
+- Apr 13: Layton Giordani → Agents of Time → ARTBAT b2b R3HAB → Martin Garrix HEADLINER (world #1)
+- Apr 14: DCR Milda → Gorgon City → Vini Vici → John Summit HEADLINER
+
+GCircuit Songkran 2026 - 20th Anniversary "ADRO-MADA: City of Tomorrow" (Apr 10-13, UOB Live Hall + Tribe Sky Beach Club, Emsphere, BTS Phrom Phong, ฿2,800-4,900):
+- Apr 10 (Illuminate Opening, Theme: Chrome/Tactical): TAKI & RITA → Mario Beckman HEADLINER → Allan Natal
+- Apr 11 (Boy Pool Party noon-7pm at Tribe Sky Beach Club, Theme: Galactic Royalty): CHU & SUN JUNE → Luis Vazquez HEADLINER → Alex Ramos
+- Apr 12 (Bear Pool Party/AquaXXL noon-7pm, Theme: Silver/Chrome/Glow): Grant Jang → Tomer Maizner HEADLINER → Sagi Kariv
+- Apr 13 (Automata Closing, Theme: Kinky/Leather): Herric Pu → Isak Salazar → Tom Stephan HEADLINER (closing set)
+
+LGBTQ+ SCENE:
+- Silom Soi 2 & 4: Bangkok's gay epicenter, free, incredible Apr 13-15, bars open noon
+- GCircuit: Asia's biggest gay circuit party, inclusive regardless of age/looks/body
+- DJ Station: Drag shows 11pm and 1am, ฿200-350
+- Bangkok Songkran Bear Week (BSBW): Apr 10-16, Silom area and Royal Orchid Sheraton
+- 2026: First year alcohol sales from 11am (new Thai law, previously restricted 2-5pm)
+
+PRACTICAL INFO:
+- S2O new venue: S2O Land, Ratchada Rd, MRT Thailand Cultural Centre (new larger site)
+- Hotels near GCircuit: Hilton Sukhumvit, DoubleTree Sukhumvit (3-5 min walk), Novotel Sukhumvit 20
+- Hotels near S2O: near MRT Thailand Cultural Centre / Ratchada
+- Hotels near Siam Songkran: near MRT Phetchaburi or Asoke
+- All major ticketed events 20+, original passport required, no photo copies
+- Transport: BTS/MRT only during Songkran — taxis are chaos
+- Street water fights peak Apr 13-15
+- Free events: Silom, Khao San, Siam Square, Maha Songkran (Sanam Luang)
+- LGBTQ+ street: Silom Soi 2 & 4 starts around noon Apr 13
+
+YOUR PERSONALITY:
+- Warm, fun, slightly cheeky, use occasional Thai (krap, sawadee, sanook=fun, sabai=chill)
+- Give specific, actionable advice
+- Be openly welcoming about LGBTQ+ scene
+- Format with line breaks for readability
+- Keep under 200 words unless a full day plan is requested
+- For day plans, be detailed and specific with times`;
+
+const history: {role: string; content: string}[] = [];
+let busy = false;
+
+function quickAsk(text: string) {
+  const input = document.getElementById('chat-input') as HTMLTextAreaElement;
+  input.value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  if (busy) return;
+  const input = document.getElementById('chat-input') as HTMLTextAreaElement;
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage('user', text);
+  history.push({ role: 'user', content: text });
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Hide suggestions after first use
+  const suggs = document.getElementById('suggestions');
+  if (suggs) suggs.style.opacity = '0.5';
+
+  busy = true;
+  const sendBtn = document.getElementById('send-btn');
+  if (sendBtn) sendBtn.setAttribute('disabled', 'true');
+
+  // Typing indicator
+  const typingId = 'typing-' + Date.now();
+  addTyping(typingId);
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: AI_SYSTEM,
+        messages: history,
+      }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const reply = data.reply || 'Something went wrong — try again!';
+    history.push({ role: 'assistant', content: reply });
+    document.getElementById(typingId)?.remove();
+    addMessage('bot', reply);
+  } catch (e) {
+    document.getElementById(typingId)?.remove();
+    addMessage('bot', 'Connection issue — Check your internet and try again!');
+  }
+
+  busy = false;
+  if (sendBtn) sendBtn.removeAttribute('disabled');
+}
+
+function addMessage(role: string, text: string) {
+  const msgs = document.getElementById('chat-messages');
+  if (!msgs) return;
+  const el = document.createElement('div');
+  el.className = `flex gap-3 items-end ${role === 'user' ? 'justify-end' : ''}`;
+  el.style.animation = 'slideUp 0.25s ease forwards';
+  el.style.opacity = '0';
+
+  if (role === 'bot') {
+    el.innerHTML = `
+      <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#006479,#40cef3);">
+        <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1;">water_drop</span>
+      </div>
+      <div class="max-w-[80%] p-4 rounded-t-2xl rounded-br-2xl shadow-sm text-sm leading-relaxed" style="background:#fff;border:1px solid rgba(192,232,255,0.4);color:#003345;">
+        ${text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong style="color:#006479;">$1</strong>')}
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div class="max-w-[80%] p-4 rounded-t-2xl rounded-bl-2xl text-sm font-medium leading-relaxed" style="background:linear-gradient(135deg,#006479,#40cef3);color:#fff;">
+        ${text.replace(/\n/g, '<br>')}
+      </div>
+      <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(192,232,255,0.5);"><span class="material-symbols-outlined text-primary" style="font-size:16px;font-variation-settings:'FILL' 1;">person</span></div>`;
+  }
+
+  msgs.appendChild(el);
+  setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
+}
+
+function addTyping(id: string) {
+  const msgs = document.getElementById('chat-messages');
+  if (!msgs) return;
+  const el = document.createElement('div');
+  el.className = 'flex gap-3 items-end';
+  el.id = id;
+  el.innerHTML = `
+    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#006479,#40cef3);">
+      <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1;">water_drop</span>
+    </div>
+    <div class="p-4 rounded-t-2xl rounded-br-2xl" style="background:#fff;border:1px solid rgba(192,232,255,0.4);">
+      <div class="flex gap-1.5 items-center">
+        <div class="w-2 h-2 rounded-full bg-primary" style="animation:bounce 1.2s ease-in-out infinite;"></div>
+        <div class="w-2 h-2 rounded-full bg-primary" style="animation:bounce 1.2s ease-in-out .2s infinite;"></div>
+        <div class="w-2 h-2 rounded-full bg-primary" style="animation:bounce 1.2s ease-in-out .4s infinite;"></div>
+      </div>
+    </div>`;
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Auto-resize textarea
+const textarea = document.getElementById('chat-input') as HTMLTextAreaElement;
+textarea?.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+textarea?.addEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+(window as any).sendMessage = sendMessage;
+(window as any).quickAsk = quickAsk;
+</script>

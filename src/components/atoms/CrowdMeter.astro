@@ -1,0 +1,45 @@
+---
+interface Props {
+  level: 'low' | 'medium' | 'high' | 'insane';
+  showLabel?: boolean;
+  showBar?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { level, showLabel = true, showBar = false, size = 'md', class: className = '' } = Astro.props;
+
+const config = {
+  low:    { label: 'Low',    icon: 'sentiment_satisfied', pct: 25, color: '#34C759', bg: '#E8FFF0', text: '#1A7A3A', border: '#34C759' },
+  medium: { label: 'Medium', icon: 'groups', pct: 55, color: '#FF9F0A', bg: '#FFF8E0', text: '#7A5A00', border: '#FF9F0A' },
+  high:   { label: 'High',   icon: 'warning', pct: 78, color: '#FF6B35', bg: '#FFF0E0', text: '#7A3000', border: '#FF6B35' },
+  insane: { label: 'INSANE', icon: 'local_fire_department', pct: 98, color: '#FF3B30', bg: '#FFE8E8', text: '#7A0000', border: '#FF3B30' },
+};
+
+const c = config[level];
+
+const sizes = {
+  sm: 'text-xs px-2.5 py-1',
+  md: 'text-sm px-3 py-1.5',
+  lg: 'text-base px-4 py-2',
+};
+---
+
+<div class={`inline-flex flex-col gap-1.5 ${className}`}>
+  <div
+    class={`inline-flex items-center gap-1.5 rounded-full font-bold border ${sizes[size]}`}
+    style={`background:${c.bg};color:${c.text};border-color:${c.border};`}
+  >
+    <span class="material-symbols-outlined" style={`font-size:inherit;font-variation-settings:'FILL' 1;color:${c.color};`}>{c.icon}</span>
+    {showLabel && <span>{c.label}</span>}
+  </div>
+
+  {showBar && (
+    <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+      <div
+        class="h-full rounded-full transition-all duration-700"
+        style={`width:${c.pct}%;background:${c.color};`}
+      ></div>
+    </div>
+  )}
+</div>

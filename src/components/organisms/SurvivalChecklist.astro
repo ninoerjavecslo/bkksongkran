@@ -1,0 +1,124 @@
+---
+import ChecklistItem from '../molecules/ChecklistItem.astro';
+import Icon from '../atoms/Icon.astro';
+import { checklist } from '../../data/index';
+---
+
+<div class="space-y-6">
+  <!-- Progress header -->
+  <div class="glass rounded-2xl p-5 space-y-3">
+    <div class="flex items-center justify-between">
+      <h3 class="font-headline font-bold text-lg text-on-surface">Songkran Ready Score</h3>
+      <span class="font-headline font-black text-2xl text-primary" id="checklist-score">0%</span>
+    </div>
+    <div class="h-3 bg-surface-container rounded-full overflow-hidden">
+      <div
+        class="h-full liquid-gradient rounded-full transition-all duration-500"
+        style="width:0%"
+        id="checklist-progress-bar"
+      ></div>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-xs text-on-surface-variant" id="checklist-progress-label">0 items ready</span>
+      <button
+        onclick="shareChecklist()"
+        class="text-xs font-bold text-primary hover:text-primary-dim flex items-center gap-1 transition-colors"
+      >
+        <span class="material-symbols-outlined text-sm">share</span>
+        Share score
+      </button>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  {checklist.map(category => (
+    <div class="space-y-3">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+             style={`background:${category.color}20;`}>
+          <span class="material-symbols-outlined text-sm" style={`color:${category.color};font-variation-settings:'FILL' 1;`}>
+            {category.icon}
+          </span>
+        </div>
+        <h4 class="font-headline font-bold text-base text-on-surface">{category.category}</h4>
+      </div>
+
+      <div class="space-y-2 pl-11">
+        {category.items.map(item => (
+          <ChecklistItem
+            id={item.id}
+            label={item.label}
+            tip={item.tip}
+            priority={item.priority as any}
+          />
+        ))}
+      </div>
+    </div>
+  ))}
+
+  <!-- Share card (hidden until complete) -->
+  <div id="share-card" class="hidden">
+    <div class="liquid-gradient rounded-2xl p-6 text-white text-center space-y-3">
+      <span class="material-symbols-outlined text-4xl text-white" style="font-variation-settings:'FILL' 1;">celebration</span>
+      <h3 class="font-headline font-bold text-xl">You're Songkran Ready!</h3>
+      <p class="text-white/80 text-sm">Share your readiness with your squad</p>
+      <button
+        onclick="shareChecklist()"
+        class="bg-white text-primary font-bold px-6 py-2 rounded-full text-sm hover:scale-105 transition-transform"
+      >
+        Share My Score
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateProgress() {
+  const all = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"][id^="check-"]');
+  const checked = Array.from(all).filter(cb => cb.checked).length;
+  const total = all.length;
+  const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+  const bar = document.getElementById('checklist-progress-bar');
+  const label = document.getElementById('checklist-progress-label');
+  const score = document.getElementById('checklist-score');
+  const shareCard = document.getElementById('share-card');
+
+  if (bar) bar.style.width = `${pct}%`;
+  if (label) label.textContent = `${checked}/${total} items ready`;
+  if (score) score.textContent = `${pct}%`;
+  if (shareCard) shareCard.classList.toggle('hidden', pct < 100);
+}
+
+// Listen to all checkboxes
+document.addEventListener('change', (e) => {
+  const target = e.target as HTMLInputElement;
+  if (target.type === 'checkbox' && target.id.startsWith('check-')) {
+    updateProgress();
+  }
+});
+
+// Init from localStorage
+document.addEventListener('DOMContentLoaded', () => {
+  const all = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"][id^="check-"]');
+  all.forEach(cb => {
+    const saved = localStorage.getItem(cb.id);
+    if (saved === 'true') cb.checked = true;
+  });
+  updateProgress();
+});
+
+function shareChecklist() {
+  const score = document.getElementById('checklist-score')?.textContent || '0%';
+  const text = `I'm ${score} Songkran ready for Bangkok 2026! Check your readiness at siamsplash.com`;
+  if (navigator.share) {
+    navigator.share({ title: 'Songkran Ready Score', text, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Copied to clipboard!');
+    });
+  }
+}
+
+(window as any).shareChecklist = shareChecklist;
+</script>

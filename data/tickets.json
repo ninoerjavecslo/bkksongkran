@@ -1,0 +1,44 @@
+[
+  {
+    "id": "seed-1",
+    "type": "selling",
+    "festival": "S2O",
+    "dates": "Apr 12",
+    "tier": "VIP",
+    "quantity": 2,
+    "price": 4500,
+    "contact": "@mike_bkk",
+    "contactType": "instagram",
+    "email": "mike@example.com",
+    "note": "Can't make it anymore, selling at face value",
+    "createdAt": "2026-03-28T10:00:00Z"
+  },
+  {
+    "id": "seed-2",
+    "type": "buying",
+    "festival": "GCircuit",
+    "dates": "All Days",
+    "tier": "GA",
+    "quantity": 1,
+    "price": 3500,
+    "contact": "line: jess_travel",
+    "contactType": "line",
+    "email": "jess@example.com",
+    "note": "Looking for full pass, budget flexible",
+    "createdAt": "2026-03-27T14:00:00Z"
+  },
+  {
+    "id": "seed-3",
+    "type": "selling",
+    "festival": "Siam Songkran",
+    "dates": "Apr 13",
+    "tier": "GA",
+    "quantity": 3,
+    "price": 1500,
+    "contact": "+66812345678",
+    "contactType": "whatsapp",
+    "email": "somchai@example.com",
+    "note": "Group changed plans, 3 tickets available",
+    "createdAt": "2026-03-26T09:00:00Z"
+  }
+]

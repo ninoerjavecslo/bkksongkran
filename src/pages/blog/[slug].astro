@@ -1,0 +1,324 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { articles } from '../../data/articles';
+
+export function getStaticPaths() {
+  return articles.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+
+function fmt(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+}
+
+function renderContent(md: string): string {
+  const lines = md.split('\n');
+  const out: string[] = [];
+  let inList = false;
+  let inTable = false;
+  let tableHead = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Close list if not a list item
+    if (inList && !trimmed.startsWith('- ') && !/^\d+\.\s/.test(trimmed)) {
+      out.push('</ul>');
+      inList = false;
+    }
+    // Close table if not a table row
+    if (inTable && !trimmed.startsWith('|')) {
+      out.push('</tbody></table></div>');
+      inTable = false;
+    }
+
+    // Empty line
+    if (trimmed === '') continue;
+
+    // H2
+    if (trimmed.startsWith('## ')) {
+      out.push(`<h2>${fmt(trimmed.slice(3))}</h2>`);
+      continue;
+    }
+    // H3
+    if (trimmed.startsWith('### ')) {
+      out.push(`<h3>${fmt(trimmed.slice(4))}</h3>`);
+      continue;
+    }
+
+    // Table
+    if (trimmed.startsWith('|')) {
+      const cells = trimmed.split('|').filter(c => c.trim());
+      // Skip separator rows
+      if (cells.every(c => /^[\s\-:]+$/.test(c))) {
+        tableHead = false;
+        continue;
+      }
+      if (!inTable) {
+        out.push('<div class="table-wrap"><table>');
+        out.push('<thead>');
+        out.push(`<tr>${cells.map(c => `<th>${fmt(c.trim())}</th>`).join('')}</tr>`);
+        out.push('</thead><tbody>');
+        inTable = true;
+        tableHead = true;
+        continue;
+      }
+      out.push(`<tr>${cells.map(c => `<td>${fmt(c.trim())}</td>`).join('')}</tr>`);
+      continue;
+    }
+
+    // List items
+    if (trimmed.startsWith('- ') || /^\d+\.\s/.test(trimmed)) {
+      if (!inList) {
+        out.push('<ul>');
+        inList = true;
+      }
+      const content = trimmed.startsWith('- ') ? trimmed.slice(2) : trimmed.replace(/^\d+\.\s/, '');
+      out.push(`<li>${fmt(content)}</li>`);
+      continue;
+    }
+
+    // Regular paragraph
+    out.push(`<p>${fmt(trimmed)}</p>`);
+  }
+
+  if (inList) out.push('</ul>');
+  if (inTable) out.push('</tbody></table></div>');
+
+  return out.join('\n');
+}
+
+const htmlContent = renderContent(article.content);
+
+// Get related articles (same category or just other articles)
+const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
+---
+
+<BaseLayout title={article.metaTitle} description={article.metaDescription} canonical={`https://bangkoksongkran.com/blog/${article.slug}`}>
+
+  <!-- Extra head tags -->
+  <meta slot="head" name="keywords" content={article.keywords.join(', ')} />
+  <meta slot="head" property="og:type" content="article" />
+
+  <!-- Article Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.metaDescription,
+    "datePublished": article.publishedDate,
+    "dateModified": article.modifiedDate,
+    "author": { "@type": "Organization", "name": "Bangkok Songkran" },
+    "publisher": { "@type": "Organization", "name": "Bangkok Songkran", "url": "https://bangkoksongkran.com" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://bangkoksongkran.com/blog/${article.slug}` },
+    "keywords": article.keywords,
+  })} />
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bangkoksongkran.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guide", "item": "https://bangkoksongkran.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": article.h1, "item": `https://bangkoksongkran.com/blog/${article.slug}` },
+    ]
+  })} />
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-8 px-6">
+    <div class="max-w-3xl mx-auto">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs mb-6" style="color:#86b3cc;">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <a href="/blog" class="hover:text-primary transition-colors">Guide</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <span style="color:#326177;">{article.h1}</span>
+      </nav>
+
+      <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-4" style={`background:${article.categoryColor}15;color:${article.categoryColor};`}>
+        {article.category}
+      </span>
+
+      <h1 class="font-headline font-extrabold tracking-tight mb-4 leading-tight" style="font-size:clamp(2rem,5vw,3.2rem);color:#003345;">
+        {article.h1}
+      </h1>
+
+      <p class="text-lg mb-6" style="color:#326177;">{article.excerpt}</p>
+
+      <div class="flex items-center gap-4 text-xs font-medium" style="color:#86b3cc;">
+        <span class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">schedule</span>
+          {article.readTime} min read
+        </span>
+        <span>Updated {new Date(article.modifiedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE CONTENT -->
+  <section class="px-6 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <div class="article-content" set:html={htmlContent} />
+    </div>
+  </section>
+
+  <!-- RELATED ARTICLES -->
+  <section class="px-6 pb-20" style="background:rgba(225,243,255,0.4);">
+    <div class="max-w-3xl mx-auto pt-12">
+      <h2 class="font-headline font-bold text-xl mb-6" style="color:#003345;">Continue Reading</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {related.map(r => (
+          <a href={`/blog/${r.slug}`} class="card p-0 overflow-hidden group block">
+            <div class="h-1 w-full" style={`background:${r.categoryColor};`}></div>
+            <div class="p-4 space-y-2">
+              <span class="text-[10px] font-bold uppercase" style={`color:${r.categoryColor};`}>{r.category}</span>
+              <h3 class="font-headline font-bold text-sm leading-snug group-hover:text-primary transition-colors" style="color:#003345;">{r.h1}</h3>
+              <span class="text-[10px]" style="color:#86b3cc;">{r.readTime} min read</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-6 pb-16">
+    <div class="max-w-3xl mx-auto text-center space-y-4">
+      <h2 class="font-headline font-bold text-xl" style="color:#003345;">Ready for Songkran 2026?</h2>
+      <p class="text-sm" style="color:#326177;">Check out the live heat map, festival lineups, and AI trip planner.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="/events" class="btn-primary px-6 py-3 text-sm">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">calendar_month</span>
+          See Lineups
+        </a>
+        <a href="/ai" class="btn-ghost px-6 py-3 text-sm" style="border:1px solid rgba(0,100,121,0.2);">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;color:#006479;">auto_awesome</span>
+          Ask AI
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style is:global>
+  .article-content {
+    color: #1a3d4d;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    font-family: 'Be Vietnam Pro', sans-serif;
+  }
+
+  /* H2 — section headers with left accent bar */
+  .article-content h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    margin: 3rem 0 1.25rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+    color: #003345;
+    letter-spacing: -0.02em;
+    border-left: 4px solid #40cef3;
+  }
+
+  /* H3 — subsection headers */
+  .article-content h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin: 2rem 0 0.75rem;
+    color: #006479;
+  }
+
+  /* Paragraphs */
+  .article-content p {
+    margin-bottom: 1rem;
+    color: #1a3d4d;
+  }
+
+  /* Inline styles */
+  .article-content strong { color: #003345; font-weight: 700; }
+  .article-content em { font-style: italic; color: #326177; }
+
+  /* Lists — styled with custom bullets */
+  .article-content ul {
+    margin: 1rem 0 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .article-content li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.6rem;
+    color: #1a3d4d;
+    line-height: 1.7;
+  }
+  .article-content li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #40cef3;
+  }
+  .article-content li strong {
+    color: #006479;
+    font-weight: 700;
+  }
+
+  /* Tables — card-style */
+  .article-content .table-wrap {
+    margin: 1.5rem 0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid rgba(192,232,255,0.6);
+    background: #fff;
+  }
+  .article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  .article-content th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background: rgba(225,243,255,0.8);
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #003345;
+    border-bottom: 2px solid rgba(192,232,255,0.8);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .article-content td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid rgba(192,232,255,0.35);
+    color: #326177;
+  }
+  .article-content tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .article-content tbody tr:hover td {
+    background: rgba(225,243,255,0.4);
+  }
+
+  /* First paragraph after h1 — larger intro text */
+  .article-content > p:first-child {
+    font-size: 1.15rem;
+    color: #003345;
+    line-height: 1.9;
+    font-weight: 500;
+  }
+</style>

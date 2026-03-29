@@ -1,0 +1,134 @@
+---
+import Navbar from '../organisms/Navbar.astro';
+import '../../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  class?: string;
+}
+
+const {
+  title = 'Bangkok Songkran 2026 — Complete Festival Guide, Lineups & Live Map',
+  description = 'The complete guide to Songkran 2026 in Bangkok. Real lineups, live crowd map, AI trip planner, survival checklist. April 10-15, 2026.',
+  canonical,
+  class: className = '',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#006479" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  {canonical && <link rel="canonical" href={canonical} />}
+  {canonical && <meta property="og:url" content={canonical} />}
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="SiamSplash" />
+  <slot name="head" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style is:global>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+    .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+    .glass{background:rgba(255,255,255,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.4);}
+    .glass-cyan{background:rgba(64,206,243,0.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(64,206,243,0.25);}
+    .liquid-gradient{background:linear-gradient(135deg,#006479 0%,#40cef3 100%);}
+    .liquid-warm{background:linear-gradient(135deg,#964300 0%,#ffc5a6 100%);}
+    .liquid-hot{background:linear-gradient(135deg,#b4005d 0%,#ff8eb2 100%);}
+    .mesh-bg{background-image:radial-gradient(at 20% 20%,rgba(64,206,243,.18) 0,transparent 50%),radial-gradient(at 80% 10%,rgba(0,100,121,.12) 0,transparent 50%),radial-gradient(at 60% 80%,rgba(180,0,93,.07) 0,transparent 50%);}
+    .text-gradient{background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .text-gradient-hot{background:linear-gradient(135deg,#b4005d,#ff8eb2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .no-scrollbar::-webkit-scrollbar{display:none;}
+    .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none;}
+    .card{background:#fff;border-radius:1rem;box-shadow:0 2px 24px rgba(0,51,69,.08);border:1px solid rgba(192,232,255,0.5);transition:all .3s;}
+    .card:hover{box-shadow:0 8px 48px rgba(0,51,69,.14);transform:translateY(-2px);}
+    .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#006479,#40cef3);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;border-radius:9999px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(64,206,243,.3);}
+    .btn-primary:hover{transform:scale(1.04);box-shadow:0 6px 28px rgba(64,206,243,.4);}
+    .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,0.6);backdrop-filter:blur(16px);color:#006479;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;border-radius:9999px;border:1px solid rgba(0,100,121,.2);cursor:pointer;transition:all .2s;}
+    .btn-ghost:hover{background:rgba(255,255,255,0.85);transform:scale(1.03);}
+    html,body{overflow-x:hidden;}
+    body{background:#eef8ff;color:#003345;font-family:'Be Vietnam Pro',sans-serif;-webkit-font-smoothing:antialiased;}
+    ::selection{background:#40cef3;color:#002a34;}
+    .animate-in{animation:slideUp .5s ease forwards;opacity:0;}
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .day-highlight{background:linear-gradient(135deg,#006479,#40cef3);color:#fff;border-radius:9999px;}
+  </style>
+</head>
+<body>
+  <!-- Noise overlay -->
+  <div class="pointer-events-none fixed inset-0 z-0 opacity-[0.022]" style="background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');"></div>
+  <!-- Mesh bg -->
+  <div class="pointer-events-none fixed inset-0 z-0 mesh-bg opacity-70"></div>
+
+  <Navbar />
+
+  <main class={`relative z-10 ${className}`}>
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative z-10 border-t border-surface-container-high" style="background:rgba(255,255,255,0.5);backdrop-filter:blur(12px);">
+    <div class="max-w-7xl mx-auto px-6 py-16">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+        <div class="col-span-2 md:col-span-1 space-y-4">
+          <a href="/" class="font-headline text-2xl font-black italic tracking-tighter block" style="color:#006479;">
+            SIAM<span style="color:#b4005d;">SPLASH</span>
+          </a>
+          <p class="text-sm leading-relaxed" style="color:#326177;">Bangkok's most useful Songkran guide. Built by someone actually going. April 10–15, 2026.</p>
+        </div>
+        <div class="space-y-3">
+          <h4 class="font-headline font-bold text-xs uppercase tracking-widest" style="color:#326177;">Festival</h4>
+          <ul class="space-y-2">
+            {['Events', 'Timetables', 'S2O', 'Siam Songkran', 'GCircuit'].map(l => (
+              <li><a href="/events" class="text-sm transition-colors hover:text-primary" style="color:#326177;">{l}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div class="space-y-3">
+          <h4 class="font-headline font-bold text-xs uppercase tracking-widest" style="color:#326177;">Tools</h4>
+          <ul class="space-y-2">
+            <li><a href="/map" class="text-sm transition-colors hover:text-primary" style="color:#326177;">Heat Map</a></li>
+            <li><a href="/survival-kit" class="text-sm transition-colors hover:text-primary" style="color:#326177;">Survival Kit</a></li>
+            <li><a href="/getting-there" class="text-sm transition-colors hover:text-primary" style="color:#326177;">Getting There</a></li>
+            <li><a href="/ai" class="text-sm transition-colors hover:text-primary" style="color:#326177;">AI Planner</a></li>
+          </ul>
+        </div>
+        <div class="space-y-3">
+          <h4 class="font-headline font-bold text-xs uppercase tracking-widest" style="color:#326177;">Info</h4>
+          <ul class="space-y-2">
+            {['About', 'Press Kit', 'Privacy', 'Contact'].map(l => (
+              <li><a href="#" class="text-sm transition-colors hover:text-primary" style="color:#326177;">{l}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8 border-t flex flex-col sm:flex-row justify-between gap-4" style="border-color:rgba(192,232,255,0.6);">
+        <p class="text-xs" style="color:#4f7d93;">© 2026 SIAM SPLASH · Bangkok, Thailand</p>
+        <p class="text-xs" style="color:#4f7d93;">Built for the festival, not for the algorithm</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll navbar effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (!nav) return;
+      nav.style.background = window.scrollY > 20 ? 'rgba(238,248,255,0.92)' : '';
+      nav.style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(0,100,121,0.12)' : '';
+    });
+  </script>
+</body>
+</html>

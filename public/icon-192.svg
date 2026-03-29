@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="32" fill="#006479"/>
+  <text x="96" y="80" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="48" fill="#ffffff">SIAM</text>
+  <text x="96" y="130" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="36" fill="#ff8eb2">SPLASH</text>
+  <circle cx="96" cy="158" r="8" fill="#40cef3" opacity="0.8"/>
+</svg>

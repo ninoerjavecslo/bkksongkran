@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import FestivalSchedule from '../components/organisms/FestivalSchedule.astro';
+import { festivals, additionalEvents, waterFightZones } from '../data/index';
+
+const ticketedEvents = additionalEvents.filter(e => e.type === 'festival');
+const freeEvents = additionalEvents.filter(e => e.type !== 'festival');
+
+const intensityConfig = {
+  insane: { label: 'INSANE', color: '#FF3B30', bg: '#FFE8E8', icon: 'whatshot' },
+  high:   { label: 'HIGH', color: '#FF9F0A', bg: '#FFF8E0', icon: 'local_fire_department' },
+  medium: { label: 'CHILL', color: '#34C759', bg: '#E8FFF0', icon: 'spa' },
+};
+---
+
+<BaseLayout title="Songkran 2026 Events & Timetables — All Festivals, Lineups & Tickets" description="Complete Songkran 2026 event calendar. S2O, Siam Songkran, GCircuit lineups with day-by-day schedules. Water fight zones and free events in Bangkok." canonical="https://bangkoksongkran.com/events">
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#b4005d;">Festival Calendar</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
+        ALL THE<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SPLASH EVENTS</span>
+      </h1>
+      <p class="text-lg max-w-2xl" style="color:#326177;">Every festival, street party, water fight zone, and cultural event happening during Songkran 2026 in Bangkok.</p>
+
+      <!-- Section jump links -->
+      <div class="flex gap-3 flex-wrap mt-8">
+        <a href="#headliners" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105" style="border-color:#006479;color:#006479;background:#00647915;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+          Headliner Festivals
+        </a>
+        <a href="#water-fights" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105" style="border-color:#FF3B30;color:#FF3B30;background:#FF3B3015;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">water_drop</span>
+          Water Fight Zones
+        </a>
+        <a href="#more-festivals" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105" style="border-color:#8B5CF6;color:#8B5CF6;background:#8B5CF615;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">music_note</span>
+          More Festivals
+        </a>
+        <a href="#free-events" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105" style="border-color:#FF9F0A;color:#FF9F0A;background:#FF9F0A15;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">celebration</span>
+          Free Events
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- HEADLINER FESTIVALS (with full schedules)  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="px-6 pb-20" id="headliners">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#00647915;">
+          <span class="material-symbols-outlined text-xl" style="color:#006479;font-variation-settings:'FILL' 1;">star</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">Headliner Festivals</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Full lineups. Day by day. Set by set.</p>
+        </div>
+      </div>
+
+      <!-- Festival jump links -->
+      <div class="flex gap-3 flex-wrap mb-10">
+        {festivals.map(f => (
+          <a href={`#${f.id}`} class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105"
+             style={`border-color:${f.color};color:${f.colorDark};background:${f.color}15;`}>
+            {f.name}
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={`background:${f.colorDark};`}>{f.dates}</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="space-y-20">
+        {festivals.map(festival => (
+          <div id={festival.id} class="scroll-mt-28">
+            <!-- Banner -->
+            <div class="rounded-2xl overflow-hidden mb-8 relative" style={`background:linear-gradient(135deg,${festival.colorDark},${festival.color});min-height:180px;`}>
+              <div class="absolute inset-0 opacity-10" style="background:radial-gradient(circle at 80% 50%,rgba(255,255,255,0.5) 0,transparent 60%);"></div>
+              <div class="relative p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <div class="text-xs font-bold uppercase tracking-widest mb-2 text-white opacity-70">
+                    {festival.type === 'circuit' ? 'LGBTQ+ Circuit Festival' : 'EDM Festival'}
+                  </div>
+                  <h2 class="font-headline text-3xl md:text-4xl font-black text-white">{festival.name}</h2>
+                  <p class="text-white opacity-80 font-medium italic mt-1">{festival.tagline}</p>
+                  <div class="flex flex-wrap gap-4 mt-4">
+                    {[{icon:'calendar_month',text:festival.dates+', 2026'},{icon:'location_on',text:festival.venue},{icon:'confirmation_number',text:festival.price}].map(m => (
+                      <span class="flex items-center gap-1.5 text-sm font-semibold text-white opacity-85">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">{m.icon}</span>
+                        {m.text}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <a href={festival.url} target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 self-start"
+                   style={`background:#fff;color:${festival.colorDark};`}>
+                  <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">confirmation_number</span>
+                  Buy Tickets
+                </a>
+              </div>
+            </div>
+
+            <!-- Schedule -->
+            <div class="card p-6 md:p-8">
+              <FestivalSchedule festival={festival} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- WATER FIGHT ZONES                          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="px-6 pb-20" id="water-fights" style="background:rgba(255,240,240,0.3);">
+    <div class="max-w-7xl mx-auto pt-16">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FF3B3015;">
+          <span class="material-symbols-outlined text-xl" style="color:#FF3B30;font-variation-settings:'FILL' 1;">water_drop</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">Water Fight Zones</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Where to get absolutely soaked. Free, no tickets needed.</p>
+        </div>
+      </div>
+      <p class="text-sm mb-10 max-w-2xl" style="color:#326177;">Bangkok transforms into a massive water battlefield during Songkran. These are the hottest (and wettest) spots — from full-on chaos to chill family-friendly zones.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {waterFightZones.map(zone => {
+          const intensity = intensityConfig[zone.intensity as keyof typeof intensityConfig];
+          return (
+            <div class="rounded-2xl overflow-hidden transition-all hover:shadow-lg" style={`border:1px solid ${zone.color}25;background:white;`}>
+              <!-- Header bar -->
+              <div class="p-5 flex items-start justify-between gap-3" style={`background:${zone.color}08;`}>
+                <div>
+                  <h3 class="font-headline font-extrabold text-lg" style="color:#003345;">{zone.name}</h3>
+                  <div class="flex flex-wrap items-center gap-3 mt-1.5">
+                    <span class="flex items-center gap-1 text-xs font-semibold" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs">calendar_today</span> {zone.dates}
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-semibold" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs">schedule</span> {zone.hours}
+                    </span>
+                  </div>
+                </div>
+                <span class="flex-shrink-0 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full" style={`background:${intensity.bg};color:${intensity.color};`}>
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{intensity.icon}</span>
+                  {intensity.label}
+                </span>
+              </div>
+
+              <div class="p-5 space-y-4">
+                <!-- Vibe -->
+                <p class="text-sm" style="color:#326177;">{zone.vibe}</p>
+
+                <!-- How to get there -->
+                <div class="flex items-start gap-2.5 p-3 rounded-xl" style="background:rgba(238,248,255,0.6);border:1px solid rgba(192,232,255,0.3);">
+                  <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style="color:#006479;font-variation-settings:'FILL' 1;">directions_transit</span>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider block mb-0.5" style="color:#006479;">How to get there</span>
+                    <p class="text-xs font-medium" style="color:#326177;">{zone.howToGet}</p>
+                  </div>
+                </div>
+
+                <!-- Pro tip -->
+                <div class="flex items-start gap-2.5 p-3 rounded-xl" style={`background:${zone.color}06;border:1px solid ${zone.color}15;`}>
+                  <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style={`color:${zone.color};font-variation-settings:'FILL' 1;`}>tips_and_updates</span>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider block mb-0.5" style={`color:${zone.color};`}>Pro Tip</span>
+                    <p class="text-xs" style="color:#326177;">{zone.tip}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- MORE TICKETED FESTIVALS                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="px-6 pb-20" id="more-festivals">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#8B5CF615;">
+          <span class="material-symbols-outlined text-xl" style="color:#8B5CF6;font-variation-settings:'FILL' 1;">music_note</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">More Ticketed Festivals</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Beyond the big three — more music + water across Bangkok.</p>
+        </div>
+      </div>
+      <p class="text-sm mb-10 max-w-2xl" style="color:#326177;">Not everything happens at S2O or Siam Songkran. These festivals bring their own flavor to the Songkran party.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {ticketedEvents.map(e => (
+          <div class="card p-5 space-y-3 transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-3">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" style={`background:${e.color}15;`}>
+                <span class="material-symbols-outlined text-2xl" style={`color:${e.color};font-variation-settings:'FILL' 1;`}>{e.icon}</span>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-bold uppercase tracking-widest" style={`color:${e.color};`}>{e.dates}</div>
+                <div class="font-headline font-black text-sm" style={`color:${e.color};`}>{e.price}</div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-headline font-bold text-base mb-0.5" style="color:#003345;">{e.name}</h3>
+              <div class="text-xs font-semibold mb-2 flex items-center gap-1" style="color:#6b8fa3;">
+                <span class="material-symbols-outlined text-xs">location_on</span> {e.venue}
+              </div>
+              <p class="text-sm" style="color:#326177;">{e.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FREE STREET & CULTURAL EVENTS              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="px-6 pb-24" id="free-events" style="background:rgba(225,243,255,0.4);">
+    <div class="max-w-7xl mx-auto pt-16">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FF9F0A15;">
+          <span class="material-symbols-outlined text-xl" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">celebration</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">Free Street & Cultural Events</h2>
+          <p class="text-xs" style="color:#6b8fa3;">No tickets needed. Just show up and get wet.</p>
+        </div>
+      </div>
+      <p class="text-sm mb-10 max-w-2xl" style="color:#326177;">Some of the best Songkran experiences are completely free. Street parties, cultural celebrations, parades, and art — all across Bangkok.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {freeEvents.map(e => (
+          <div class="card p-5 space-y-3 transition-all hover:shadow-lg hover:-translate-y-0.5">
+            <div class="flex items-start justify-between gap-3">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" style={`background:${e.color}15;`}>
+                <span class="material-symbols-outlined text-2xl" style={`color:${e.color};font-variation-settings:'FILL' 1;`}>{e.icon}</span>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-bold uppercase tracking-widest" style={`color:${e.color};`}>{e.dates}</div>
+                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase" style="background:#E8FFF0;color:#34C759;">
+                  <span class="material-symbols-outlined text-[10px]" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                  Free
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-headline font-bold text-base mb-0.5" style="color:#003345;">{e.name}</h3>
+              <div class="text-xs font-semibold mb-2 flex items-center gap-1" style="color:#6b8fa3;">
+                <span class="material-symbols-outlined text-xs">location_on</span> {e.venue}
+              </div>
+              <p class="text-sm" style="color:#326177;">{e.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

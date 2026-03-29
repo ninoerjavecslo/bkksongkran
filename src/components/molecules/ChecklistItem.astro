@@ -1,0 +1,80 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  tip?: string;
+  priority: 'critical' | 'high' | 'medium';
+}
+
+const { id, label, tip, priority } = Astro.props;
+
+const priorityConfig = {
+  critical: { label: 'Must', color: '#FF3B30', bg: '#FFE8E8' },
+  high:     { label: 'Should', color: '#FF9F0A', bg: '#FFF8E0' },
+  medium:   { label: 'Nice', color: '#34C759', bg: '#E8FFF0' },
+};
+const p = priorityConfig[priority];
+---
+
+<label
+  class="flex gap-3 p-4 rounded-xl border border-surface-container-high bg-white/60 cursor-pointer
+         hover:bg-white/90 hover:shadow-sm transition-all duration-200 group"
+  for={`check-${id}`}
+>
+  <!-- Custom checkbox -->
+  <div class="flex-shrink-0 mt-0.5">
+    <input
+      type="checkbox"
+      id={`check-${id}`}
+      class="sr-only peer"
+    />
+    <div class="w-5 h-5 rounded-md border-2 border-outline-variant
+                peer-checked:bg-primary peer-checked:border-primary
+                flex items-center justify-center transition-all duration-200
+                group-hover:border-primary/50">
+      <svg class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 12 12" fill="none">
+        <path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="flex-1 min-w-0">
+    <div class="flex items-start justify-between gap-2">
+      <span class="font-semibold text-sm text-on-surface leading-snug">{label}</span>
+      <span
+        class="flex-shrink-0 text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+        style={`background:${p.bg};color:${p.color};`}
+      >
+        {p.label}
+      </span>
+    </div>
+    {tip && (
+      <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">{tip}</p>
+    )}
+  </div>
+</label>
+
+<script>
+// Persist checkbox state per item
+document.addEventListener('DOMContentLoaded', () => {
+  const checkboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"][id^="check-"]');
+  checkboxes.forEach(cb => {
+    const saved = localStorage.getItem(cb.id);
+    if (saved === 'true') cb.checked = true;
+    cb.addEventListener('change', () => {
+      localStorage.setItem(cb.id, String(cb.checked));
+      updateProgress();
+    });
+  });
+});
+
+function updateProgress() {
+  const all = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"][id^="check-"]');
+  const checked = Array.from(all).filter(cb => cb.checked).length;
+  const pct = Math.round((checked / all.length) * 100);
+  const bar = document.getElementById('checklist-progress-bar');
+  const label = document.getElementById('checklist-progress-label');
+  if (bar) bar.style.width = `${pct}%`;
+  if (label) label.textContent = `${checked}/${all.length} items ready`;
+}
+</script>

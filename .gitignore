@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+.playwright-mcp/
+.claude/
+*.xlsx
+file.jpg

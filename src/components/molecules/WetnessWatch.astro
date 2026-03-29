@@ -1,0 +1,65 @@
+---
+// WetnessWatch — hero card showing current hotspot
+interface Props {
+  pct?: number;
+  hotspot?: string;
+  class?: string;
+}
+const { pct = 92, hotspot = 'Silom Road, Bangkok', class: className = '' } = Astro.props;
+---
+
+<div class={`glass rounded-2xl p-6 shadow-glass space-y-5 ${className}`}>
+  <div class="flex justify-between items-center">
+    <h3 class="font-headline font-extrabold text-2xl text-primary-dim">Wetness Watch</h3>
+    <span class="material-symbols-outlined text-primary text-3xl animate-pulse-slow" style="font-variation-settings:'FILL' 1;">water_drop</span>
+  </div>
+
+  <!-- Big number -->
+  <div class="space-y-3">
+    <div class="flex items-end gap-2">
+      <span class="text-6xl font-black text-primary font-headline" id="wetness-pct">{pct}%</span>
+      <span class="text-xl font-bold text-on-surface-variant mb-2">WET</span>
+    </div>
+
+    <!-- Bar -->
+    <div class="h-3 w-full bg-surface-container rounded-full overflow-hidden">
+      <div
+        class="h-full liquid-gradient rounded-full transition-all duration-1000"
+        style={`width:${pct}%;`}
+        id="wetness-bar"
+      ></div>
+    </div>
+  </div>
+
+  <!-- Hotspot -->
+  <div class="flex items-center gap-3 bg-primary/10 p-4 rounded-xl border border-primary/10">
+    <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">location_on</span>
+    <div>
+      <p class="text-xs font-bold text-primary uppercase tracking-wider">Current Hotspot</p>
+      <p class="text-base font-extrabold text-primary-dim font-headline" id="wetness-hotspot">{hotspot}</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Simulate live updates — replace with Firebase in production
+const hotspots = [
+  { name: 'Silom Soi 2 & 4, Bangkok', pct: 94 },
+  { name: 'Khao San Road, Banglamphu', pct: 98 },
+  { name: 'Siam Square, Central', pct: 76 },
+  { name: 'S2O Land, Ratchada', pct: 89 },
+  { name: 'Emsphere, Sukhumvit', pct: 85 },
+];
+
+let idx = 0;
+setInterval(() => {
+  idx = (idx + 1) % hotspots.length;
+  const h = hotspots[idx];
+  const pctEl = document.getElementById('wetness-pct');
+  const barEl = document.getElementById('wetness-bar');
+  const spotEl = document.getElementById('wetness-hotspot');
+  if (pctEl) pctEl.textContent = `${h.pct}%`;
+  if (barEl) barEl.style.width = `${h.pct}%`;
+  if (spotEl) spotEl.textContent = h.name;
+}, 4000);
+</script>

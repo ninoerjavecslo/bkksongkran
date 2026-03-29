@@ -1,0 +1,43 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'hot' | 'live' | 'success' | 'warning' | 'custom';
+  size?: 'xs' | 'sm' | 'md';
+  dot?: boolean;
+  class?: string;
+  color?: string;
+  bg?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'sm',
+  dot = false,
+  class: className = '',
+  color,
+  bg,
+} = Astro.props;
+
+const variants = {
+  primary:   'bg-primary-container text-primary-on-container',
+  secondary: 'bg-secondary-container text-secondary-on-container',
+  hot:       'bg-tertiary-container text-tertiary-on-container',
+  live:      'bg-error text-error-on animate-pulse',
+  success:   'bg-emerald-100 text-emerald-800',
+  warning:   'bg-amber-100 text-amber-800',
+  custom:    '',
+};
+
+const sizes = {
+  xs: 'px-2 py-0.5 text-[9px]',
+  sm: 'px-3 py-1 text-xs',
+  md: 'px-4 py-1.5 text-sm',
+};
+
+const style = (color || bg) ? `color:${color || ''};background:${bg || ''};` : '';
+const classes = `inline-flex items-center gap-1.5 rounded-full font-bold uppercase tracking-widest ${sizes[size]} ${variants[variant]} ${className}`;
+---
+
+<span class={classes} style={style}>
+  {dot && <span class="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>}
+  <slot />
+</span>

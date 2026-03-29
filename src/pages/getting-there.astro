@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import { roadClosures, venueTransport, transportTips } from '../data/index';
+
+const severityConfig = {
+  full: { label: 'Closed', color: '#FF3B30', bg: '#FFE8E8', icon: 'block' },
+  partial: { label: 'Restricted', color: '#FF9F0A', bg: '#FFF8E0', icon: 'warning' },
+};
+---
+
+<BaseLayout title="Getting to Songkran Bangkok 2026 — Transport & Routes Guide" description="How to get around Bangkok during Songkran. BTS/MRT routes, airport transfers, venue directions, and transport tips for the festival." canonical="https://bangkoksongkran.com/getting-there">
+
+  <!-- HERO -->
+  <section class="pt-36 pb-16 px-6 relative overflow-hidden">
+    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));"></div>
+    <div class="absolute top-16 left-10 w-72 h-72 rounded-full opacity-10" style="background:radial-gradient(circle,#FF9F0A,transparent);"></div>
+    <div class="absolute bottom-0 right-10 w-56 h-56 rounded-full opacity-10" style="background:radial-gradient(circle,#22C55E,transparent);"></div>
+
+    <div class="relative max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style="background:rgba(0,100,121,0.08);border:1px solid rgba(0,100,121,0.12);">
+        <span class="material-symbols-outlined text-sm" style="color:#006479;font-variation-settings:'FILL' 1;">directions</span>
+        <span class="text-xs font-bold tracking-widest uppercase" style="color:#006479;">Transport Guide</span>
+      </div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,8vw,5rem);color:#003345;line-height:0.95;">
+        GETTING THERE<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">(IN ONE PIECE)</span>
+      </h1>
+      <p class="text-lg max-w-2xl mx-auto" style="color:#326177;">
+        Songkran turns Bangkok's roads into rivers. Here's how to navigate the beautiful chaos — and actually arrive where you planned.
+      </p>
+    </div>
+  </section>
+
+  <!-- ROAD CLOSURES MAP SECTION -->
+  <section class="px-6 pb-16">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Section header -->
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FF3B3015;">
+          <span class="material-symbols-outlined text-xl" style="color:#FF3B30;font-variation-settings:'FILL' 1;">road</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">Road Closures</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Apr 10–15, 2026 — Major closures during Songkran week</p>
+        </div>
+      </div>
+
+      <!-- Bangkok Road Closure Map (CSS illustration) -->
+      <div class="relative rounded-2xl overflow-hidden mb-8" style="height:340px;background:linear-gradient(160deg,#E8F4FD,#D1ECFF);border:1px solid rgba(192,232,255,0.6);">
+        <!-- Grid lines -->
+        {[...Array(8)].map((_,i) => (
+          <div class="absolute left-0 right-0 h-px" style={`top:${i*14}%;background:rgba(0,100,200,0.04);`}></div>
+        ))}
+        {[...Array(8)].map((_,i) => (
+          <div class="absolute top-0 bottom-0 w-px" style={`left:${i*14}%;background:rgba(0,100,200,0.04);`}></div>
+        ))}
+
+        <!-- Chao Phraya River -->
+        <div class="absolute" style="bottom:10%;left:8%;width:6px;height:80%;background:rgba(100,180,255,0.3);border-radius:999px;transform:rotate(3deg);"></div>
+
+        <!-- BTS Lines -->
+        <!-- Sukhumvit (green) -->
+        <div class="absolute" style="top:38%;left:25%;width:60%;height:3px;background:#22C55E;opacity:0.5;border-radius:2px;"></div>
+        <!-- Silom (green) -->
+        <div class="absolute" style="top:38%;left:35%;width:3px;height:35%;background:#22C55E;opacity:0.5;border-radius:2px;"></div>
+        <!-- MRT Blue line -->
+        <div class="absolute rounded-full" style="top:18%;left:30%;width:40%;height:55%;border:3px solid rgba(30,58,138,0.25);background:transparent;"></div>
+
+        <!-- Closed road zones -->
+        <!-- Silom closed -->
+        <div class="absolute rounded-lg" style="left:30%;top:58%;width:80px;height:24px;background:rgba(255,59,48,0.15);border:1.5px dashed rgba(255,59,48,0.5);"></div>
+        <!-- Khao San closed -->
+        <div class="absolute rounded-lg" style="left:12%;top:18%;width:70px;height:28px;background:rgba(255,59,48,0.15);border:1.5px dashed rgba(255,59,48,0.5);"></div>
+        <!-- Sanam Luang -->
+        <div class="absolute rounded-lg" style="left:14%;top:28%;width:60px;height:20px;background:rgba(255,59,48,0.15);border:1.5px dashed rgba(255,59,48,0.5);"></div>
+        <!-- RCA restricted -->
+        <div class="absolute rounded-lg" style="left:62%;top:48%;width:70px;height:22px;background:rgba(255,159,10,0.12);border:1.5px dashed rgba(255,159,10,0.5);"></div>
+        <!-- Ratchada restricted -->
+        <div class="absolute rounded-lg" style="left:52%;top:16%;width:75px;height:22px;background:rgba(255,159,10,0.12);border:1.5px dashed rgba(255,159,10,0.5);"></div>
+
+        <!-- Venue pins -->
+        {[
+          {l:'15%',t:'15%',name:'Khao San',c:'#FF3B30',icon:'water_drop'},
+          {l:'33%',t:'62%',name:'Silom',c:'#9B59B6',icon:'celebration'},
+          {l:'36%',t:'35%',name:'Siam',c:'#34C759',icon:'storefront'},
+          {l:'56%',t:'12%',name:'S2O',c:'#40cef3',icon:'music_note'},
+          {l:'72%',t:'35%',name:'GCircuit',c:'#c084fc',icon:'nightlife'},
+          {l:'66%',t:'50%',name:'Siam Songkran',c:'#ff8eb2',icon:'music_note'},
+          {l:'17%',t:'30%',name:'Sanam Luang',c:'#964300',icon:'temple_buddhist'},
+        ].map(p => (
+          <div class="absolute flex flex-col items-center cursor-pointer group" style={`left:${p.l};top:${p.t};`}>
+            <div class="px-2.5 py-1.5 rounded-xl text-white text-[10px] font-black flex items-center gap-1 transition-transform group-hover:scale-110 shadow-md" style={`background:${p.c};`}>
+              <span class="material-symbols-outlined text-[11px]" style="font-variation-settings:'FILL' 1;">{p.icon}</span>
+              {p.name}
+            </div>
+            <div class="w-0 h-0 border-l-[5px] border-r-[5px] border-l-transparent border-r-transparent border-t-[5px]" style={`border-top-color:${p.c};`}></div>
+          </div>
+        ))}
+
+        <!-- Legend -->
+        <div class="absolute bottom-3 left-3 flex flex-wrap gap-3 items-center px-4 py-2.5 rounded-xl text-[10px] font-bold" style="background:rgba(255,255,255,0.92);border:1px solid rgba(192,232,255,0.5);">
+          <span class="flex items-center gap-1.5"><span class="w-6 h-0.5 rounded" style="background:#22C55E;"></span>BTS</span>
+          <span class="flex items-center gap-1.5"><span class="w-6 h-0.5 rounded" style="background:#1E3A8A;"></span>MRT</span>
+          <span class="flex items-center gap-1.5"><span class="w-4 h-3 rounded border-dashed border" style="border-color:#FF3B30;background:#FF3B3015;"></span>Closed</span>
+          <span class="flex items-center gap-1.5"><span class="w-4 h-3 rounded border-dashed border" style="border-color:#FF9F0A;background:#FF9F0A12;"></span>Restricted</span>
+        </div>
+
+        <!-- BKK watermark -->
+        <div class="absolute bottom-1/3 right-6 font-headline font-black text-5xl pointer-events-none select-none" style="color:rgba(0,100,200,0.04);transform:rotate(-28deg);letter-spacing:8px;">BKK</div>
+      </div>
+
+      <!-- Road closure cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {roadClosures.map(closure => {
+          const sev = severityConfig[closure.severity as keyof typeof severityConfig];
+          return (
+            <div class="rounded-xl p-4 transition-all hover:shadow-md" style={`background:white;border:1px solid ${sev.color}20;`}>
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <h4 class="font-bold text-sm" style="color:#003345;">{closure.road}</h4>
+                <span class="flex-shrink-0 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1" style={`background:${sev.bg};color:${sev.color};`}>
+                  <span class="material-symbols-outlined text-[10px]" style="font-variation-settings:'FILL' 1;">{sev.icon}</span>
+                  {sev.label}
+                </span>
+              </div>
+              <p class="text-xs mb-2" style="color:#6b8fa3;">{closure.desc}</p>
+              <div class="flex items-center gap-2 text-[10px] font-bold" style="color:#326177;">
+                <span class="material-symbols-outlined text-xs">calendar_today</span>
+                {closure.dates}
+                <span class="text-[8px]" style="color:#6b8fa3;">|</span>
+                {closure.area}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- VENUE-BY-VENUE TRANSPORT GUIDES -->
+  <section class="px-6 pb-16">
+    <div class="max-w-5xl mx-auto">
+
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#006479;15;">
+          <span class="material-symbols-outlined text-xl" style="color:#006479;font-variation-settings:'FILL' 1;">pin_drop</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">How to Get to Each Venue</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Step-by-step directions. Because Google Maps won't warn you about water cannons.</p>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        {venueTransport.map(venue => (
+          <div class="rounded-2xl overflow-hidden transition-all hover:shadow-lg" style={`border:1px solid ${venue.festivalColor}25;`}>
+            <!-- Venue header -->
+            <div class="p-6 flex flex-col sm:flex-row sm:items-center gap-4" style={`background:linear-gradient(135deg,${venue.festivalColor}10,${venue.festivalColor}05);`}>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                  <div class="w-3 h-3 rounded-full" style={`background:${venue.festivalColor};`}></div>
+                  <h3 class="font-headline font-extrabold text-xl tracking-tight" style="color:#003345;">{venue.venue}</h3>
+                </div>
+                <p class="text-sm flex items-center gap-1.5" style="color:#6b8fa3;">
+                  <span class="material-symbols-outlined text-sm">location_on</span>
+                  {venue.location}
+                </p>
+              </div>
+              {venue.closureWarning && (
+                <div class="flex items-start gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold max-w-xs" style="background:#FFF8E0;color:#92400E;border:1px solid rgba(255,159,10,0.2);">
+                  <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">warning</span>
+                  {venue.closureWarning}
+                </div>
+              )}
+            </div>
+
+            <!-- Transport options -->
+            <div class="p-6 bg-white/70 space-y-3">
+              {venue.transport.map(t => (
+                <div class="flex items-start gap-4 p-4 rounded-xl transition-all hover:shadow-sm" style="background:rgba(238,248,255,0.5);border:1px solid rgba(192,232,255,0.3);">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${t.color}15;`}>
+                    <span class="material-symbols-outlined text-lg" style={`color:${t.color};font-variation-settings:'FILL' 1;`}>{t.icon}</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                      <span class="font-bold text-sm" style="color:#003345;">{t.mode}</span>
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style={`background:${t.color}15;color:${t.color};`}>{t.walkTime}</span>
+                    </div>
+                    <p class="text-sm font-semibold mb-1" style="color:#326177;">{t.route}</p>
+                    <p class="text-xs" style="color:#6b8fa3;">{t.details}</p>
+                  </div>
+                </div>
+              ))}
+
+              <!-- Pro tip -->
+              <div class="flex items-start gap-3 p-4 rounded-xl" style="background:linear-gradient(135deg,rgba(0,100,121,0.06),rgba(64,206,243,0.04));border:1px solid rgba(0,100,121,0.1);">
+                <span class="material-symbols-outlined text-lg flex-shrink-0 mt-0.5" style="color:#006479;font-variation-settings:'FILL' 1;">tips_and_updates</span>
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider block mb-1" style="color:#006479;">Pro Tip</span>
+                  <p class="text-sm" style="color:#326177;">{venue.proTip}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- GENERAL TRANSPORT TIPS -->
+  <section class="px-6 pb-24">
+    <div class="max-w-5xl mx-auto">
+
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#8B5CF615;">
+          <span class="material-symbols-outlined text-xl" style="color:#8B5CF6;font-variation-settings:'FILL' 1;">lightbulb</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">General Transport Tips</h2>
+          <p class="text-xs" style="color:#6b8fa3;">Stuff you'll wish someone told you before you got stuck in traffic for 2 hours.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {transportTips.map(tip => (
+          <div class="rounded-2xl p-5 transition-all hover:shadow-lg hover:-translate-y-0.5 bg-white/70" style={`border:1px solid ${tip.color}20;`}>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={`background:${tip.color}12;`}>
+              <span class="material-symbols-outlined text-2xl" style={`color:${tip.color};font-variation-settings:'FILL' 1;`}>{tip.icon}</span>
+            </div>
+            <h3 class="font-bold text-base mb-2" style="color:#003345;">{tip.title}</h3>
+            <p class="text-sm leading-relaxed" style="color:#6b8fa3;">{tip.desc}</p>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+</BaseLayout>

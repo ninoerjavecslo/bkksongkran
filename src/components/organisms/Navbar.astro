@@ -1,0 +1,101 @@
+---
+import Button from '../atoms/Button.astro';
+const currentPath = Astro.url.pathname;
+
+const links = [
+  { label: 'Home',          href: '/' },
+  { label: 'Events',        href: '/events' },
+  { label: 'Guide',         href: '/blog' },
+  { label: 'Survival Kit',  href: '/survival-kit' },
+  { label: 'Getting There', href: '/getting-there' },
+  { label: 'Tickets',       href: '/tickets' },
+  { label: 'Heat Map',      href: '/map' },
+  { label: 'AI Guide',      href: '/ai' },
+];
+---
+
+<nav class="nav-pill" id="navbar" style="position:fixed;top:1rem;left:50%;transform:translateX(-50%);width:95%;max-width:80rem;display:flex;align-items:center;justify-content:space-between;border-radius:9999px;padding:0.75rem 2rem;z-index:50;background:rgba(238,248,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.5);box-shadow:0 8px 32px 0 rgba(0,180,216,0.12);">
+  <!-- Logo -->
+  <a href="/" class="text-2xl font-black italic tracking-tighter text-primary font-headline hover:text-primary-dim transition-colors">
+    SIAM<span class="text-tertiary">SPLASH</span>
+  </a>
+
+  <!-- Desktop links -->
+  <div class="hidden md:flex items-center gap-8">
+    {links.map(link => {
+      const active = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+      return (
+        <a
+          href={link.href}
+          class={`text-sm font-semibold font-label tracking-tight transition-all duration-200 pb-1 border-b-2
+            ${active
+              ? 'text-primary border-primary'
+              : 'text-on-surface-variant border-transparent hover:text-primary hover:border-primary'
+            }`}
+        >
+          {link.label}
+        </a>
+      );
+    })}
+  </div>
+
+  <!-- Right actions -->
+  <div class="flex items-center gap-3">
+    <Button href="/ai" variant="primary" size="sm" class="hidden sm:inline-flex">
+      <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+      Ask AI
+    </Button>
+
+    <!-- Mobile menu toggle -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden p-2 rounded-full hover:bg-surface-container-high transition-colors"
+      aria-label="Toggle menu"
+    >
+      <span class="material-symbols-outlined text-on-surface">menu</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-40 glass pt-24 pb-8 px-6 flex flex-col gap-4 translate-x-full transition-transform duration-300"
+>
+  {links.map(link => (
+    <a
+      href={link.href}
+      class="font-headline font-bold text-2xl text-on-surface py-3 border-b border-surface-container-high hover:text-primary transition-colors"
+    >
+      {link.label}
+    </a>
+  ))}
+  <Button href="/ai" variant="primary" size="lg" class="mt-4">
+    Ask AI — Plan My Trip
+  </Button>
+</div>
+
+<script>
+const btn = document.getElementById('mobile-menu-btn');
+const menu = document.getElementById('mobile-menu');
+let open = false;
+
+btn?.addEventListener('click', () => {
+  open = !open;
+  menu?.classList.toggle('translate-x-full', !open);
+  menu?.classList.toggle('translate-x-0', open);
+});
+
+// Scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (!nav) return;
+  if (window.scrollY > 20) {
+    nav.classList.add('shadow-lg');
+    nav.style.background = 'rgba(238,248,255,0.95)';
+  } else {
+    nav.classList.remove('shadow-lg');
+    nav.style.background = 'rgba(238,248,255,0.92)';
+  }
+});
+</script>
