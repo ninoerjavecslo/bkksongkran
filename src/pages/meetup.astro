@@ -229,7 +229,7 @@ const partiesJson = JSON.stringify(parties);
                 </div>
 
                 <!-- People chips -->
-                <div id={`people-${party.id}`} class="flex flex-wrap gap-2 mt-4 empty:hidden"></div>
+                <div id={`people-${party.id}`} class="mt-4 empty:hidden"></div>
 
                 <!-- Divider -->
                 <div class="mt-4 pt-4" style="border-top:1px solid rgba(192,232,255,0.4);">
@@ -543,79 +543,87 @@ function renderParty(pid) {
   renderChips(peopleEl, entries, colorMap[pid] || '#40cef3');
 }
 
-// ── Chip ──────────────────────────────────────────────────────
-function chip(entry, color) {
-  const c = document.createElement('div');
-  c.style.cssText = 'display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border-radius:9999px;background:white;border:1px solid rgba(192,232,255,0.8);box-shadow:0 1px 4px rgba(0,51,69,0.06);max-width:240px;';
-
-  const av = document.createElement('div');
-  av.style.cssText = `width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:white;flex-shrink:0;text-transform:uppercase;background:${color};`;
-  av.textContent = (entry.name || '?').trim()[0];
-
-  const nm = document.createElement('span');
-  nm.style.cssText = 'font-size:14px;font-weight:800;color:#000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px;flex-shrink:0;';
-  nm.textContent = entry.name || '';
-
-  c.appendChild(av);
-  c.appendChild(nm);
-
-  // note field: "contact · optional-note"
-  const rawNote = (entry.note || '').trim();
-  if (rawNote) {
-    const parts = rawNote.split(' · ');
-    const contact = parts[0].trim();
-    const noteText = parts.slice(1).join(' · ').trim();
-
-    let href = null;
-    if (contact.startsWith('@')) {
-      href = 'https://instagram.com/' + contact.slice(1);
-    } else if (/^\+?[\d\s\-()]{7,}$/.test(contact)) {
-      href = 'https://wa.me/' + contact.replace(/\D/g, '');
-    }
-
-    if (href) {
-      const link = document.createElement('a');
-      link.href = href;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.style.cssText = 'display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;background:rgba(0,51,69,0.07);font-size:12px;font-weight:700;color:#003345;text-decoration:none;white-space:nowrap;flex-shrink:0;';
-      link.textContent = contact;
-      link.addEventListener('mouseover', () => { link.style.background = 'rgba(0,51,69,0.15)'; });
-      link.addEventListener('mouseout',  () => { link.style.background = 'rgba(0,51,69,0.07)'; });
-      c.appendChild(link);
-    } else if (contact) {
-      const ct = document.createElement('span');
-      ct.style.cssText = 'font-size:12px;font-weight:700;color:#003345;';
-      ct.textContent = contact;
-      c.appendChild(ct);
-    }
-
-    if (noteText) {
-      const nt = document.createElement('span');
-      nt.style.cssText = 'font-size:11px;color:#6b8fa3;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;';
-      nt.textContent = '· ' + noteText;
-      c.appendChild(nt);
-    }
-  }
-  return c;
-}
-
-// ── Render chips with collapse at 20 ─────────────────────────
+// ── Render people: avatar stack + expandable list ────────────
 function renderChips(containerEl, entries, color) {
   while (containerEl.firstChild) containerEl.removeChild(containerEl.firstChild);
-  const MAX = 20;
-  entries.slice(0, MAX).forEach(e => containerEl.appendChild(chip(e, color)));
-  if (entries.length > MAX) {
-    const extra = entries.slice(MAX);
+  if (!entries.length) return;
+
+  const SHOW = 5; // avatars shown in stack
+
+  // Avatar stack row
+  const stackRow = document.createElement('div');
+  stackRow.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;';
+
+  const avatarStack = document.createElement('div');
+  avatarStack.style.cssText = 'display:flex;';
+  entries.slice(0, SHOW).forEach((e, i) => {
+    const av = document.createElement('div');
+    av.style.cssText = `width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;text-transform:uppercase;background:${color};border:2px solid white;margin-left:${i === 0 ? '0' : '-8px'};flex-shrink:0;`;
+    av.title = e.name || '';
+    av.textContent = (e.name || '?').trim()[0];
+    avatarStack.appendChild(av);
+  });
+
+  if (entries.length > SHOW) {
     const more = document.createElement('div');
-    more.style.cssText = 'display:inline-flex;align-items:center;padding:4px 12px;border-radius:9999px;background:rgba(0,51,69,0.06);border:1px dashed rgba(0,51,69,0.15);font-size:12px;font-weight:700;color:#6b8fa3;cursor:pointer;user-select:none;';
-    more.textContent = '+' + extra.length + ' more';
-    more.addEventListener('click', () => {
-      more.remove();
-      extra.forEach(e => containerEl.appendChild(chip(e, color)));
-    });
-    containerEl.appendChild(more);
+    more.style.cssText = `width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${color};background:white;border:2px solid ${color};margin-left:-8px;flex-shrink:0;`;
+    more.textContent = '+' + (entries.length - SHOW);
+    avatarStack.appendChild(more);
   }
+
+  const label = document.createElement('span');
+  label.style.cssText = 'font-size:12px;font-weight:600;color:#6b8fa3;';
+  label.textContent = 'See who\'s going';
+
+  const chevron = document.createElement('span');
+  chevron.className = 'material-symbols-outlined';
+  chevron.style.cssText = 'font-size:16px;color:#6b8fa3;transition:transform 0.2s;';
+  chevron.textContent = 'expand_more';
+
+  stackRow.appendChild(avatarStack);
+  stackRow.appendChild(label);
+  stackRow.appendChild(chevron);
+
+  // Expandable list
+  const listWrap = document.createElement('div');
+  listWrap.style.cssText = 'display:none;margin-top:10px;display:none;flex-direction:column;gap:6px;';
+
+  entries.forEach(e => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:white;border:1px solid rgba(192,232,255,0.7);';
+
+    const av = document.createElement('div');
+    av.style.cssText = `width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:white;text-transform:uppercase;background:${color};flex-shrink:0;`;
+    av.textContent = (e.name || '?').trim()[0];
+
+    const nm = document.createElement('span');
+    nm.style.cssText = 'font-size:13px;font-weight:700;color:#003345;flex-shrink:0;';
+    nm.textContent = e.name || '';
+
+    row.appendChild(av);
+    row.appendChild(nm);
+
+    const note = (e.note || '').trim();
+    if (note) {
+      const nt = document.createElement('span');
+      nt.style.cssText = 'font-size:12px;color:#6b8fa3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+      nt.textContent = '· ' + note;
+      row.appendChild(nt);
+    }
+
+    listWrap.appendChild(row);
+  });
+
+  let open = false;
+  stackRow.addEventListener('click', () => {
+    open = !open;
+    listWrap.style.display = open ? 'flex' : 'none';
+    chevron.style.transform = open ? 'rotate(180deg)' : '';
+    label.textContent = open ? 'Hide' : 'See who\'s going';
+  });
+
+  containerEl.appendChild(stackRow);
+  containerEl.appendChild(listWrap);
 }
 
 // ── Custom events ─────────────────────────────────────────────
@@ -697,7 +705,7 @@ function buildCustomCard(ev, day) {
   // People
   const people = document.createElement('div');
   people.id = 'people-' + ev.id;
-  people.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;';
+  people.style.cssText = 'margin-top:16px;';
   renderChips(people, ev.entries, '#b4005d');
   body.appendChild(people);
 
