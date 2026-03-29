@@ -3,7 +3,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 
-const ALLOWED_TYPES = ['feature-event', 'report-scam', 'whos-going', 'general'];
+const ALLOWED_TYPES = ['feature-event', 'report-scam', 'whos-going', 'general', 'advertise'];
 const TURNSTILE_SECRET = import.meta.env.TURNSTILE_SECRET_KEY;
 
 async function verifyTurnstile(token: string): Promise<boolean> {
@@ -60,6 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
     'report-scam':   '🚨 Scammer Report',
     'whos-going':    '👥 Who\'s Going? Enquiry',
     'general':       '✉️ Contact Form',
+    'advertise':     '📢 Advertising Enquiry',
   };
 
   const resend = new Resend(import.meta.env.RESEND_API_KEY);
