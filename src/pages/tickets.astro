@@ -44,10 +44,10 @@ const buyingTips = [
       </div>
 
   <!-- Buying tips modal -->
-  <div id="buying-tips-modal" class="hidden fixed inset-0 z-50" onclick="if(event.target===this)this.classList.add('hidden')">
-    <div class="fixed inset-0" style="background:rgba(0,30,50,0.6);backdrop-filter:blur(8px);"></div>
-    <div class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4">
-      <div class="relative w-full max-w-md rounded-2xl p-6 space-y-4" style="background:white;border:1px solid rgba(168,85,247,0.2);">
+  <div id="buying-tips-modal" class="hidden fixed inset-0 z-50">
+    <div class="fixed inset-0" onclick="document.getElementById('buying-tips-modal').classList.add('hidden')" style="background:rgba(0,30,50,0.6);backdrop-filter:blur(8px);"></div>
+    <div class="fixed inset-0 overflow-y-auto flex items-start sm:items-center justify-center p-4 pt-20 sm:pt-4 pointer-events-none">
+      <div class="relative w-full max-w-md rounded-2xl p-6 space-y-4 pointer-events-auto" style="background:white;border:1px solid rgba(168,85,247,0.2);">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined" style="color:#a855f7;font-variation-settings:'FILL' 1;">info</span>
