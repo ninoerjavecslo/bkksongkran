@@ -32,39 +32,14 @@ export const prerender = false;
           <div class="font-bold text-sm mb-0.5" style="color:#003345;">Unlock all contact info</div>
           <div class="text-xs" style="color:#326177;">Enter your email once to reveal seller and buyer contacts across all listings.</div>
         </div>
-        <button id="unlock-btn" onclick="openUnlockModal()" class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 4px 16px rgba(0,100,121,0.25);">
-          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
-          Unlock contacts
-        </button>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input flex-1 sm:w-52" style="padding:0.5rem 0.75rem;font-size:0.8125rem;" />
+          <button id="unlock-btn" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">Unlock</button>
+        </div>
       </div>
+      <p id="unlock-error" class="hidden text-xs font-bold mt-2 ml-1" style="color:#b31b25;"></p>
     </div>
   </section>
-
-  <!-- UNLOCK MODAL -->
-  <div id="unlock-modal" class="hidden fixed inset-0 flex items-center justify-center px-4" style="z-index:9999;background:rgba(0,20,40,0.6);backdrop-filter:blur(6px);">
-    <div class="w-full max-w-sm rounded-3xl p-8" style="background:white;box-shadow:0 32px 80px rgba(0,0,0,0.25);">
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background:rgba(0,100,121,0.1);">
-            <span class="material-symbols-outlined text-xl" style="color:#006479;font-variation-settings:'FILL' 1;">lock_open</span>
-          </div>
-          <h2 class="font-headline font-extrabold text-xl" style="color:#003345;">Unlock contacts</h2>
-        </div>
-        <button onclick="closeUnlockModal()" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
-          <span class="material-symbols-outlined" style="color:#6b8fa3;">close</span>
-        </button>
-      </div>
-      <p class="text-sm mb-5" style="color:#326177;">Enter your email to reveal all seller and buyer contacts across every listing. One-time only.</p>
-      <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input w-full mb-2" style="padding:0.75rem 1rem;font-size:0.9375rem;" />
-      <p id="unlock-error" class="hidden text-xs font-bold mb-3" style="color:#b31b25;"></p>
-      <button id="unlock-submit" onclick="doUnlock()" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02]" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 4px 16px rgba(0,100,121,0.25);">
-        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
-        Unlock all contacts
-      </button>
-      <div id="turnstile-tickets" class="mt-3"></div>
-      <p class="text-[10px] text-center mt-3" style="color:#6b8fa3;">Your email is stored privately and never shared.</p>
-    </div>
-  </div>
 
   <!-- FILTERS -->
   <section class="px-6 pb-4">
@@ -108,7 +83,7 @@ export const prerender = false;
         <div class="flex items-start justify-between gap-2">
           <div class="flex items-center gap-2">
             <span class="tpl-type-badge inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase"></span>
-            <span class="tpl-fest-badge inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wide"></span>
+            <span class="tpl-fest-badge inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold"></span>
           </div>
           <span class="tpl-time text-[10px] font-medium" style="color:#86b3cc;"></span>
         </div>
@@ -118,14 +93,12 @@ export const prerender = false;
           <div class="tpl-qty text-xs" style="color:#326177;"></div>
         </div>
         <p class="tpl-note text-xs leading-relaxed hidden" style="color:#326177;"></p>
-        <!-- Contact: locked state -->
         <div class="tpl-contact-locked pt-3 border-t" style="border-color:rgba(192,232,255,0.5);">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-sm" style="color:#86b3cc;font-variation-settings:'FILL' 1;">lock</span>
             <span class="text-xs" style="color:#86b3cc;">Unlock contacts above to reveal</span>
           </div>
         </div>
-        <!-- Contact: revealed state -->
         <div class="tpl-contact-revealed hidden pt-2 border-t" style="border-color:rgba(192,232,255,0.5);">
           <div class="flex items-center gap-2">
             <span class="tpl-contact-icon material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;"></span>
@@ -137,7 +110,7 @@ export const prerender = false;
     </div>
   </template>
 
-  <!-- SUCCESS MODAL (shown after posting) -->
+  <!-- SUCCESS MODAL -->
   <div id="success-modal" class="modal-overlay hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-scroll">
@@ -153,14 +126,14 @@ export const prerender = false;
             <span class="material-symbols-outlined text-base">content_copy</span>
             Copy Delete Link
           </button>
-          <p class="text-[11px] text-center" style="color:#86b3cc;">We also recommend saving it somewhere safe — you won't be able to recover it.</p>
+          <p class="text-[11px] text-center" style="color:#86b3cc;">Save it somewhere safe — you won't be able to recover it.</p>
           <button id="success-close-btn" class="w-full px-4 py-2.5 rounded-xl text-sm font-bold transition-all" style="background:rgba(225,243,255,0.7);border:1px solid rgba(192,232,255,0.8);color:#326177;">Close</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- POST FORM (inline, hidden by default) -->
+  <!-- POST FORM -->
   <section id="post-modal" class="hidden px-6 pb-20">
     <div class="max-w-3xl mx-auto">
       <div class="card p-6 md:p-8 space-y-4">
@@ -170,147 +143,128 @@ export const prerender = false;
             <span class="material-symbols-outlined text-on-surface-variant">close</span>
           </button>
         </div>
-
-          <!-- Validation banner -->
-          <div id="form-errors" class="hidden p-3 rounded-xl text-sm font-medium" style="background:#FFE8E8;border:1px solid #FF3B30;color:#7A0000;"></div>
-
-          <form id="ticket-form" novalidate>
-            <!-- Type -->
-            <div class="mb-5">
-              <label class="form-label">I'm... <span class="req">*</span></label>
-              <div class="flex gap-3">
-                <label class="flex-1">
-                  <input type="radio" name="type" value="selling" class="peer hidden" checked />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border-2 border-surface-container-high rounded-xl p-3 text-center cursor-pointer transition-all">
-                    <span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings:'FILL' 1;color:#006479;">sell</span>
-                    <div class="text-sm font-bold" style="color:#003345;">Selling</div>
-                  </div>
-                </label>
-                <label class="flex-1">
-                  <input type="radio" name="type" value="buying" class="peer hidden" />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border-2 border-surface-container-high rounded-xl p-3 text-center cursor-pointer transition-all">
-                    <span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings:'FILL' 1;color:#006479;">shopping_cart</span>
-                    <div class="text-sm font-bold" style="color:#003345;">Buying</div>
-                  </div>
-                </label>
+        <div id="form-errors" class="hidden p-3 rounded-xl text-sm font-medium" style="background:#FFE8E8;border:1px solid #FF3B30;color:#7A0000;"></div>
+        <form id="ticket-form" novalidate>
+          <div class="mb-5">
+            <label class="form-label">I'm... <span class="req">*</span></label>
+            <div class="flex gap-3">
+              <label class="flex-1">
+                <input type="radio" name="type" value="selling" class="peer hidden" checked />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border-2 border-surface-container-high rounded-xl p-3 text-center cursor-pointer transition-all">
+                  <span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings:'FILL' 1;color:#006479;">sell</span>
+                  <div class="text-sm font-bold" style="color:#003345;">Selling</div>
+                </div>
+              </label>
+              <label class="flex-1">
+                <input type="radio" name="type" value="buying" class="peer hidden" />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border-2 border-surface-container-high rounded-xl p-3 text-center cursor-pointer transition-all">
+                  <span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings:'FILL' 1;color:#006479;">shopping_cart</span>
+                  <div class="text-sm font-bold" style="color:#003345;">Buying</div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="mb-5">
+            <label class="form-label">Festival <span class="req">*</span></label>
+            <div class="cs-wrap" data-cs-name="festival">
+              <button type="button" class="cs-trigger form-input" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                <span class="cs-label" style="color:#86b3cc;">Select festival...</span>
+                <span class="material-symbols-outlined text-base" style="color:#86b3cc;transition:transform 0.2s;">expand_more</span>
+              </button>
+              <div class="cs-menu">
+                <div class="cs-item" data-val="S2O">S2O Songkran (Apr 11-13)</div>
+                <div class="cs-item" data-val="Siam Songkran">Siam Songkran (Apr 11-14)</div>
+                <div class="cs-item" data-val="GCircuit">GCircuit Songkran (Apr 10-13)</div>
               </div>
             </div>
-
-            <!-- Festival -->
-            <div class="mb-5">
-              <label class="form-label">Festival <span class="req">*</span></label>
-              <div class="cs-wrap" data-cs-name="festival">
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-5">
+            <div>
+              <label class="form-label">Date(s) <span class="req">*</span></label>
+              <div class="cs-wrap" data-cs-name="dates">
                 <button type="button" class="cs-trigger form-input" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
-                  <span class="cs-label" style="color:#86b3cc;">Select festival...</span>
+                  <span class="cs-label" style="color:#86b3cc;">Select...</span>
                   <span class="material-symbols-outlined text-base" style="color:#86b3cc;transition:transform 0.2s;">expand_more</span>
                 </button>
                 <div class="cs-menu">
-                  <div class="cs-item" data-val="S2O">S2O Songkran (Apr 11-13)</div>
-                  <div class="cs-item" data-val="Siam Songkran">Siam Songkran (Apr 11-14)</div>
-                  <div class="cs-item" data-val="GCircuit">GCircuit Songkran (Apr 10-13)</div>
+                  <div class="cs-item" data-val="All Days">All Days Pass</div>
+                  <div class="cs-item" data-val="Apr 10">Apr 10</div>
+                  <div class="cs-item" data-val="Apr 11">Apr 11</div>
+                  <div class="cs-item" data-val="Apr 12">Apr 12</div>
+                  <div class="cs-item" data-val="Apr 13">Apr 13</div>
+                  <div class="cs-item" data-val="Apr 14">Apr 14</div>
                 </div>
               </div>
             </div>
-
-            <!-- Date & Tier -->
-            <div class="grid grid-cols-2 gap-4 mb-5">
-              <div>
-                <label class="form-label">Date(s) <span class="req">*</span></label>
-                <div class="cs-wrap" data-cs-name="dates">
-                  <button type="button" class="cs-trigger form-input" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
-                    <span class="cs-label" style="color:#86b3cc;">Select...</span>
-                    <span class="material-symbols-outlined text-base" style="color:#86b3cc;transition:transform 0.2s;">expand_more</span>
-                  </button>
-                  <div class="cs-menu">
-                    <div class="cs-item" data-val="All Days">All Days Pass</div>
-                    <div class="cs-item" data-val="Apr 10">Apr 10</div>
-                    <div class="cs-item" data-val="Apr 11">Apr 11</div>
-                    <div class="cs-item" data-val="Apr 12">Apr 12</div>
-                    <div class="cs-item" data-val="Apr 13">Apr 13</div>
-                    <div class="cs-item" data-val="Apr 14">Apr 14</div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label class="form-label">Tier <span class="req">*</span></label>
-                <div class="cs-wrap" data-cs-name="tier" data-cs-default="GA">
-                  <button type="button" class="cs-trigger form-input" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
-                    <span class="cs-label">GA (General)</span>
-                    <span class="material-symbols-outlined text-base" style="color:#86b3cc;transition:transform 0.2s;">expand_more</span>
-                  </button>
-                  <div class="cs-menu">
-                    <div class="cs-item active" data-val="GA">GA (General)</div>
-                    <div class="cs-item" data-val="VIP">VIP</div>
-                  </div>
+            <div>
+              <label class="form-label">Tier <span class="req">*</span></label>
+              <div class="cs-wrap" data-cs-name="tier" data-cs-default="GA">
+                <button type="button" class="cs-trigger form-input" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+                  <span class="cs-label">GA (General)</span>
+                  <span class="material-symbols-outlined text-base" style="color:#86b3cc;transition:transform 0.2s;">expand_more</span>
+                </button>
+                <div class="cs-menu">
+                  <div class="cs-item active" data-val="GA">GA (General)</div>
+                  <div class="cs-item" data-val="VIP">VIP</div>
                 </div>
               </div>
             </div>
-
-            <!-- Qty & Price -->
-            <div class="grid grid-cols-2 gap-4 mb-5">
-              <div>
-                <label class="form-label">Tickets <span class="req">*</span></label>
-                <input type="number" name="quantity" min="1" max="10" value="1" class="form-input" />
-              </div>
-              <div>
-                <label class="form-label">Price per ticket (฿) <span class="req">*</span></label>
-                <input type="number" name="price" min="0" step="100" placeholder="e.g. 2000" class="form-input" />
-              </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-5">
+            <div>
+              <label class="form-label">Tickets <span class="req">*</span></label>
+              <input type="number" name="quantity" min="1" max="10" value="1" class="form-input" />
             </div>
-
-            <!-- Contact -->
-            <div class="mb-5">
-              <label class="form-label">Contact <span class="req">*</span></label>
-              <div class="grid grid-cols-4 gap-2 mb-2">
-                <label>
-                  <input type="radio" name="contact_type" value="telegram" class="peer hidden" checked />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Telegram</div>
-                </label>
-                <label>
-                  <input type="radio" name="contact_type" value="line" class="peer hidden" />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Line</div>
-                </label>
-                <label>
-                  <input type="radio" name="contact_type" value="whatsapp" class="peer hidden" />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">WhatsApp</div>
-                </label>
-                <label>
-                  <input type="radio" name="contact_type" value="email" class="peer hidden" />
-                  <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Email</div>
-                </label>
-              </div>
-              <input type="text" name="contact" placeholder="@username, phone, or email" class="form-input" />
+            <div>
+              <label class="form-label">Price per ticket (฿) <span class="req">*</span></label>
+              <input type="number" name="price" min="0" step="100" placeholder="e.g. 2000" class="form-input" />
             </div>
-
-            <!-- Email -->
-            <div class="mb-5">
-              <label class="form-label">Your Email <span class="req">*</span> <span style="font-weight:400;text-transform:none;color:#86b3cc;">(private — for listing management only)</span></label>
-              <input type="email" name="email" placeholder="your@email.com" class="form-input" />
-            </div>
-
-            <!-- Note -->
-            <div class="mb-5">
-              <label class="form-label">Note <span style="font-weight:400;text-transform:none;color:#86b3cc;">(optional)</span></label>
-              <textarea name="note" rows="2" maxlength="200" placeholder="Any extra info..." class="form-input resize-none"></textarea>
-            </div>
-
-            <!-- Checkboxes -->
-            <div class="space-y-3 mb-6">
-              <label class="flex items-start gap-3 cursor-pointer group">
-                <input type="checkbox" name="gdpr" class="mt-0.5 w-4 h-4 rounded accent-primary" style="accent-color:#006479;" />
-                <span class="text-xs leading-relaxed" style="color:#326177;">I agree that my contact info and listing details will be publicly visible. My email will only be used for listing management. <span class="req">*</span></span>
+          </div>
+          <div class="mb-5">
+            <label class="form-label">Contact <span class="req">*</span></label>
+            <div class="grid grid-cols-4 gap-2 mb-2">
+              <label>
+                <input type="radio" name="contact_type" value="telegram" class="peer hidden" checked />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Telegram</div>
               </label>
-              <label class="flex items-start gap-3 cursor-pointer group">
-                <input type="checkbox" name="safety" class="mt-0.5 w-4 h-4 rounded" style="accent-color:#006479;" />
-                <span class="text-xs leading-relaxed" style="color:#326177;">I understand that BKK SONGKRAN is not responsible for any transactions. I will verify tickets and meet in safe, public places. <span class="req">*</span></span>
+              <label>
+                <input type="radio" name="contact_type" value="line" class="peer hidden" />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Line</div>
+              </label>
+              <label>
+                <input type="radio" name="contact_type" value="whatsapp" class="peer hidden" />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">WhatsApp</div>
+              </label>
+              <label>
+                <input type="radio" name="contact_type" value="email" class="peer hidden" />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Email</div>
               </label>
             </div>
-
-            <button type="submit" id="submit-btn" class="btn-primary w-full px-6 py-3 text-sm">
-              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
-              Post Listing
-            </button>
-          </form>
+            <input type="text" name="contact" placeholder="@username, phone, or email" class="form-input" />
+          </div>
+          <div class="mb-5">
+            <label class="form-label">Your Email <span class="req">*</span> <span style="font-weight:400;text-transform:none;color:#86b3cc;">(private — for listing management only)</span></label>
+            <input type="email" name="email" placeholder="your@email.com" class="form-input" />
+          </div>
+          <div class="mb-5">
+            <label class="form-label">Note <span style="font-weight:400;text-transform:none;color:#86b3cc;">(optional)</span></label>
+            <textarea name="note" rows="2" maxlength="200" placeholder="Any extra info..." class="form-input resize-none"></textarea>
+          </div>
+          <div class="space-y-3 mb-6">
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" name="gdpr" class="mt-0.5 w-4 h-4 rounded" style="accent-color:#006479;" />
+              <span class="text-xs leading-relaxed" style="color:#326177;">I agree that my contact info and listing details will be publicly visible. My email will only be used for listing management. <span class="req">*</span></span>
+            </label>
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" name="safety" class="mt-0.5 w-4 h-4 rounded" style="accent-color:#006479;" />
+              <span class="text-xs leading-relaxed" style="color:#326177;">I understand that BKK SONGKRAN is not responsible for any transactions. I will verify tickets and meet in safe, public places. <span class="req">*</span></span>
+            </label>
+          </div>
+          <button type="submit" id="submit-btn" class="btn-primary w-full px-6 py-3 text-sm">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
+            Post Listing
+          </button>
+        </form>
       </div>
     </div>
   </section>
@@ -331,21 +285,16 @@ export const prerender = false;
   .filter-btn { padding:0.4rem 0.75rem;border-radius:0.5rem;font-size:0.75rem;font-weight:700;color:#326177;transition:all 0.2s;display:flex;align-items:center;gap:0.25rem;cursor:pointer;background:transparent;border:none; }
   .filter-btn:hover { color:#006479; }
   .filter-btn.active { background:linear-gradient(135deg,#006479,#40cef3);color:#fff; }
-
   .form-input { width:100%;padding:0.75rem 1rem;border-radius:0.75rem;font-size:0.875rem;font-weight:500;outline:none;background:rgba(225,243,255,0.7);border:1.5px solid rgba(192,232,255,0.8);color:#003345;transition:border-color 0.2s; }
   .form-input:focus { border-color:#006479; }
-  .form-input.error { border-color:#FF3B30; background:rgba(255,232,232,0.3); }
+  .form-input.error { border-color:#FF3B30;background:rgba(255,232,232,0.3); }
   .form-label { display:block;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;color:#326177; }
   .req { color:#b31b25;font-weight:700; }
-
-  /* Modal system */
   .modal-overlay { position:fixed;inset:0;z-index:60; }
   .modal-backdrop { position:fixed;inset:0;background:rgba(0,30,50,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px); }
   .modal-scroll { position:fixed;inset:0;overflow-y:auto; }
   .modal-center { min-height:100%;display:flex;align-items:center;justify-content:center;padding:2rem 1rem; }
   .modal-card { position:relative;z-index:1; }
-
-  /* Custom select */
   .cs-wrap { position:relative; }
   .cs-trigger .cs-label { white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
   .cs-menu { display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:30;background:#fff;border-radius:0.75rem;border:1.5px solid rgba(192,232,255,0.8);box-shadow:0 8px 24px rgba(0,51,69,0.12);overflow:hidden; }
@@ -368,7 +317,6 @@ const CI: Record<string,string> = { telegram:'send', line:'chat', whatsapp:'call
 let tickets: any[] = [];
 let fType = 'all', fFest = 'all';
 
-// Revealed contacts: id → { contact, contact_type }
 function getRevealed(): Record<string,{contact:string;contact_type:string}> {
   try { return JSON.parse(localStorage.getItem('revealed_tickets') || '{}'); } catch { return {}; }
 }
@@ -376,23 +324,19 @@ function saveRevealed(r: Record<string,{contact:string;contact_type:string}>) {
   localStorage.setItem('revealed_tickets', JSON.stringify(r));
 }
 
-// --- Custom selects ---
+// Custom selects
 const csValues: Record<string,string> = { tier: 'GA' };
-
 document.querySelectorAll('.cs-wrap').forEach(wrap => {
   const name = wrap.getAttribute('data-cs-name')!;
   const trigger = wrap.querySelector('.cs-trigger')!;
   const label = wrap.querySelector('.cs-label')!;
   const items = wrap.querySelectorAll('.cs-item');
-
   if (wrap.getAttribute('data-cs-default')) csValues[name] = wrap.getAttribute('data-cs-default')!;
-
   trigger.addEventListener('click', (e) => {
     e.stopPropagation();
     document.querySelectorAll('.cs-wrap.open').forEach(w => { if (w !== wrap) w.classList.remove('open'); });
     wrap.classList.toggle('open');
   });
-
   items.forEach(item => {
     item.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -406,12 +350,11 @@ document.querySelectorAll('.cs-wrap').forEach(wrap => {
     });
   });
 });
-
 document.addEventListener('click', () => {
   document.querySelectorAll('.cs-wrap.open').forEach(w => w.classList.remove('open'));
 });
 
-// --- Filters ---
+// Filters
 document.querySelectorAll('[data-filter-type]').forEach(btn => {
   btn.addEventListener('click', () => {
     fType = btn.getAttribute('data-filter-type')!;
@@ -427,11 +370,7 @@ document.querySelectorAll('[data-filter-fest]').forEach(btn => {
   });
 });
 
-// --- Modal helpers ---
-function showModal(id: string) { document.getElementById(id)!.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-function hideModal(id: string) { document.getElementById(id)!.classList.add('hidden'); document.body.style.overflow = ''; }
-
-// Post form (inline toggle)
+// Form toggle
 const postSection = document.getElementById('post-modal')!;
 const listingsSection = document.querySelector('#listings-grid')!.closest('section')!;
 const filtersSection = document.querySelector('[data-filter-type]')!.closest('section')!;
@@ -450,16 +389,21 @@ function closeFormView() {
   postSection.classList.add('hidden');
   listingsSection.classList.remove('hidden');
   filtersSection.classList.remove('hidden');
-  unlockBanner.classList.remove('hidden');
+  if (Object.keys(getRevealed()).length === 0) unlockBanner.classList.remove('hidden');
   headerBtn.classList.remove('hidden');
 }
-
 document.getElementById('btn-open-form')!.addEventListener('click', openForm);
 document.getElementById('close-form-btn')!.addEventListener('click', closeFormView);
 
 // Success modal
-document.getElementById('success-close-btn')!.addEventListener('click', () => hideModal('success-modal'));
-document.querySelector('#success-modal .modal-backdrop')!.addEventListener('click', () => hideModal('success-modal'));
+document.getElementById('success-close-btn')!.addEventListener('click', () => {
+  document.getElementById('success-modal')!.classList.add('hidden');
+  document.body.style.overflow = '';
+});
+document.querySelector('#success-modal .modal-backdrop')!.addEventListener('click', () => {
+  document.getElementById('success-modal')!.classList.add('hidden');
+  document.body.style.overflow = '';
+});
 document.getElementById('copy-link-btn')!.addEventListener('click', () => {
   const link = document.getElementById('delete-link-display')!.textContent || '';
   navigator.clipboard.writeText(link).then(() => {
@@ -467,58 +411,37 @@ document.getElementById('copy-link-btn')!.addEventListener('click', () => {
     btn.textContent = 'Copied!';
     setTimeout(() => {
       btn.textContent = '';
-      const ic = document.createElement('span'); ic.className='material-symbols-outlined text-base'; ic.textContent='content_copy'; btn.appendChild(ic); btn.appendChild(document.createTextNode(' Copy Delete Link'));
+      const ic = document.createElement('span');
+      ic.className = 'material-symbols-outlined text-base';
+      ic.textContent = 'content_copy';
+      btn.appendChild(ic);
+      btn.appendChild(document.createTextNode(' Copy Delete Link'));
     }, 1500);
   });
 });
 
-// --- Unlock contacts ---
+// Unlock contacts
+const unlockBtn = document.getElementById('unlock-btn')!;
+const unlockEmailEl = document.getElementById('unlock-email') as HTMLInputElement;
 const unlockError = document.getElementById('unlock-error')!;
 
-// Hide banner if already unlocked
-function updateUnlockBanner() {
-  const r = getRevealed();
-  if (Object.keys(r).length > 0) unlockBanner.classList.add('hidden');
-}
-updateUnlockBanner();
+if (Object.keys(getRevealed()).length > 0) unlockBanner.classList.add('hidden');
 
-(window as any).openUnlockModal = function() {
-  document.getElementById('unlock-modal')!.classList.remove('hidden');
-  setTimeout(() => (document.getElementById('unlock-email') as HTMLInputElement)?.focus(), 50);
-};
-(window as any).closeUnlockModal = function() {
-  document.getElementById('unlock-modal')!.classList.add('hidden');
-  unlockError.classList.add('hidden');
-  (document.getElementById('unlock-email') as HTMLInputElement).value = '';
-  if (window.turnstile && ticketsTurnstileId !== null) window.turnstile.reset(ticketsTurnstileId);
-};
-document.getElementById('unlock-modal')!.addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) (window as any).closeUnlockModal();
-});
-
-(window as any).doUnlock = async function() {
-  const unlockEmail = document.getElementById('unlock-email') as HTMLInputElement;
-  const submitBtn = document.getElementById('unlock-submit')!;
-  const email = unlockEmail.value.trim();
+unlockBtn.addEventListener('click', async () => {
+  const email = unlockEmailEl.value.trim();
   unlockError.classList.add('hidden');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     unlockError.textContent = 'Please enter a valid email address';
     unlockError.classList.remove('hidden');
     return;
   }
-  const turnstileToken = (window.turnstile && ticketsTurnstileId !== null) ? window.turnstile.getResponse(ticketsTurnstileId) : '';
-  if (!turnstileToken) {
-    unlockError.textContent = 'Please complete the security check.';
-    unlockError.classList.remove('hidden');
-    return;
-  }
-  submitBtn.textContent = 'Unlocking...';
-  submitBtn.setAttribute('disabled', 'true');
+  unlockBtn.textContent = '...';
+  unlockBtn.setAttribute('disabled', 'true');
   try {
     const res = await fetch('/api/reveal', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email, turnstileToken }),
+      body: JSON.stringify({ email }),
     });
     const data = await res.json();
     if (!res.ok) {
@@ -527,18 +450,17 @@ document.getElementById('unlock-modal')!.addEventListener('click', (e) => {
     } else {
       saveRevealed(data.contacts || {});
       unlockBanner.classList.add('hidden');
-      (window as any).closeUnlockModal();
       render();
     }
   } catch {
     unlockError.textContent = 'Connection error. Try again.';
     unlockError.classList.remove('hidden');
   }
-  submitBtn.textContent = 'Unlock all contacts';
-  submitBtn.removeAttribute('disabled');
-};
+  unlockBtn.textContent = 'Unlock';
+  unlockBtn.removeAttribute('disabled');
+});
 
-// --- Submit ---
+// Submit form
 document.getElementById('ticket-form')!.addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target as HTMLFormElement;
@@ -551,12 +473,10 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
   fd.dates = csValues.dates || '';
   fd.tier = csValues.tier || 'GA';
 
-  // Clear previous errors
   const errBanner = document.getElementById('form-errors')!;
   form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
   errBanner.classList.add('hidden');
 
-  // Validate
   const errors: string[] = [];
   if (!fd.festival) { errors.push('Select a festival'); document.querySelector('[data-cs-name="festival"] .cs-trigger')?.classList.add('error'); }
   if (!fd.dates) { errors.push('Select a date'); document.querySelector('[data-cs-name="dates"] .cs-trigger')?.classList.add('error'); }
@@ -576,7 +496,6 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
     return;
   }
 
-  // Remove checkbox values from payload
   delete fd.gdpr;
   delete fd.safety;
 
@@ -586,24 +505,23 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
     if (!res.ok) throw new Error(data.error || 'Failed');
 
     form.reset();
-    // Reset custom selects visually
     document.querySelectorAll('.cs-wrap').forEach(w => {
-      const label = w.querySelector('.cs-label') as HTMLElement;
-      const name = w.getAttribute('data-cs-name')!;
-      if (name === 'tier') { label.textContent = 'GA (General)'; label.style.color = '#003345'; }
-      else { label.textContent = name === 'festival' ? 'Select festival...' : 'Select...'; label.style.color = '#86b3cc'; }
+      const lbl = w.querySelector('.cs-label') as HTMLElement;
+      const n = w.getAttribute('data-cs-name')!;
+      if (n === 'tier') { lbl.textContent = 'GA (General)'; lbl.style.color = '#003345'; }
+      else { lbl.textContent = n === 'festival' ? 'Select festival...' : 'Select...'; lbl.style.color = '#86b3cc'; }
       w.querySelectorAll('.cs-item').forEach(i => i.classList.remove('active'));
-      if (name === 'tier') w.querySelector('[data-val="GA"]')?.classList.add('active');
-      delete csValues[name];
+      if (n === 'tier') w.querySelector('[data-val="GA"]')?.classList.add('active');
+      delete csValues[n];
     });
     csValues.tier = 'GA';
     closeFormView();
     await load();
 
-    // Show success modal with delete link
     const deleteLink = `${location.origin}/api/tickets?id=${encodeURIComponent(data.id)}&token=${encodeURIComponent(data.deleteToken)}`;
     document.getElementById('delete-link-display')!.textContent = deleteLink;
-    showModal('success-modal');
+    document.getElementById('success-modal')!.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
   } catch (err: any) {
     alert(err.message || 'Something went wrong. Try again.');
   }
@@ -618,7 +536,7 @@ document.getElementById('ticket-form')!.addEventListener('submit', async (e) => 
   btn.appendChild(document.createTextNode(' Post Listing'));
 });
 
-// --- Load & Render ---
+// Load & render
 async function load() {
   try { tickets = await (await fetch('/api/tickets')).json(); } catch { tickets = []; }
   render();
@@ -646,8 +564,7 @@ function render() {
     const sell = t.type === 'selling';
     const clone = tpl.content.cloneNode(true) as DocumentFragment;
 
-    const bar = clone.querySelector('.tpl-bar') as HTMLElement;
-    bar.style.background = `linear-gradient(90deg,${fc.d},${fc.c})`;
+    (clone.querySelector('.tpl-bar') as HTMLElement).style.background = `linear-gradient(90deg,${fc.d},${fc.c})`;
 
     const tb = clone.querySelector('.tpl-type-badge') as HTMLElement;
     tb.style.cssText = `background:${sell?'#E8FFF0':'#E8F4FF'};color:${sell?'#1A7A3A':'#006479'};border:1px solid ${sell?'#34C759':'#40cef3'};`;
@@ -659,7 +576,7 @@ function render() {
     tb.appendChild(document.createTextNode(sell ? ' Selling' : ' Buying'));
 
     const fb = clone.querySelector('.tpl-fest-badge') as HTMLElement;
-    fb.style.cssText = `background:${fc.c}25;color:${fc.d};border:1.5px solid ${fc.c}50;`;
+    fb.style.cssText = `background:${fc.c}15;color:${fc.d};`;
     fb.textContent = t.festival;
 
     (clone.querySelector('.tpl-time') as HTMLElement).textContent = ago(t.created_at);
@@ -702,27 +619,4 @@ function ago(d:string) {
 }
 
 load();
-</script>
-
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-<script>
-let ticketsTurnstileId: any = null;
-
-(window as any).openUnlockModal = (function(orig: any) {
-  return function() {
-    orig();
-    function tryRender() {
-      if (ticketsTurnstileId !== null) return;
-      if ((window as any).turnstile) {
-        ticketsTurnstileId = (window as any).turnstile.render('#turnstile-tickets', {
-          sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
-          'refresh-expired': 'auto',
-        });
-      } else {
-        setTimeout(tryRender, 100);
-      }
-    }
-    tryRender();
-  };
-})((window as any).openUnlockModal);
 </script>

@@ -51,9 +51,6 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (error) return json({ error: error.message }, 500);
 
-  // Log the lead (best-effort, don't fail if it errors)
-  await supabase.from('leads').insert({ email, ticket_id: null });
-
   // Return map of id → { contact, contact_type }
   const contacts: Record<string, { contact: string; contact_type: string }> = {};
   for (const t of tickets ?? []) {
