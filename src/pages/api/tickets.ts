@@ -6,6 +6,24 @@ import { join } from 'node:path';
 
 const DATA_PATH = join(process.cwd(), 'data', 'tickets.json');
 
+const ALLOWED_FESTIVALS = ['S2O', 'Siam Songkran', 'GCircuit', 'Other'];
+const ALLOWED_TYPES = ['selling', 'buying'];
+const ALLOWED_CONTACT_TYPES = ['telegram', 'line', 'whatsapp', 'email'];
+
+// Rate limiter: max 5 POSTs per IP per hour
+const postRateMap = new Map<string, { count: number; reset: number }>();
+function isPostRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = postRateMap.get(ip);
+  if (!entry || now > entry.reset) {
+    postRateMap.set(ip, { count: 1, reset: now + 3_600_000 });
+    return false;
+  }
+  if (entry.count >= 5) return true;
+  entry.count++;
+  return false;
+}
+
 function readTickets() {
   try {
     return JSON.parse(readFileSync(DATA_PATH, 'utf-8'));
@@ -30,6 +48,11 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+    if (isPostRateLimited(ip)) {
+      return new Response(JSON.stringify({ error: 'Too many requests — try again later' }), { status: 429 });
+    }
+
     const body = await request.json();
     const { type, festival, dates, tier, quantity, price, contact, contactType, email, note } = body;
 
@@ -37,18 +60,40 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
+    // Allowlist validation
+    if (!ALLOWED_TYPES.includes(type)) {
+      return new Response(JSON.stringify({ error: 'Invalid type' }), { status: 400 });
+    }
+    if (!ALLOWED_FESTIVALS.includes(festival)) {
+      return new Response(JSON.stringify({ error: 'Invalid festival' }), { status: 400 });
+    }
+    if (!ALLOWED_CONTACT_TYPES.includes(contactType)) {
+      return new Response(JSON.stringify({ error: 'Invalid contactType' }), { status: 400 });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(JSON.stringify({ error: 'Invalid email' }), { status: 400 });
+    }
+
+    // Length limits
+    const str = (v: unknown, max: number) => String(v ?? '').slice(0, max);
+    const qty = Math.min(Math.max(1, Number(quantity)), 20);
+    const prc = Math.min(Math.max(0, Number(price)), 999999);
+    if (isNaN(qty) || isNaN(prc)) {
+      return new Response(JSON.stringify({ error: 'Invalid quantity or price' }), { status: 400 });
+    }
+
     const ticket = {
       id: `t-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       type,
       festival,
-      dates,
-      tier,
-      quantity: Number(quantity),
-      price: Number(price),
-      contact,
+      dates: str(dates, 100),
+      tier: str(tier, 100),
+      quantity: qty,
+      price: prc,
+      contact: str(contact, 200),
       contactType,
-      email,
-      note: note || '',
+      email: str(email, 254),
+      note: str(note, 500),
       createdAt: new Date().toISOString(),
     };
 

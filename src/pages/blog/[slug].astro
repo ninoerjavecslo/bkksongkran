@@ -11,8 +11,12 @@ export function getStaticPaths() {
 
 const { article } = Astro.props;
 
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function fmt(text: string): string {
-  return text
+  return esc(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>');
 }
@@ -101,7 +105,7 @@ const htmlContent = renderContent(article.content);
 const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
 ---
 
-<BaseLayout title={article.metaTitle} description={article.metaDescription} canonical={`https://bangkoksongkran.com/blog/${article.slug}`}>
+<BaseLayout title={article.metaTitle} description={article.metaDescription} canonical={`https://bkksongkran.com/blog/${article.slug}`}>
 
   <!-- Extra head tags -->
   <meta slot="head" name="keywords" content={article.keywords.join(', ')} />
@@ -116,8 +120,8 @@ const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
     "datePublished": article.publishedDate,
     "dateModified": article.modifiedDate,
     "author": { "@type": "Organization", "name": "Bangkok Songkran" },
-    "publisher": { "@type": "Organization", "name": "Bangkok Songkran", "url": "https://bangkoksongkran.com" },
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://bangkoksongkran.com/blog/${article.slug}` },
+    "publisher": { "@type": "Organization", "name": "Bangkok Songkran", "url": "https://bkksongkran.com" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://bkksongkran.com/blog/${article.slug}` },
     "keywords": article.keywords,
   })} />
 
@@ -126,9 +130,9 @@ const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bangkoksongkran.com" },
-      { "@type": "ListItem", "position": 2, "name": "Guide", "item": "https://bangkoksongkran.com/blog" },
-      { "@type": "ListItem", "position": 3, "name": article.h1, "item": `https://bangkoksongkran.com/blog/${article.slug}` },
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bkksongkran.com" },
+      { "@type": "ListItem", "position": 2, "name": "Guide", "item": "https://bkksongkran.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": article.h1, "item": `https://bkksongkran.com/blog/${article.slug}` },
     ]
   })} />
 

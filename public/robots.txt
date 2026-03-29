@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bangkoksongkran.com/sitemap.xml
+Sitemap: https://bkksongkran.com/sitemap.xml

@@ -11,32 +11,32 @@ import { articles } from '../../data/articles';
     "@type": "Blog",
     "name": "Bangkok Songkran Guide",
     "description": "The complete guide to Songkran 2026 in Bangkok. Articles, tips, and everything you need to know about Thailand's water festival.",
-    "url": "https://bangkoksongkran.com/blog",
+    "url": "https://bkksongkran.com/blog",
     "blogPost": articles.map(a => ({
       "@type": "BlogPosting",
       "headline": a.title,
       "description": a.metaDescription,
       "datePublished": a.publishedDate,
       "dateModified": a.modifiedDate,
-      "url": `https://bangkoksongkran.com/blog/${a.slug}`,
+      "url": `https://bkksongkran.com/blog/${a.slug}`,
     })),
   })} />
 
   <!-- HEADER -->
-  <section class="pt-36 pb-12 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
-    <div class="max-w-4xl mx-auto">
+  <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
       <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">Songkran Knowledge Base</div>
-      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,7vw,4.5rem);color:#003345;line-height:0.95;">
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
         SONGKRAN<br/>
         <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GUIDE</span>
       </h1>
-      <p class="text-lg max-w-xl" style="color:#326177;">Everything you need to know about Thailand's water festival. Written by locals, updated for 2026.</p>
+      <p class="text-lg max-w-2xl" style="color:#326177;">Everything you need to know about Thailand's water festival. Written by locals, updated for 2026.</p>
     </div>
   </section>
 
   <!-- FEATURED ARTICLE -->
   <section class="px-6 pb-8">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-7xl mx-auto">
       <a href={`/blog/${articles[0].slug}`} class="block group">
         <div class="card overflow-hidden relative" style="min-height:280px;">
           <div class="absolute inset-0">
@@ -61,7 +61,7 @@ import { articles } from '../../data/articles';
 
   <!-- ALL ARTICLES GRID -->
   <section class="px-6 pb-20">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {articles.slice(1).map(article => (
           <a href={`/blog/${article.slug}`} class="card p-0 overflow-hidden group block">
@@ -88,7 +88,7 @@ import { articles } from '../../data/articles';
 
   <!-- FAQ Section for SEO -->
   <section class="px-6 pb-20">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-7xl mx-auto">
       <h2 class="font-headline font-extrabold text-2xl mb-6" style="color:#003345;">Frequently Asked Questions</h2>
       <div class="space-y-4">
         {[

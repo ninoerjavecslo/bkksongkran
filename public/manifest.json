@@ -1,6 +1,6 @@
 {
-  "name": "SIAM SPLASH — Songkran 2026",
-  "short_name": "SIAM SPLASH",
+  "name": "BKK SONGKRAN — Songkran 2026",
+  "short_name": "BKK SONGKRAN",
   "description": "Bangkok's complete Songkran 2026 guide. Timetables, heat map, AI planner.",
   "start_url": "/",
   "display": "standalone",
@@ -13,6 +13,6 @@
   ],
   "categories": ["travel", "entertainment", "lifestyle"],
   "screenshots": [
-    { "src": "/og.jpg", "sizes": "1200x630", "type": "image/jpeg", "label": "SIAM SPLASH Home" }
+    { "src": "/og.jpg", "sizes": "1200x630", "type": "image/jpeg", "label": "BKK SONGKRAN Home" }
   ]
 }

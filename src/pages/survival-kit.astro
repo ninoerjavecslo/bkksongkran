@@ -6,35 +6,23 @@ import { checklist } from '../data/index';
 const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
 ---
 
-<BaseLayout title="Songkran Survival Kit — What to Pack for Bangkok 2026" description="The complete Songkran packing checklist. Waterproof gear, health essentials, transport tips — everything you need for Bangkok's water festival." canonical="https://bangkoksongkran.com/survival-kit">
+<BaseLayout title="Songkran Survival Kit — What to Pack for Bangkok 2026" description="The complete Songkran packing checklist. Waterproof gear, health essentials, transport tips — everything you need for Bangkok's water festival." canonical="https://bkksongkran.com/survival-kit">
 
-  <!-- HERO -->
-  <section class="pt-36 pb-16 px-6 relative overflow-hidden">
-    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));"></div>
-    <div class="absolute top-20 right-10 w-64 h-64 rounded-full opacity-10" style="background:radial-gradient(circle,#40cef3,transparent);"></div>
-    <div class="absolute bottom-0 left-10 w-48 h-48 rounded-full opacity-10" style="background:radial-gradient(circle,#ff8eb2,transparent);"></div>
-
-    <div class="relative max-w-4xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style="background:rgba(0,100,121,0.08);border:1px solid rgba(0,100,121,0.12);">
-        <span class="material-symbols-outlined text-sm" style="color:#006479;font-variation-settings:'FILL' 1;">backpack</span>
-        <span class="text-xs font-bold tracking-widest uppercase" style="color:#006479;">Survival Guide</span>
-      </div>
-      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,8vw,5rem);color:#003345;line-height:0.95;">
-        YOUR SONGKRAN<br/>
-        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SURVIVAL KIT</span>
+  <!-- HEADER -->
+  <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#964300;">Packing Checklist</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
+        SURVIVAL<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">KIT</span>
       </h1>
-      <p class="text-lg max-w-xl mx-auto mb-2" style="color:#326177;">
-        Everything between you and a soggy disaster. Pack smart, survive smarter.
-      </p>
-      <p class="text-sm max-w-md mx-auto" style="color:#6b8fa3;">
-        Check off items as you pack. Share your readiness score with your squad.
-      </p>
+      <p class="text-lg max-w-2xl" style="color:#326177;">Everything between you and a soggy disaster. Check off items as you pack, share your readiness score with your squad.</p>
     </div>
   </section>
 
   <!-- STICKY PROGRESS BAR -->
   <div class="sticky top-20 z-30 px-6" id="sticky-progress">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-7xl mx-auto">
       <div class="rounded-2xl p-4 flex items-center gap-4" style="background:rgba(238,248,255,0.95);backdrop-filter:blur(20px);border:1px solid rgba(192,232,255,0.6);box-shadow:0 4px 24px rgba(0,100,121,0.08);">
         <div class="flex items-center gap-3 flex-shrink-0">
           <span class="material-symbols-outlined text-xl" style="color:#006479;font-variation-settings:'FILL' 1;">shield</span>
@@ -87,7 +75,7 @@ const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
                 <div class="p-5 bg-white/70">
                   <div class="flex items-start justify-between gap-3 mb-3">
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${category.color}12;`}>
-                      <span class="material-symbols-outlined text-xl" style={`color:${category.color};font-variation-settings:'FILL' 1;`}>{category.icon}</span>
+                      <span class="material-symbols-outlined text-xl" style={`color:${category.color};font-variation-settings:'FILL' 1;`}>{(item as any).icon ?? category.icon}</span>
                     </div>
                     <span class="flex-shrink-0 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full" style={`background:${
                       item.priority === 'critical' ? '#FFE8E8' :
@@ -116,7 +104,7 @@ const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
                           </svg>
                         </div>
                       </div>
-                      <span class="text-xs font-semibold packed-label" style="color:#6b8fa3;">Pack this</span>
+                      <span class="text-xs font-semibold packed-label" style="color:#6b8fa3;">Got it</span>
                     </label>
                   </div>
                 </div>
@@ -137,8 +125,7 @@ const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
           <!-- Share card preview -->
           <div id="share-preview" class="max-w-sm mx-auto rounded-2xl p-6 mb-8 text-left" style="background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);">
             <div class="flex items-center justify-between mb-4">
-              <span class="font-headline font-black text-lg text-white">SIAM<span style="color:#ff8eb2;">SPLASH</span></span>
-              <span class="text-xs font-bold text-white/50">2026</span>
+              <span class="font-headline font-black text-lg text-white">SONGKRAN<span style="color:#ff8eb2;"> 2026</span></span>
             </div>
             <div class="text-center py-4">
               <div class="font-headline font-black text-6xl text-white mb-1" id="share-score">0%</div>
@@ -146,7 +133,7 @@ const totalItems = checklist.reduce((sum, cat) => sum + cat.items.length, 0);
             </div>
             <div class="grid grid-cols-5 gap-2 mt-4" id="share-items-grid"></div>
             <div class="mt-4 pt-3 text-center" style="border-top:1px solid rgba(255,255,255,0.15);">
-              <span class="text-[10px] font-bold text-white/40 tracking-widest uppercase">siamsplash.com/survival-kit</span>
+              <span class="text-[10px] font-bold text-white/40 tracking-widest uppercase">bkksongkran.com/survival-kit</span>
             </div>
           </div>
 
@@ -237,7 +224,7 @@ function shareChecklist() {
   const checked = Array.from(all).filter(cb => cb.checked).length;
   const total = all.length;
 
-  const text = `I'm ${score} Songkran-ready for Bangkok 2026! (${checked}/${total} items packed)\n\nCheck your readiness at siamsplash.com/survival-kit`;
+  const text = `I'm ${score} Songkran-ready for Bangkok 2026! (${checked}/${total} items packed)\n\nCheck your readiness at bkksongkran.com/survival-kit`;
 
   if (navigator.share) {
     navigator.share({ title: 'My Songkran Survival Kit', text, url: window.location.href });

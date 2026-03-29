@@ -476,11 +476,11 @@ export const checklist = [
     emoji: '🏨',
     description: 'Prep before you step outside. Once you\'re wet, there\'s no going back.',
     items: [
-      { id: 'pouch', label: 'Waterproof phone pouch', priority: 'critical', tip: 'Your phone\'s warranty doesn\'t cover Khao San Road' },
-      { id: 'bag', label: 'Dry bag or zip-lock bags', priority: 'critical', tip: 'For cash, cards, and anything that can\'t get wet' },
-      { id: 'sunscreen', label: 'SPF 50 waterproof sunscreen', priority: 'critical', tip: 'Reapply every 2 hours. Bangkok April = brutal sun.' },
-      { id: 'meds', label: 'Basic first aid / meds', priority: 'medium', tip: 'Paracetamol, rehydration salts, blister plasters' },
-      { id: 'id', label: 'Original passport or ID', priority: 'critical', tip: 'Ticketed events are 20+. Thai police check originals — no photos.' },
+      { id: 'pouch', label: 'Waterproof phone pouch', icon: 'smartphone', priority: 'critical', tip: 'Your phone\'s warranty doesn\'t cover Khao San Road' },
+      { id: 'bag', label: 'Dry bag or zip-lock bags', icon: 'backpack', priority: 'critical', tip: 'For cash, cards, and anything that can\'t get wet' },
+      { id: 'sunscreen', label: 'SPF 50 waterproof sunscreen', icon: 'wb_sunny', priority: 'critical', tip: 'Reapply every 2 hours. Bangkok April = brutal sun.' },
+      { id: 'meds', label: 'Basic first aid / meds', icon: 'medical_services', priority: 'medium', tip: 'Paracetamol, rehydration salts, blister plasters' },
+      { id: 'id', label: 'Original passport or ID', icon: 'badge', priority: 'critical', tip: 'Ticketed events are 20+. Thai police check originals — no photos.' },
     ],
   },
   {
@@ -490,10 +490,10 @@ export const checklist = [
     emoji: '⚔️',
     description: 'What to wear when the streets become rivers.',
     items: [
-      { id: 'shoes', label: 'Water-safe shoes', priority: 'high', tip: 'Rubber sandals or Crocs. Nothing leather. Ever.' },
-      { id: 'clothes', label: 'Quick-dry clothing', priority: 'high', tip: 'Synthetic or moisture-wicking. You will be soaked in 30 seconds.' },
-      { id: 'goggles', label: 'Waterproof goggles', priority: 'medium', tip: 'Optional but game-changing at water cannon festivals' },
-      { id: 'charger', label: 'Portable charger in waterproof bag', priority: 'high', tip: 'Dead phone = no maps, no tickets, no Grab home' },
+      { id: 'shoes', label: 'Water-safe shoes', icon: 'steps', priority: 'high', tip: 'Rubber sandals or Crocs. Nothing leather. Ever.' },
+      { id: 'clothes', label: 'Quick-dry clothing', icon: 'checkroom', priority: 'high', tip: 'Synthetic or moisture-wicking. You will be soaked in 30 seconds.' },
+      { id: 'goggles', label: 'Waterproof goggles', icon: 'visibility', priority: 'medium', tip: 'Optional but game-changing at water cannon festivals' },
+      { id: 'charger', label: 'Portable charger in waterproof bag', icon: 'battery_charging_full', priority: 'high', tip: 'Dead phone = no maps, no tickets, no Grab home' },
     ],
   },
   {
@@ -503,10 +503,10 @@ export const checklist = [
     emoji: '🚇',
     description: 'Navigate the chaos like a local.',
     items: [
-      { id: 'rabbit', label: 'BTS Rabbit card loaded', priority: 'high', tip: 'Only sane transport during Songkran. Taxis are chaos.' },
-      { id: 'cash', label: 'Emergency cash in sealed bag', priority: 'high', tip: 'Keep ฿500 separate from your main wallet in a ziplock.' },
-      { id: 'grab', label: 'Grab app installed & topped up', priority: 'medium', tip: 'For late night when BTS stops running. Expect 3-4x surge.' },
-      { id: 'water', label: 'Reusable water bottle', priority: 'high', tip: '240+ free refill stations citywide during Songkran' },
+      { id: 'rabbit', label: 'BTS Rabbit card loaded', icon: 'train', priority: 'high', tip: 'Only sane transport during Songkran. Taxis are chaos.' },
+      { id: 'cash', label: 'Emergency cash in sealed bag', icon: 'payments', priority: 'high', tip: 'Keep ฿500 separate from your main wallet in a ziplock.' },
+      { id: 'grab', label: 'Grab app installed & topped up', icon: 'local_taxi', priority: 'medium', tip: 'For late night when BTS stops running. Expect 3-4x surge.' },
+      { id: 'water', label: 'Reusable water bottle', icon: 'water_drop', priority: 'high', tip: '240+ free refill stations citywide during Songkran' },
     ],
   },
   {
@@ -516,9 +516,9 @@ export const checklist = [
     emoji: '🎫',
     description: 'Everything for the ticketed festivals.',
     items: [
-      { id: 'tickets', label: 'Download tickets to phone', priority: 'critical', tip: 'Screenshot or save offline — your data will die in crowds.' },
-      { id: 'wristband', label: 'Wristband stored in pouch', priority: 'high', tip: 'Waterproof your wristband with tape if swimming.' },
-      { id: 'map', label: 'Venue maps saved offline', priority: 'medium', tip: 'S2O Land and Emsphere layouts saved to Maps app.' },
+      { id: 'tickets', label: 'Download tickets to phone', icon: 'confirmation_number', priority: 'critical', tip: 'Screenshot or save offline — your data will die in crowds.' },
+      { id: 'wristband', label: 'Wristband stored in pouch', icon: 'watch', priority: 'high', tip: 'Waterproof your wristband with tape if swimming.' },
+      { id: 'map', label: 'Venue maps saved offline', icon: 'map', priority: 'medium', tip: 'S2O Land and Emsphere layouts saved to Maps app.' },
     ],
   },
   {
@@ -528,9 +528,9 @@ export const checklist = [
     emoji: '🙏',
     description: 'Songkran is a sacred Thai holiday. Have fun AND be respectful.',
     items: [
-      { id: 'monks', label: 'Don\'t splash monks, elderly or babies', priority: 'critical', tip: 'Songkran is a sacred holiday. Read the room.' },
-      { id: 'consent', label: 'Ask before splashing strangers', priority: 'high', tip: 'Most people are game, but check first.' },
-      { id: 'zones', label: 'Stay in designated water zones', priority: 'medium', tip: 'Certain streets are dry zones — respect them.' },
+      { id: 'monks', label: 'Don\'t splash monks, elderly or babies', icon: 'do_not_disturb', priority: 'critical', tip: 'Songkran is a sacred holiday. Read the room.' },
+      { id: 'zones', label: 'Stay in designated water zones', icon: 'location_on', priority: 'medium', tip: 'Certain streets are dry zones — respect them.' },
+      { id: 'dry-zones', label: 'Know the dry zones near temples', icon: 'temple_buddhist', priority: 'high', tip: 'Areas around temples and government buildings are dry. Look for signs.' },
     ],
   },
 ];

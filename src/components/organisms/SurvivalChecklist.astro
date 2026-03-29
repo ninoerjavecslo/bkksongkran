@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function shareChecklist() {
   const score = document.getElementById('checklist-score')?.textContent || '0%';
-  const text = `I'm ${score} Songkran ready for Bangkok 2026! Check your readiness at siamsplash.com`;
+  const text = `I'm ${score} Songkran ready for Bangkok 2026! Check your readiness at bkksongkran.com`;
   if (navigator.share) {
     navigator.share({ title: 'Songkran Ready Score', text, url: window.location.href });
   } else {
