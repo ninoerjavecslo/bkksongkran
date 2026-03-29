@@ -13,7 +13,8 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-const KNOWN_PROVIDERS = /^[^\s@]+@(gmail|googlemail|yahoo|ymail|outlook|hotmail|live|msn|icloud|me|mac|proton|protonmail|fastmail|hey|aol|zoho)\.(com|co\.uk|fr|de|es|it|nl|be|ch|at|ca|com\.au|co\.nz|co\.za|co\.in|co\.jp|com\.br|co\.id)$/i;
+// Domain must be at least 3 chars, TLD at least 2 chars — blocks s.com, a.io etc.
+const VALID_EMAIL_DOMAIN = /^[^\s@]+@[a-zA-Z0-9]([a-zA-Z0-9\-]{1,})[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
 
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
@@ -31,8 +32,8 @@ export const POST: APIRoute = async ({ request }) => {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return json({ error: 'Please enter a valid email address.' }, 400);
 
-  if (!KNOWN_PROVIDERS.test(email))
-    return json({ error: 'Please use a real email provider (Gmail, Outlook, Yahoo, iCloud, etc.).' }, 400);
+  if (!VALID_EMAIL_DOMAIN.test(email))
+    return json({ error: 'Please enter a valid email (e.g. you@gmail.com or you@company.com).' }, 400);
 
   const secret = import.meta.env.TURNSTILE_SECRET_KEY;
   if (secret) {

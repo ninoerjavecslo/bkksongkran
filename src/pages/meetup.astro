@@ -61,17 +61,12 @@ const partiesJson = JSON.stringify(parties);
 
   <!-- UNLOCK BANNER -->
   <section class="px-6 pb-3 pt-1" id="meetup-unlock-banner">
-    <div class="max-w-7xl mx-auto flex items-center gap-4 flex-wrap">
-      <div class="flex items-center gap-2 flex-1 min-w-0">
-        <span class="material-symbols-outlined text-sm flex-shrink-0" style="color:#6b8fa3;font-variation-settings:'FILL' 1;">lock</span>
-        <p class="text-sm" style="color:#326177;">
-          Contact handles are hidden.<br class="hidden sm:block" />
-          <span class="sm:hidden"> </span>Enter your email once to reveal them.
-        </p>
-      </div>
-      <button id="btn-meetup-unlock" class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#006479,#40cef3);">
-        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
-        Reveal contacts
+    <div class="max-w-7xl mx-auto flex items-center gap-3">
+      <span class="material-symbols-outlined text-sm flex-shrink-0" style="color:#6b8fa3;font-variation-settings:'FILL' 1;">lock</span>
+      <p class="text-sm" style="color:#326177;">Contact handles are hidden.</p>
+      <button id="btn-meetup-unlock" class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background:linear-gradient(135deg,#006479,#40cef3);">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">lock_open</span>
+        Reveal
       </button>
     </div>
   </section>
@@ -92,8 +87,12 @@ const partiesJson = JSON.stringify(parties);
           <p class="text-[11px] mt-1" style="color:#6b8fa3;">Gmail, Outlook, Yahoo, iCloud, etc.</p>
         </div>
         <label class="flex items-start gap-3 cursor-pointer">
+          <input id="meetup-unlock-gdpr" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-cyan-600" />
+          <span class="text-xs" style="color:#326177;">I confirm I'm a real person and agree that my email is stored to enable contact unlocking. <span style="color:#ef4444;">*</span></span>
+        </label>
+        <label class="flex items-start gap-3 cursor-pointer">
           <input id="meetup-unlock-newsletter" type="checkbox" class="mt-0.5 flex-shrink-0 w-4 h-4 rounded accent-cyan-600" />
-          <span class="text-xs" style="color:#6b8fa3;">Send me Songkran 2026 updates — lineups, last-minute tips, community highlights. No spam, unsubscribe anytime.</span>
+          <span class="text-xs" style="color:#6b8fa3;">Send me Songkran 2026 updates — lineups, last-minute tips, community highlights. No spam, unsubscribe anytime. <span style="color:#6b8fa3;font-style:italic;">(optional)</span></span>
         </label>
         <div id="turnstile-meetup-unlock"></div>
         <button id="meetup-unlock-btn" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
@@ -553,7 +552,8 @@ function hasSignedEvent(eventId) { return getSignedEvents().includes(eventId); }
 
 // ── Spam / promo detection ────────────────────────────────────
 // ── Unlock contacts ───────────────────────────────────────────
-const KNOWN_PROVIDERS = /^[^\s@]+@(gmail|googlemail|yahoo|ymail|outlook|hotmail|live|msn|icloud|me|mac|proton|protonmail|fastmail|hey|aol|zoho)\.(com|co\.uk|fr|de|es|it|nl|be|ch|at|ca|com\.au|co\.nz|co\.za|co\.in|co\.jp|com\.br|co\.id)$/i;
+// Domain must be at least 3 chars, TLD at least 2 chars — blocks s.com, a.io etc.
+const VALID_EMAIL_DOMAIN = /^[^\s@]+@[a-zA-Z0-9]([a-zA-Z0-9\-]{1,})[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
 
 function isUnlocked() {
   return !!localStorage.getItem('meetup_unlock_email');
@@ -561,7 +561,7 @@ function isUnlocked() {
 
 function validateUnlockEmail(email) {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Please enter a valid email address.';
-  if (!KNOWN_PROVIDERS.test(email)) return 'Please use a real email provider (Gmail, Outlook, Yahoo, iCloud, etc.).';
+  if (!VALID_EMAIL_DOMAIN.test(email)) return 'Please enter a valid email (e.g. you@gmail.com or you@yourcompany.com).';
   return null;
 }
 
@@ -1257,6 +1257,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const emailErr = validateUnlockEmail(email);
     if (emailErr) { errEl.textContent = emailErr; errEl.classList.remove('hidden'); emailEl?.focus(); return; }
+
+    const gdpr = document.getElementById('meetup-unlock-gdpr')?.checked;
+    if (!gdpr) { errEl.textContent = 'Please accept the consent checkbox to continue.'; errEl.classList.remove('hidden'); return; }
 
     const tsId = window.__meetupUnlockTurnstileId;
     const token = (tsId !== null && window.turnstile) ? window.turnstile.getResponse(tsId) : '';

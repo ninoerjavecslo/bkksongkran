@@ -26,14 +26,14 @@ export const POST: APIRoute = async ({ request }) => {
   let body: any;
   try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
 
-  const { email, turnstileToken } = body;
+  const { email, turnstileToken, newsletter } = body;
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return json({ error: 'Valid email required' }, 400);
 
-  // Turnstile verification
+  // Turnstile verification — only required when a token is present (first-time unlock)
+  // Auto-refresh requests from returning users skip Turnstile; rate limiting still applies
   const secret = import.meta.env.TURNSTILE_SECRET_KEY;
-  if (secret) {
-    if (!turnstileToken) return json({ error: 'Bot check required.' }, 403);
+  if (secret && turnstileToken) {
     const tsRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -41,6 +41,14 @@ export const POST: APIRoute = async ({ request }) => {
     });
     const tsData: any = await tsRes.json();
     if (!tsData.success) return json({ error: 'Bot check failed. Please try again.' }, 403);
+  }
+
+  // Store newsletter opt-in
+  if (newsletter === true) {
+    await supabase.from('subscribers').upsert(
+      { email: email.toLowerCase().trim(), source: 'tickets_unlock', newsletter: true },
+      { onConflict: 'email', ignoreDuplicates: false }
+    );
   }
 
   // Fetch all contacts
