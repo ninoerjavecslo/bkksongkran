@@ -1,0 +1,45 @@
+---
+/**
+ * AdBanner — sponsored placement unit.
+ *
+ * size:
+ *   "leaderboard"  — 728×90 desktop banner (homepage/events between sections)
+ *   "rectangle"    — 336×280 inline rectangle (blog posts mid-content)
+ *   "wide"         — full-width strip (between page sections on mobile-first pages)
+ *
+ * When Google AdSense is live, swap the inner div for an <ins class="adsbygoogle"> tag.
+ */
+interface Props {
+  size?: 'leaderboard' | 'rectangle' | 'wide';
+  class?: string;
+}
+
+const { size = 'wide', class: className = '' } = Astro.props;
+
+const dims: Record<string, { w: string; h: string; label: string }> = {
+  leaderboard: { w: 'max-w-3xl', h: 'h-24',  label: '728 × 90' },
+  rectangle:   { w: 'max-w-sm',  h: 'h-64',  label: '336 × 280' },
+  wide:        { w: 'w-full',    h: 'h-20 md:h-24', label: 'Full width' },
+};
+
+const d = dims[size];
+---
+
+<div class={`flex justify-center my-6 ${className}`}>
+  <div
+    class={`${d.w} ${d.h} w-full flex flex-col items-center justify-center gap-2 rounded-2xl cursor-pointer transition-all hover:opacity-90`}
+    style="background:linear-gradient(135deg,rgba(0,100,121,0.06),rgba(64,206,243,0.08));border:1.5px dashed rgba(64,206,243,0.35);"
+    onclick="window.location.href='/contact?type=feature-event'"
+    role="link"
+    tabindex="0"
+    aria-label="Advertise here — contact us"
+  >
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-sm" style="color:#40cef3;font-variation-settings:'FILL' 1;">campaign</span>
+      <span class="text-xs font-bold uppercase tracking-widest" style="color:#006479;">Advertise here</span>
+    </div>
+    <p class="text-[11px]" style="color:#6b8fa3;">
+      Reach festival-goers · <a href="/contact?type=feature-event" class="underline hover:text-primary" style="color:#006479;" onclick="event.stopPropagation()">Get in touch</a>
+    </p>
+  </div>
+</div>

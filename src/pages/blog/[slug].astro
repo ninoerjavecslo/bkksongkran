@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../components/layout/BaseLayout.astro';
+import AdBanner from '../../components/molecules/AdBanner.astro';
 import { articles } from '../../data/articles';
 
 export function getStaticPaths() {
@@ -171,11 +172,18 @@ const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
   </section>
 
   <!-- ARTICLE CONTENT -->
-  <section class="px-6 pb-16">
+  <section class="px-6 pb-8">
     <div class="max-w-3xl mx-auto">
       <div class="article-content" set:html={htmlContent} />
     </div>
   </section>
+
+  <!-- AD — below article content -->
+  <div class="px-6 pb-8">
+    <div class="max-w-3xl mx-auto">
+      <AdBanner size="rectangle" />
+    </div>
+  </div>
 
   <!-- RELATED ARTICLES -->
   <section class="px-6 pb-20" style="background:rgba(225,243,255,0.4);">

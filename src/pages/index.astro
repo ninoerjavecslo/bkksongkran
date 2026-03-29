@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import EventCard from '../components/molecules/EventCard.astro';
+import AdBanner from '../components/molecules/AdBanner.astro';
 import { festivals, additionalEvents } from '../data/index';
 import { articles } from '../data/articles';
 
@@ -228,6 +229,11 @@ const featuredArticles = articles.slice(0, 3);
       </a>
     </div>
   </section>
+
+  <!-- ═══ AD ═══ -->
+  <div class="px-6">
+    <AdBanner size="wide" />
+  </div>
 
   <!-- ═══ ARTICLES ═══ -->
   <section class="px-6 pb-20 pt-12">
