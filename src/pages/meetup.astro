@@ -950,13 +950,14 @@ window.submitEntry = async function(pid, dayId) {
 
   subBtn.disabled = true; subBtn.style.opacity = '0.6';
   try {
-    const res = await fetch(API, {
+    const res = await fetch('/api/meetup', {
       method: 'POST',
-      headers: { ...HDRS, 'Prefer': 'return=representation' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, party: pid, day: dayId, note: (contact ? contact + (note ? ' · ' + note : '') : note) || null, is_custom: false }),
     });
-    if (!res.ok) throw new Error();
-    const [entry] = await res.json();
+    const resData = await res.json();
+    if (!res.ok) throw new Error(resData.error || 'Failed');
+    const entry = resData;
     markEventSigned(pid);
     if (!byParty[pid]) byParty[pid] = [];
     byParty[pid].push(entry);
@@ -968,8 +969,8 @@ window.submitEntry = async function(pid, dayId) {
     nameI.value = ''; contactI.value = ''; noteI.value = '';
     document.getElementById('name-counter-' + pid).textContent = '0 / 30';
     document.getElementById('note-counter-' + pid).textContent = '0 / 100';
-  } catch {
-    errEl.textContent = 'Network error. Try again.';
+  } catch (e) {
+    errEl.textContent = (e && e.message) ? e.message : 'Network error. Try again.';
     errEl.classList.remove('hidden');
   } finally {
     subBtn.disabled = false; subBtn.style.opacity = '1';
@@ -1033,16 +1034,14 @@ window.submitCustomEvent = async function() {
   try {
     const evId = 'c-' + evName.toLowerCase().replace(/[^a-z0-9]/g,'-').slice(0,25) + '-' + Date.now();
     const combinedNote = contact + (note ? ' · ' + note : '');
-    const res = await fetch(API, {
+    const res = await fetch('/api/meetup', {
       method: 'POST',
-      headers: { ...HDRS, 'Prefer': 'return=representation' },
-      body: JSON.stringify({ name: host, party: evId, day, note: combinedNote, event_name: evName, is_custom: true, category, email }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: host, party: evId, day, note: combinedNote, event_name: evName, is_custom: true, category, email, turnstileToken }),
     });
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      throw new Error(errBody.message || errBody.hint || errBody.details || res.status);
-    }
-    const [entry] = await res.json();
+    const resBody = await res.json();
+    if (!res.ok) throw new Error(resBody.error || resBody.message || res.status);
+    const entry = resBody;
 
     if (!customByDay[day]) customByDay[day] = {};
     entry.category = category;

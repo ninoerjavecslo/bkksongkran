@@ -2,6 +2,7 @@ export const prerender = false;
 
 import type { APIRoute } from 'astro';
 import { supabase } from '../../lib/supabase';
+import { moderateTicket } from '../../lib/moderation';
 
 const ALLOWED_FESTIVALS    = ['S2O', 'Siam Songkran', 'GCircuit', 'Other'];
 const ALLOWED_TYPES        = ['selling', 'buying'];
@@ -55,6 +56,9 @@ export const POST: APIRoute = async ({ request }) => {
   const qty = Math.min(Math.max(1, Number(quantity)), 20);
   const prc = Math.min(Math.max(0, Number(price)), 999_999);
   if (isNaN(qty) || isNaN(prc)) return json({ error: 'Invalid quantity or price' }, 400);
+
+  const mod = moderateTicket({ note: str(note, 500), tier: str(tier, 100), contact: str(contact, 200) });
+  if (!mod.ok) return json({ error: mod.reason }, 422);
 
   const { data, error } = await supabase
     .from('tickets')
