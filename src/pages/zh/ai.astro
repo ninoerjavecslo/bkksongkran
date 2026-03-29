@@ -1,0 +1,354 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Breadcrumb from '../../components/atoms/Breadcrumb.astro';
+import { zh } from '../../data/zh';
+
+const t = zh;
+---
+
+<BaseLayout
+  title={t.ai.metaTitle}
+  description={t.ai.metaDescription}
+  canonical="https://bkksongkran.com/zh/ai"
+  lang="zh"
+  enUrl="https://bkksongkran.com/ai"
+>
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-8 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-8 mb-8">
+        <div class="flex-1">
+          <Breadcrumb crumbs={[{ label: "首页", href: "/zh" }, { label: "AI 向导" }]} />
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#b4005d;">{t.ai.pageLabel}</div>
+          <h1 class="font-headline font-extrabold tracking-tighter mb-3" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.9;">
+            {t.ai.meet}<br/><span style="background:linear-gradient(135deg,#b4005d,#ff8eb2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">{t.ai.nong}</span>
+          </h1>
+          <p class="text-lg max-w-lg" style="color:#326177;line-height:1.6;">
+            {t.ai.intro}
+          </p>
+        </div>
+
+        <!-- Avatar -->
+        <div class="relative flex-shrink-0">
+          <div class="w-16 h-16 md:w-32 md:h-32 rounded-full flex items-center justify-center relative" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 0 40px rgba(64,206,243,0.4);">
+            <span class="material-symbols-outlined text-white" style="font-size:clamp(20px,4vw,40px);font-variation-settings:'FILL' 1;">water_drop</span>
+            <div class="absolute inset-0 rounded-full" style="background:linear-gradient(135deg,#006479,#40cef3);opacity:0.3;animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
+          </div>
+          <div class="absolute -bottom-2 -right-2 hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-lg" style="background:#fff;border:1px solid rgba(192,232,255,0.6);">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-xs font-bold" style="color:#003345;">在线</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT + SIDEBAR -->
+  <section class="px-6 pb-20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- CHAT -->
+      <div class="lg:col-span-8 flex flex-col" style="height:clamp(520px,80vh,680px);">
+        <div class="card flex flex-col h-full overflow-hidden">
+
+          <!-- Chat header -->
+          <div class="flex items-center gap-3 px-6 py-4 border-b" style="border-color:rgba(192,232,255,0.4);background:rgba(225,243,255,0.4);">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#006479,#40cef3);">
+              <span class="material-symbols-outlined text-white" style="font-size:18px;font-variation-settings:'FILL' 1;">water_drop</span>
+            </div>
+            <div>
+              <div class="font-headline font-bold text-sm" style="color:#003345;">Nong — 宋干节专家</div>
+              <div class="text-xs" style="color:#326177;">了解所有2026年演出阵容 · 实时节日向导</div>
+            </div>
+            <div class="ml-auto flex items-center gap-1.5 text-xs font-bold" style="color:#34C759;">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              在线
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar" id="chat-messages">
+            <!-- Initial greeting -->
+            <div class="flex gap-3 items-end">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#006479,#40cef3);">
+                <span class="material-symbols-outlined text-white" style="font-size:14px;font-variation-settings:'FILL' 1;">water_drop</span>
+              </div>
+              <div class="max-w-[80%] p-4 rounded-t-2xl rounded-br-2xl shadow-sm text-sm leading-relaxed" style="background:#fff;border:1px solid rgba(192,232,255,0.4);color:#003345;">
+                萨瓦迪卡！我是Nong — 你的2026年宋干节向导。<br/><br/>
+                我知道所有已确认的演出阵容：S2O的 <strong style="color:#006479;">Alan Walker × Steve Aoki</strong>，暹罗宋干的压轴嘉宾 <strong style="color:#b4005d;">Martin Garrix</strong>，以及 <strong style="color:#7c3aed;">GCircuit</strong> 在Emsphere的完整4晚行程。<br/><br/>
+                你可以让我帮你规划当天行程、对比节日、找LGBTQ+景点或者问任何其他问题。你想了解什么？
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggestions -->
+          <div class="px-5 py-3 border-t flex gap-2 overflow-x-auto no-scrollbar" style="border-color:rgba(192,232,255,0.4);" id="suggestions">
+            {[
+              '帮我规划4月12日全天',
+              'S2O vs 暹罗宋干？',
+              '最佳LGBTQ+景点',
+              'GCircuit新手攻略',
+              '午夜后去哪？',
+              'GCircuit穿什么？',
+              'S2O附近最佳酒店',
+            ].map(s => (
+              <button
+                class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold border transition-all hover:border-primary hover:text-primary"
+                style="background:rgba(225,243,255,0.7);border-color:rgba(192,232,255,0.6);color:#326177;white-space:nowrap;"
+                onclick={`quickAsk(\`${s}\`)`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          <!-- Input -->
+          <div class="px-5 pb-5 pt-3 flex gap-3 items-end">
+            <textarea
+              id="chat-input"
+              placeholder={t.ai.placeholder}
+              rows="1"
+              class="flex-1 px-5 py-3 rounded-2xl text-sm outline-none resize-none transition-all"
+              style="background:rgba(225,243,255,0.7);border:1.5px solid rgba(192,232,255,0.8);color:#003345;max-height:120px;font-family:'Be Vietnam Pro',sans-serif;"
+            ></textarea>
+            <button
+              id="send-btn"
+              class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
+              style="background:linear-gradient(135deg,#006479,#40cef3);color:#fff;"
+              onclick="sendMessage()"
+            >
+              <span class="material-symbols-outlined text-xl">send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="lg:col-span-4 space-y-5">
+
+        <!-- What Nong knows -->
+        <div class="card p-5 space-y-4">
+          <h3 class="font-headline font-bold text-sm uppercase tracking-wider" style="color:#003345;">Nong 了解什么</h3>
+          {[
+            {icon:'music_note',label:'完整2026演出阵容',detail:'S2O、暹罗宋干、GCircuit逐日阵容',color:'#006479'},
+            {icon:'favorite',label:'LGBTQ+场景',detail:'GCircuit、Silom Soi 2&4、Gay酒吧、Bear Week',color:'#9B59B6'},
+            {icon:'schedule',label:'行程规划',detail:'为任何日期制定完整行程',color:'#FF9F0A'},
+            {icon:'hotel',label:'住宿推荐',detail:'按场馆、风格和预算推荐酒店',color:'#b4005d'},
+            {icon:'directions_transit',label:'交通出行',detail:'BTS路线、MRT站点、Grab攻略',color:'#34C759'},
+            {icon:'checklist',label:'生存攻略',detail:'打包清单、携带物品、穿着建议',color:'#FF6B35'},
+          ].map(k => (
+            <div class="flex gap-3 items-start">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={`background:${k.color}15;`}>
+                <span class="material-symbols-outlined text-sm" style={`color:${k.color};font-variation-settings:'FILL' 1;`}>{k.icon}</span>
+              </div>
+              <div>
+                <div class="font-semibold text-sm" style="color:#003345;">{k.label}</div>
+                <div class="text-xs" style="color:#326177;">{k.detail}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Popular questions -->
+        <div class="card p-5 space-y-3">
+          <h3 class="font-headline font-bold text-sm uppercase tracking-wider" style="color:#003345;">热门问题</h3>
+          {[
+            '4月12日S2O的压轴嘉宾是谁？',
+            'GCircuit泳池派对时间？',
+            '宋干节LGBTQ+友好吗？',
+            '曼谷最佳住宿区域？',
+            '如何去Emsphere？',
+          ].map(q => (
+            <button
+              onclick={`quickAsk(\`${q}\`)`}
+              class="w-full text-left p-3 rounded-xl text-sm font-medium transition-all hover:shadow-sm"
+              style="background:rgba(225,243,255,0.7);color:#003345;border:1px solid rgba(192,232,255,0.5);"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+
+      </aside>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<div id="turnstile-chat" style="display:none;"></div>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+
+<script>
+
+const history: { role: 'user' | 'assistant'; content: string }[] = [];
+let busy = false;
+let chatTurnstileId: any = null;
+
+const msgsEl = document.getElementById('chat-messages')!;
+const inputEl = document.getElementById('chat-input') as HTMLTextAreaElement;
+const sendBtn = document.getElementById('send-btn') as HTMLButtonElement;
+const suggsEl = document.getElementById('suggestions') as HTMLElement;
+
+function makeAvatar(bg: string, iconName: string, iconClass: string, size: string) {
+  const av = document.createElement('div');
+  av.className = 'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0';
+  av.style.background = bg;
+  const icon = document.createElement('span');
+  icon.className = `material-symbols-outlined ${iconClass}`;
+  icon.style.cssText = `font-size:${size};font-variation-settings:"FILL" 1;`;
+  icon.textContent = iconName;
+  av.appendChild(icon);
+  return av;
+}
+
+function addMessage(role: 'user' | 'bot', text: string) {
+  const el = document.createElement('div');
+  el.className = `flex gap-3 items-end ${role === 'user' ? 'justify-end' : ''}`;
+  el.style.animation = 'slideUp 0.25s ease forwards';
+  el.style.opacity = '0';
+
+  if (role === 'bot') {
+    const bubble = document.createElement('div');
+    bubble.className = 'max-w-[80%] p-4 rounded-t-2xl rounded-br-2xl shadow-sm text-sm leading-relaxed';
+    bubble.style.cssText = 'background:#fff;border:1px solid rgba(192,232,255,0.4);color:#003345;';
+    text.split('\n').forEach((line, i) => {
+      if (i > 0) bubble.appendChild(document.createElement('br'));
+      line.split(/\*\*(.*?)\*\*/g).forEach((part, pi) => {
+        if (pi % 2 === 1) {
+          const strong = document.createElement('strong');
+          strong.style.color = '#006479';
+          strong.textContent = part;
+          bubble.appendChild(strong);
+        } else if (part) {
+          bubble.appendChild(document.createTextNode(part));
+        }
+      });
+    });
+    el.appendChild(makeAvatar('linear-gradient(135deg,#006479,#40cef3)', 'water_drop', 'text-white', '14px'));
+    el.appendChild(bubble);
+  } else {
+    const bubble = document.createElement('div');
+    bubble.className = 'max-w-[80%] p-4 rounded-t-2xl rounded-bl-2xl text-sm font-medium leading-relaxed liquid-gradient';
+    bubble.style.color = '#fff';
+    bubble.textContent = text;
+    el.appendChild(bubble);
+    el.appendChild(makeAvatar('rgba(192,232,255,0.5)', 'person', 'text-primary', '16px'));
+  }
+
+  msgsEl.appendChild(el);
+  setTimeout(() => {
+    if (role === 'bot') {
+      msgsEl.scrollTop = el.offsetTop - msgsEl.offsetTop;
+    } else {
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+    }
+  }, 50);
+}
+
+function addTyping(id: string) {
+  const el = document.createElement('div');
+  el.className = 'flex gap-3 items-end';
+  el.id = id;
+  const bubble = document.createElement('div');
+  bubble.className = 'p-4 rounded-t-2xl rounded-br-2xl';
+  bubble.style.cssText = 'background:#fff;border:1px solid rgba(192,232,255,0.4);';
+  const dots = document.createElement('div');
+  dots.className = 'flex gap-1.5 items-center';
+  [0, 0.2, 0.4].forEach(delay => {
+    const d = document.createElement('div');
+    d.className = 'w-2 h-2 rounded-full bg-primary';
+    d.style.animation = `bounce 1.2s ease-in-out ${delay}s infinite`;
+    dots.appendChild(d);
+  });
+  bubble.appendChild(dots);
+  el.appendChild(makeAvatar('linear-gradient(135deg,#006479,#40cef3)', 'water_drop', 'text-white', '14px'));
+  el.appendChild(bubble);
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+function quickAsk(text: string) {
+  inputEl.value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  if (busy) return;
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  addMessage('user', text);
+  history.push({ role: 'user', content: text });
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+  suggsEl.style.opacity = '0.5';
+
+  busy = true;
+  sendBtn.setAttribute('disabled', 'true');
+
+  const typingId = 'typing-' + Date.now();
+  addTyping(typingId);
+
+  try {
+    let turnstileToken = '';
+    try {
+      if (!(window as any).turnstile) await new Promise<void>(r => { const t = setInterval(() => { if ((window as any).turnstile) { clearInterval(t); r(); } }, 100); });
+      if (chatTurnstileId === null) {
+        chatTurnstileId = await new Promise(resolve => {
+          const id = (window as any).turnstile.render('#turnstile-chat', {
+            sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+            callback: () => {},
+            'refresh-expired': 'auto',
+          });
+          const poll = setInterval(() => {
+            const t = (window as any).turnstile.getResponse(id);
+            if (t) { clearInterval(poll); resolve(id); }
+          }, 200);
+        });
+      }
+      let waited = 0;
+      while (!(turnstileToken = (window as any).turnstile.getResponse(chatTurnstileId) || '') && waited < 30000) {
+        await new Promise(r => setTimeout(r, 300));
+        waited += 300;
+      }
+    } catch { turnstileToken = ''; }
+
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: history.slice(-20), turnstileToken }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const reply = data.reply || '出错了 — 请重试！';
+    history.push({ role: 'assistant', content: reply });
+    document.getElementById(typingId)?.remove();
+    addMessage('bot', reply);
+    if (chatTurnstileId !== null) (window as any).turnstile.reset(chatTurnstileId);
+  } catch (err: any) {
+    document.getElementById(typingId)?.remove();
+    addMessage('bot', err?.message?.includes('Bot check') ? '安全验证失败 — 请刷新页面后重试。' : '连接问题 — 请检查网络后重试！');
+  }
+
+  busy = false;
+  sendBtn.removeAttribute('disabled');
+}
+
+inputEl?.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+inputEl?.addEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+(window as any).sendMessage = sendMessage;
+(window as any).quickAsk = quickAsk;
+</script>

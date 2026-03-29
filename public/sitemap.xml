@@ -27,4 +27,27 @@
   <url><loc>https://bkksongkran.com/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://bkksongkran.com/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://bkksongkran.com/disclaimer</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <!-- Simplified Chinese pages -->
+  <url><loc>https://bkksongkran.com/zh</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://bkksongkran.com/zh/events</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/survival-kit</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bkksongkran.com/zh/ai</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bkksongkran.com/zh/gay-guide</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bkksongkran.com/zh/map</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/heat-map</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bkksongkran.com/zh/contact</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://bkksongkran.com/zh/advertise</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/what-is-songkran-festival</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/when-is-songkran-2026</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/where-to-celebrate-songkran-bangkok</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/what-to-do-during-songkran</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/songkran-practical-guide</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/songkran-bangkok-vs-chiang-mai</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/s2o-festival-2026-lineup</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/siam-songkran-2026-lineup</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/gcircuit-songkran-2026-lineup</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/silom-road-songkran-guide</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/songkran-water-and-cash-guide</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://bkksongkran.com/zh/blog/songkran-bangkok-first-timer-guide</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>

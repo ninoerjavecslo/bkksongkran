@@ -41,29 +41,32 @@ export const festivals = [
     featured: true,
     url: 'https://eventpop.me',
     crowd: 'insane',
-    description: 'Massive water cannons fire on every drop. Alan Walker × Steve Aoki, Zedd, Kygo, Lost Frequencies. New venue S2O Land near MRT Cultural Centre.',
+    description: 'Massive water cannons fire on every drop. Lonely Club (Alan Walker b2b Steve Aoki) World Premiere, Zedd, Kygo, Lost Frequencies and more. New venue S2O Land near MRT Cultural Centre.',
+    timetableNote: 'Full timetable coming soon — set times will be added here.',
     schedule: {
       'Apr 11': [
-        { time: '16:00', end: '17:30', name: 'AC Slater', genre: 'Bass House', headliner: false },
-        { time: '17:30', end: '19:00', name: 'William Black', genre: 'Melodic Bass', headliner: false },
-        { time: '19:00', end: '21:00', name: 'I Hate Models', genre: 'Dark Techno', headliner: false },
-        { time: '21:00', end: '23:00', name: 'Lost Frequencies', genre: 'Deep House', headliner: false },
-        { time: '23:00', end: '01:00', name: 'Alan Walker × Steve Aoki', sub: '"Lonely Club" World Premiere', genre: 'EDM', headliner: true },
+        { name: 'Lonely Club', sub: 'Alan Walker b2b Steve Aoki — World Premiere', genre: 'EDM', headliner: true },
+        { name: 'Lost Frequencies', genre: 'Future House', headliner: true },
+        { name: 'I Hate Models', genre: 'Techno', headliner: false },
+        { name: 'William Black', genre: 'Melodic Bass', headliner: false },
+        { name: 'AC Slater', genre: 'House', headliner: false },
       ],
       'Apr 12': [
-        { time: '16:00', end: '17:30', name: 'Marie Vaunt', genre: 'House', headliner: false },
-        { time: '17:30', end: '19:00', name: 'Dabin', genre: 'Future Bass', headliner: false },
-        { time: '19:00', end: '21:00', name: 'SIDEPIECE', genre: 'Tech House', headliner: false },
-        { time: '21:00', end: '23:00', name: 'Don Diablo', sub: 'CTRL ALT DELETE Asia Debut', genre: 'Future House', headliner: false },
-        { time: '23:00', end: '01:00', name: 'Zedd', genre: 'Electro House', headliner: true },
+        { name: 'Zedd', genre: 'Electro House', headliner: true },
+        { name: 'Don Diablo presents CTRL ALT DELETE', sub: 'Asia Premiere', genre: 'Future House', headliner: true },
+        { name: 'Dabin', genre: 'Melodic Bass', headliner: false },
+        { name: 'Sidepiece', genre: 'Tech House', headliner: false },
+        { name: 'Marie Vaunt', genre: 'House', headliner: false },
       ],
       'Apr 13': [
-        { time: '16:00', end: '17:30', name: 'Da Tweekaz', genre: 'Hardstyle', headliner: false },
-        { time: '17:30', end: '19:00', name: 'Ray Volpe', genre: 'Bass', headliner: false },
-        { time: '19:00', end: '21:00', name: 'GRYFFIN', genre: 'Melodic House', headliner: false },
-        { time: '23:00', end: '01:00', name: 'Kygo', genre: 'Tropical House', headliner: true },
+        { name: 'Kygo', genre: 'Tropical House', headliner: true },
+        { name: 'Gryffin', genre: 'Melodic House', headliner: true },
+        { name: 'Da Tweekaz', genre: 'Hardstyle', headliner: false },
+        { name: 'Ray Volpe', genre: 'Bass House', headliner: false },
+        { name: 'Frank Walker', genre: 'Future Bass', headliner: false },
       ],
-    }
+    },
+    regionalSupport: ['Bestboi', 'Kikie', 'Maysaa', 'Mordan', '+1+0', 'Yao'],
   },
   {
     id: 'siam',
@@ -83,29 +86,17 @@ export const festivals = [
     description: 'Martin Garrix, Marshmello, John Summit, ARTBAT, Alok. 4 nights at Bravo BKK Arena in the heart of Bangkok\'s nightlife district.',
     schedule: {
       'Apr 11': [
-        { time: '17:00', end: '18:30', name: '22Bullets', genre: 'Big Room', headliner: false },
-        { time: '18:30', end: '20:00', name: 'Andromedik', genre: 'Drum & Bass', headliner: false },
-        { time: '20:00', end: '22:00', name: 'Ben Nicky', genre: 'Hard Dance', headliner: false },
-        { time: '22:00', end: '00:00', name: 'Afrojack b2b R3HAB', genre: 'Big Room / Electro', headliner: true },
+        { name: 'Afrojack b2b R3HAB', genre: 'Big Room / Electro', headliner: true },
       ],
       'Apr 12': [
-        { time: '17:00', end: '18:30', name: 'Arcando', genre: 'Big Room', headliner: false },
-        { time: '18:30', end: '20:00', name: 'Slushii', genre: 'Future Bass', headliner: false },
-        { time: '20:00', end: '22:00', name: 'Third Party b3b DubVision b3b Matisse & Sadko', genre: 'Progressive', headliner: false },
-        { time: '22:00', end: '23:30', name: 'Alok', sub: 'Urban Theory Show', genre: 'House / Bass', headliner: true },
-        { time: '23:30', end: '02:00', name: 'Marshmello', genre: 'Future Bass', headliner: true },
+        { name: 'Alok', sub: 'Urban Theory Show', genre: 'House / Bass', headliner: true },
+        { name: 'Marshmello', genre: 'Future Bass', headliner: true },
       ],
       'Apr 13': [
-        { time: '17:00', end: '19:00', name: 'Layton Giordani', genre: 'Techno', headliner: false },
-        { time: '19:00', end: '21:00', name: 'Agents of Time', genre: 'Melodic Techno', headliner: false },
-        { time: '21:00', end: '23:00', name: 'ARTBAT b2b R3HAB', genre: 'Progressive', headliner: false },
-        { time: '23:00', end: '02:00', name: 'Martin Garrix', genre: 'Progressive House', headliner: true },
+        { name: 'Martin Garrix', genre: 'Progressive House', headliner: true },
       ],
       'Apr 14': [
-        { time: '17:00', end: '19:00', name: 'DCR Milda', genre: 'Tech House', headliner: false },
-        { time: '19:00', end: '21:00', name: 'Gorgon City', genre: 'UK House', headliner: false },
-        { time: '21:00', end: '23:00', name: 'Vini Vici', genre: 'Psytrance', headliner: false },
-        { time: '23:00', end: '02:00', name: 'John Summit', genre: 'Chicago House', headliner: true },
+        { name: 'John Summit', genre: 'Chicago House', headliner: true },
       ],
     }
   },
@@ -127,18 +118,18 @@ export const festivals = [
     description: "Asia's largest gay circuit festival. 20th Anniversary. Night parties + Bear & Boy pool parties at Emsphere, Sukhumvit (BTS Phrom Phong).",
     schedule: {
       'Apr 10': [
-        { time: '19:00', end: '06:00', name: 'Opening Party — Team Alpha', sub: 'Brian Solis, Mario Beckman · Theme: Chrome', genre: 'Circuit', headliner: true },
+        { name: 'Opening Party — Illuminate', sub: 'Theme: Chrome · UOB Live Hall', genre: 'Circuit', headliner: true },
       ],
       'Apr 11': [
-        { time: '12:00', end: '19:00', name: 'Boy Pool Party — AQUA', sub: 'Boren, Kai · Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true },
-        { time: '19:00', end: '06:00', name: 'Main Party Vol. One — Empire Of The World', sub: 'MisterMiss, Tomer Maizner · Theme: Galactic Royalty', genre: 'Circuit', headliner: true },
+        { name: 'Boy Pool Party — AQUA', sub: 'Tribe Sky Beach Club · Noon–7pm', genre: 'Pool Party', headliner: false, isPool: true },
+        { name: 'Main Party Vol. One', sub: 'Theme: Galactic Royalty · UOB Live Hall', genre: 'Circuit', headliner: true },
       ],
       'Apr 12': [
-        { time: '12:00', end: '19:00', name: 'Bear Pool Party — AQUAXXL', sub: 'Pat+, CallMeKevin · Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true },
-        { time: '19:00', end: '06:00', name: 'Main Party Vol. Two — Adro Mada', sub: 'Karsten Sollors, Fran Albuquerque · Theme: Chrome & Glow', genre: 'Circuit', headliner: true },
+        { name: 'Bear Pool Party — AQUAXXL', sub: 'Tribe Sky Beach Club · Noon–7pm', genre: 'Pool Party', headliner: false, isPool: true },
+        { name: 'Main Party Vol. Two — Adro Mada', sub: 'Theme: Chrome & Glow · UOB Live Hall', genre: 'Circuit', headliner: true },
       ],
       'Apr 13': [
-        { time: '19:00', end: '06:00', name: 'Closing Party — Kink', sub: 'Jair Sandoval, Alex Acosta · Theme: Leather & Kink', genre: 'Circuit', headliner: true },
+        { name: 'Closing Party — Kink', sub: 'Theme: Leather & Kink · UOB Live Hall', genre: 'Circuit', headliner: true },
       ],
     }
   },

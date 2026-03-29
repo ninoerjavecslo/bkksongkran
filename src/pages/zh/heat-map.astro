@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { waterFightZones } from '../../data/index';
+import Breadcrumb from '../../components/atoms/Breadcrumb.astro';
+
+const intensityConfig = {
+  insane: { label: '超燃', color: '#FF3B30', bg: '#FFE8E8', icon: 'whatshot' },
+  high:   { label: '超嗨', color: '#FF9F0A', bg: '#FFF8E0', icon: 'local_fire_department' },
+  medium: { label: '轻松', color: '#34C759', bg: '#E8FFF0', icon: 'spa' },
+};
+---
+
+<BaseLayout
+  title="宋干节曼谷实时人群热力图2026 — 实时热力图"
+  description="曼谷宋干节各区实时人群密度。查看活动热点，上报现场情况，找到最佳位置。"
+  canonical="https://bkksongkran.com/zh/heat-map"
+  lang="zh"
+  enUrl="https://bkksongkran.com/heat-map"
+>
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-12 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "首页", href: "/zh" }, { label: "热力图" }]} />
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#006479;">实时工具</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.95;">
+        实时<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">热力图</span>
+      </h1>
+      <p class="text-lg max-w-xl" style="color:#326177;">来自现场参与者的实时人群数据。查看活动热点 — 以及哪里已经太挤。</p>
+    </div>
+  </section>
+
+  <!-- COMING SOON BANNER -->
+  <section class="px-6 pb-12">
+    <div class="max-w-7xl mx-auto">
+      <div class="rounded-3xl p-8 md:p-12 text-center relative overflow-hidden" style="background:linear-gradient(135deg,#006479,#00899e,#40cef3);">
+        <div class="absolute inset-0 opacity-10" style="background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,0.05) 10px,rgba(255,255,255,0.05) 20px);"></div>
+        <div class="relative">
+          <span class="material-symbols-outlined text-5xl text-white/60 mb-4 block" style="font-variation-settings:'FILL' 1;">map</span>
+          <h2 class="font-headline font-extrabold text-3xl md:text-4xl text-white mb-3">即将上线</h2>
+          <p class="text-white/70 text-base max-w-lg mx-auto mb-6">实时热力图将在宋干节开始时正式启动。来自现场的实时人群报告、区域追踪和动态更新。</p>
+          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">calendar_today</span>
+            2026年4月10日起上线
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WATER FIGHT ZONES -->
+  <section class="px-6 pb-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FF3B3015;">
+          <span class="material-symbols-outlined text-xl" style="color:#FF3B30;font-variation-settings:'FILL' 1;">water_drop</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">泼水区</h2>
+          <p class="text-xs" style="color:#6b8fa3;">活动核心地带。节日期间这些区域将进行实时追踪。</p>
+        </div>
+      </div>
+      <p class="text-sm mb-10 max-w-2xl" style="color:#326177;">全部免费入场，无需门票。从极致狂欢到轻松家庭友好区域 — 选择适合你的强度级别。</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {waterFightZones.map(zone => {
+          const intensity = intensityConfig[zone.intensity as keyof typeof intensityConfig];
+          return (
+            <div class="rounded-2xl overflow-hidden transition-all hover:shadow-lg" style={`border:1px solid ${zone.color}25;background:white;`}>
+              <div class="p-5 flex items-start justify-between gap-3" style={`background:${zone.color}08;`}>
+                <div>
+                  <h3 class="font-headline font-extrabold text-lg" style="color:#003345;">{zone.name}</h3>
+                  <div class="flex flex-wrap items-center gap-3 mt-1.5">
+                    <span class="flex items-center gap-1 text-xs font-semibold" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs">calendar_today</span> {zone.dates}
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-semibold" style="color:#6b8fa3;">
+                      <span class="material-symbols-outlined text-xs">schedule</span> {zone.hours}
+                    </span>
+                  </div>
+                </div>
+                <span class="flex-shrink-0 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full" style={`background:${intensity.bg};color:${intensity.color};`}>
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{intensity.icon}</span>
+                  {intensity.label}
+                </span>
+              </div>
+
+              <div class="p-5 space-y-4">
+                <p class="text-sm" style="color:#326177;">{zone.vibe}</p>
+
+                <div class="flex items-start gap-2.5 p-3 rounded-xl" style="background:rgba(238,248,255,0.6);border:1px solid rgba(192,232,255,0.3);">
+                  <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style="color:#006479;font-variation-settings:'FILL' 1;">directions_transit</span>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider block mb-0.5" style="color:#006479;">如何前往</span>
+                    <p class="text-xs font-medium" style="color:#326177;">{zone.howToGet}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-2.5 p-3 rounded-xl" style={`background:${zone.color}06;border:1px solid ${zone.color}15;`}>
+                  <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style={`color:${zone.color};font-variation-settings:'FILL' 1;`}>tips_and_updates</span>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider block mb-0.5" style={`color:${zone.color};`}>达人贴士</span>
+                    <p class="text-xs" style="color:#326177;">{zone.tip}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <!-- Info cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+        {[
+          {icon:'water_drop',   title:'补水站', desc:'每个泼水区均设有免费补水点。保持水分 — 曼谷的热度不是开玩笑的。',     color:'#006479'},
+          {icon:'medical_services', title:'安全救护点', desc:'每个主要泼水区均设有急救站。寻找绿色帐篷。',                               color:'#34C759'},
+          {icon:'directions_transit', title:'仅限BTS/MRT',    desc:'忘掉出租车吧。宋干节期间延长运营时间。',                                           color:'#FF9F0A'},
+          {icon:'smartphone',   title:'离线优先',         desc:'提前保存地图和本页面。人群中数据信号会中断。',                                          color:'#b4005d'},
+        ].map(t => (
+          <div class="flex gap-4 p-4 rounded-xl" style="background:rgba(255,255,255,0.7);border:1px solid rgba(192,232,255,0.5);">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${t.color}15;`}>
+              <span class="material-symbols-outlined text-base" style={`color:${t.color};font-variation-settings:'FILL' 1;`}>{t.icon}</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm mb-0.5" style="color:#003345;">{t.title}</h4>
+              <p class="text-xs" style="color:#326177;">{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

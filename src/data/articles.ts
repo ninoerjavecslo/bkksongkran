@@ -520,42 +520,23 @@ Three nights. Three headliners. One massive water stage.
 
 ---
 
-## Full Day-by-Day Lineup
+## Confirmed Headliners
 
-### Day 1 — Friday, April 11
+Three nights, three headliners — each confirmed by S2O:
 
-| Slot | Artist |
-|------|--------|
-| Opening | AC Slater |
-| | William Black |
-| | I Hate Models |
-| | Lost Frequencies |
-| HEADLINER | **Alan Walker × Steve Aoki** |
+| Night | Date | Headliner |
+|-------|------|-----------|
+| Night 1 | Friday, Apr 11 | **Alan Walker × Steve Aoki** — World Premiere of "Lonely Club" |
+| Night 2 | Saturday, Apr 12 | **Zedd** |
+| Night 3 | Sunday, Apr 13 | **Kygo** |
 
-The opening night culminates in the world premiere of "Lonely Club" — the first-ever live collaboration between Alan Walker and Steve Aoki. If you only go one night, this is the one.
+The full support act lineup and set times will be announced closer to the event. Check the [official S2O website](https://eventpop.me) for updates.
 
-### Day 2 — Saturday, April 12
+**Night 1** culminates in the world premiere of "Lonely Club" — the first-ever live collaboration between Alan Walker and Steve Aoki. If you only go one night, this is the one.
 
-| Slot | Artist |
-|------|--------|
-| Opening | Marie Vaunt |
-| | Dabin |
-| | SIDEPIECE |
-| | Don Diablo |
-| HEADLINER | **Zedd** |
+**Night 2** — Zedd closes with his classic festival set — expect "Beautiful Now," "Stay the Night," and the whole back catalog.
 
-Don Diablo brings his CTRL ALT DELETE show to Asia for the first time. Zedd closes with his classic festival set — expect "Beautiful Now," "Stay the Night," and the whole back catalog.
-
-### Day 3 — Sunday, April 13
-
-| Slot | Artist |
-|------|--------|
-| Opening | Da Tweekaz |
-| | Ray Volpe |
-| | GRYFFIN |
-| HEADLINER | **Kygo** |
-
-Kygo on the final day is pure Songkran magic. His tropical house sound + a massive water stage + 13 April heat = perfection. Bring your best waterproof setup.
+**Night 3** — Kygo on the final day is pure Songkran magic. His tropical house sound + a massive water stage + 13 April heat = perfection.
 
 ---
 
@@ -636,52 +617,26 @@ This is the festival for people who want big names, an indoor/outdoor hybrid ven
 
 ---
 
-## Full 4-Night Lineup
+## Confirmed Headliners
 
-### Night 1 — Friday, April 11
+Four nights, four headliners — each confirmed by Siam Songkran:
 
-| Slot | Artist |
-|------|--------|
-| Opening | 22Bullets |
-| | Andromedik |
-| | Ben Nicky |
-| HEADLINER | **Afrojack b2b R3HAB** |
+| Night | Date | Headliner |
+|-------|------|-----------|
+| Night 1 | Friday, Apr 11 | **Afrojack b2b R3HAB** |
+| Night 2 | Saturday, Apr 12 | **Marshmello** |
+| Night 3 | Sunday, Apr 13 | **Martin Garrix** |
+| Night 4 | Monday, Apr 14 | **John Summit** |
 
-Afrojack and R3HAB back-to-back is an insane way to open the festival. Two of the most electrifying performers in EDM sharing the same decks for what's expected to be a 90-minute b2b set.
+The full support act lineup and set times will be announced closer to the event. Check the [official Siam Songkran website](https://siamsongkran.info) for updates.
 
-### Night 2 — Saturday, April 12
+**Night 1** — Afrojack and R3HAB back-to-back is an insane way to open the festival. Two of the most electrifying performers in EDM sharing the same decks.
 
-| Slot | Artist |
-|------|--------|
-| Opening | Arcando |
-| | Slushii |
-| | Third Party b3b DubVision b3b Matisse&Sadko |
-| | Alok (Urban Theory Show) |
-| HEADLINER | **Marshmello** |
+**Night 2** — Marshmello closes the night in full helmet and all-white outfit. Expect a massive production.
 
-The Saturday lineup is stacked. Alok brings his special Urban Theory visual show, and Marshmello closes the night in full helmet and all-white outfit. Expect a massive production.
+**Night 3** — Martin Garrix is currently ranked **#1 DJ in the world** by DJ Mag. His Songkran set on April 13 — the peak day of the festival — will be one of the most attended events of the entire week.
 
-### Night 3 — Sunday, April 13
-
-| Slot | Artist |
-|------|--------|
-| Opening | Layton Giordani |
-| | Agents of Time |
-| | ARTBAT b2b R3HAB |
-| HEADLINER | **Martin Garrix** |
-
-This is the headline event of the entire Siam Songkran festival. Martin Garrix is currently ranked **#1 DJ in the world** by DJ Mag. His Songkran set on April 13 — the peak day of the festival — will be one of the most attended events of the entire week.
-
-### Night 4 — Monday, April 14
-
-| Slot | Artist |
-|------|--------|
-| Opening | DCR Milda |
-| | Gorgon City |
-| | Vini Vici |
-| HEADLINER | **John Summit** |
-
-April 14 is the closing night and John Summit is the perfect finisher. His deep/tech-house sound is a completely different vibe from the rest of the lineup — expect a long, building set that takes the crowd from tense to euphoric.
+**Night 4** — John Summit is the perfect finisher. His deep/tech-house sound is a completely different vibe from the rest of the lineup.
 
 ---
 

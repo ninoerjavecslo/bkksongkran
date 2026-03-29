@@ -25,6 +25,14 @@ const days = Object.keys(festival.schedule);
     </Button>
   </div>
 
+  <!-- Timetable alert -->
+  {festival.timetableNote && (
+    <div class="flex items-start gap-3 px-4 py-3 rounded-xl text-sm font-medium" style="background:#FFF8E0;border:1px solid #FF9F0A40;color:#7a4a00;">
+      <span class="material-symbols-outlined text-base flex-shrink-0 mt-0.5" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">schedule</span>
+      <span>{festival.timetableNote}</span>
+    </div>
+  )}
+
   <!-- Day selector -->
   <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id={`day-tabs-${festival.id}`}>
     {days.map((day, i) => (

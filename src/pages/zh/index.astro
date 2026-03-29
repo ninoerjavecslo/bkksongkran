@@ -1,0 +1,361 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import { festivals, additionalEvents } from '../../data/index';
+import { zhArticles as articles } from '../../data/articles.zh';
+import { zh } from '../../data/zh';
+
+const allEvents = [
+  ...festivals.map(f => ({ ...f, isFestival: true })),
+  ...additionalEvents.filter(e => e.type === 'festival').map(e => ({ ...e, isFestival: false })),
+];
+const featuredArticles = articles.slice(0, 3);
+const t = zh;
+---
+
+<BaseLayout
+  title={t.home.metaTitle}
+  description={t.home.metaDescription}
+  canonical="https://bkksongkran.com/zh"
+  enUrl="https://bkksongkran.com/"
+  lang="zh"
+>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="relative min-h-screen flex items-center pt-28 pb-20 px-6 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <picture>
+        <source type="image/webp" srcset="/hero-songkran-800.webp 800w, /hero-songkran.webp 1400w" sizes="100vw" />
+        <img src="/hero-songkran.jpg" alt="2026年曼谷宋干节泼水节人群" class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async" width="1400" height="933" />
+      </picture>
+      <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(0,30,50,0.85) 0%,rgba(0,100,121,0.6) 50%,rgba(0,51,69,0.8) 100%);"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div class="space-y-7">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold" style="background:rgba(255,197,166,0.2);color:#ffdcc8;border:1px solid rgba(255,197,166,0.35);">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-fixed opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary-fixed"></span>
+          </span>
+          {t.home.heroTag}
+        </div>
+
+        <h1 class="font-headline font-extrabold leading-[0.88] tracking-tighter text-white" style="font-size:clamp(3rem,8vw,6rem);text-shadow:0 4px 32px rgba(0,100,121,0.5);">
+          {t.home.heroTitle}<br/>
+          <span class="text-hero-accent">SONGKRAN</span><br/>
+          2026
+        </h1>
+
+        <p class="text-lg font-medium leading-relaxed max-w-[480px]" style="color:#fff;">
+          {t.home.heroSubtitle}
+        </p>
+
+        <div class="flex gap-4 flex-wrap">
+          <a href="/zh/events" class="btn-primary px-8 py-4 text-base">
+            <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">calendar_month</span>
+            {t.common.seeAllEvents}
+          </a>
+          <a href="/zh/survival-kit" class="btn px-8 py-4 text-base text-white transition-all hover:bg-white/20 hover:scale-105" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);">
+            <span class="material-symbols-outlined text-xl text-hero-accent" style="font-variation-settings:'FILL' 1;">backpack</span>
+            {t.common.survivalKit}
+          </a>
+        </div>
+
+        <div class="flex gap-10 pt-2">
+          {t.home.stats.map(s => (
+            <div>
+              <div class="font-headline font-black text-3xl text-hero-accent">{s.n}</div>
+              <div class="text-xs font-semibold" style="color:#fff;">{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- COUNTDOWN -->
+      <div class="flex flex-col items-center gap-6">
+        <div class="rounded-3xl p-8 text-center w-full" style="background:rgba(0,30,50,0.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(93,216,247,0.2);">
+          <div class="text-xs font-bold uppercase tracking-[0.25em] mb-5 text-hero-accent">{t.common.songkranStartsIn}</div>
+          <div class="grid grid-cols-4 gap-3" id="countdown-grid">
+            <div>
+              <div class="font-headline font-black text-4xl md:text-5xl text-white" id="cd-days">--</div>
+              <div class="text-[10px] font-bold uppercase tracking-widest mt-1 text-hero-accent">{t.common.days}</div>
+            </div>
+            <div>
+              <div class="font-headline font-black text-4xl md:text-5xl text-white" id="cd-hours">--</div>
+              <div class="text-[10px] font-bold uppercase tracking-widest mt-1 text-hero-accent">{t.common.hours}</div>
+            </div>
+            <div>
+              <div class="font-headline font-black text-4xl md:text-5xl text-white" id="cd-mins">--</div>
+              <div class="text-[10px] font-bold uppercase tracking-widest mt-1 text-hero-accent">{t.common.mins}</div>
+            </div>
+            <div>
+              <div class="font-headline font-black text-4xl md:text-5xl text-white" id="cd-secs">--</div>
+              <div class="text-[10px] font-bold uppercase tracking-widest mt-1 text-hero-accent">{t.common.secs}</div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4" style="border-top:1px solid rgba(93,216,247,0.15);">
+            <span class="text-sm font-semibold text-hero-text-muted">{t.common.aprilDates}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+      <span class="text-xs font-bold uppercase tracking-widest text-white">{t.common.scroll}</span>
+      <div class="w-px h-10" style="background:linear-gradient(to bottom,#fff,transparent);"></div>
+    </div>
+  </section>
+
+  <!-- ═══ BENTO HIGHLIGHTS ═══ -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary">{t.home.festivalHighlights}</div>
+          <h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface">{t.home.theBigThree}</h2>
+        </div>
+        <a href="/zh/events" class="flex items-center gap-2 text-sm font-bold text-primary transition-all hover:gap-4 group">
+          {t.common.fullLineupDetails}
+          <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <a href="/zh/events#siam" class="md:col-span-7 relative group overflow-hidden rounded-2xl block" style="min-height:380px;">
+          <img src="/festival-siam-songkran.webp" alt="2026年曼谷暹罗宋干节" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="eager" fetchpriority="high" width="2000" height="1153" />
+          <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,51,69,0.97) 0%,rgba(0,51,69,0.55) 55%,rgba(0,51,69,0.2) 100%);"></div>
+          <div class="absolute bottom-0 left-0 p-8 w-full">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:rgba(93,216,247,0.25);color:#b0ecff;border:1px solid rgba(93,216,247,0.35);">{t.home.siamTag}</span>
+            <h3 class="font-headline text-3xl md:text-4xl font-black text-white mb-2">Siam Songkran</h3>
+            <p class="text-sm font-medium text-hero-text-dim">Martin Garrix · Marshmello · John Summit · ARTBAT</p>
+            <div class="flex items-center gap-3 mt-4">
+              <span class="text-xs px-3 py-1 rounded-full font-bold" style="background:rgba(255,142,178,0.25);color:#ffb8d0;">{t.home.siamNights}</span>
+            </div>
+          </div>
+        </a>
+
+        <div class="md:col-span-5 grid grid-rows-2 gap-6">
+          <a href="/zh/events#s2o" class="relative group overflow-hidden rounded-2xl block" style="min-height:200px;">
+            <img src="/festival-s2o.jpg" alt="2026年曼谷S2O宋干音乐节" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="eager" width="1440" height="555" />
+            <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,51,69,0.97) 0%,rgba(0,51,69,0.5) 55%,rgba(0,51,69,0.15) 100%);"></div>
+            <div class="absolute bottom-0 left-0 p-6">
+              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold mb-1" style="background:rgba(93,216,247,0.25);color:#b0ecff;">{t.home.s2oTag}</span>
+              <h3 class="font-headline text-2xl font-black text-white">S2O Festival</h3>
+              <p class="text-xs font-medium mt-1 text-hero-text-muted">Alan Walker × Steve Aoki · Zedd · Kygo</p>
+            </div>
+          </a>
+          <a href="/zh/events#gcircuit" class="relative group overflow-hidden rounded-2xl block" style="min-height:200px;">
+            <img src="/festival-gcircuit.jpg" alt="2026年曼谷GCircuit宋干LGBTQ+派对" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="eager" width="750" height="289" />
+            <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(76,29,149,0.97) 0%,rgba(76,29,149,0.6) 55%,rgba(180,0,93,0.25) 100%);"></div>
+            <div class="absolute bottom-0 left-0 p-6">
+              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold mb-1" style="background:rgba(255,142,178,0.25);color:#ffb8d0;border:1px solid rgba(255,142,178,0.35);"><span class="material-symbols-outlined text-[10px]" style="font-variation-settings:'FILL' 1;">diversity_3</span> {t.home.gcircuitTag}</span>
+              <h3 class="font-headline text-2xl font-black text-white">GCircuit 20th</h3>
+              <p class="text-xs font-medium mt-1" style="color:#ecc4d4;">{t.home.gcircuitSub}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ QUICK LINKS ═══ -->
+  <section class="px-6 py-12">
+    <div class="section-inner grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <a href="/zh/events" class="card p-5 space-y-3 group block bg-surface-container-low cursor-pointer">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-primary">
+          <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">calendar_month</span>
+        </div>
+        <h3 class="font-headline font-bold text-base text-on-surface">{t.home.allEventsTitle}</h3>
+        <p class="text-sm text-content-muted">{t.home.allEventsDesc}</p>
+        <div class="flex items-center gap-1 text-sm font-bold text-primary group-hover:gap-3 transition-all">
+          {t.home.allEventsCta}
+          <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="/zh/survival-kit" class="card p-5 space-y-3 group block bg-secondary-on cursor-pointer">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-secondary">
+          <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">checklist</span>
+        </div>
+        <h3 class="font-headline font-bold text-base text-on-surface">{t.home.survivalKitTitle}</h3>
+        <p class="text-sm text-content-muted">{t.home.survivalKitDesc}</p>
+        <div class="flex items-center gap-1 text-sm font-bold text-secondary group-hover:gap-3 transition-all">
+          {t.home.survivalKitCta}
+          <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="/zh/blog" class="card p-5 space-y-3 group block bg-emerald-50 cursor-pointer">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-emerald-600">
+          <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">travel_explore</span>
+        </div>
+        <h3 class="font-headline font-bold text-base text-on-surface">{t.home.guideTitle}</h3>
+        <p class="text-sm text-content-muted">{t.home.allEventsDesc}</p>
+        <div class="flex items-center gap-1 text-sm font-bold text-emerald-600 group-hover:gap-3 transition-all">
+          {t.home.guideCta}
+          <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="/zh/ai" class="card p-5 space-y-3 group block cursor-pointer" style="background:rgba(180,0,93,0.04);">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#b4005d,#ff8eb2);">
+          <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+        </div>
+        <h3 class="font-headline font-bold text-base text-on-surface">{t.home.aiPlannerTitle}</h3>
+        <p class="text-sm text-content-muted">{t.home.aiPlannerDesc}</p>
+        <div class="flex items-center gap-1 text-sm font-bold group-hover:gap-3 transition-all" style="color:#b4005d;">
+          {t.home.aiPlannerCta}
+          <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ ARTICLES ═══ -->
+  <section class="px-6 pb-20 pt-12">
+    <div class="section-inner">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary">{t.home.guideTitle}</div>
+          <h2 class="font-headline text-4xl font-extrabold text-on-surface">{t.home.guideCta}</h2>
+        </div>
+        <a href="/zh/blog" class="flex items-center gap-1 text-sm font-bold text-primary transition-all hover:gap-3 group">
+          {t.blog.allArticles}
+          <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {featuredArticles.map((article, i) => (
+          <a href={`/zh/blog/${article.slug}`} class="card p-0 overflow-hidden group block">
+            {i === 0 ? (
+              <div class="relative" style="height:200px;">
+                <img src={article.featuredImage} alt={article.title} width="1200" height="630" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,51,69,0.9),transparent 60%);"></div>
+                <div class="absolute bottom-0 left-0 p-5">
+                  <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase text-white" style={`background:${article.categoryColor}30;`}>{article.category}</span>
+                  <h3 class="font-headline font-bold text-base text-white mt-2 leading-snug">{article.h1}</h3>
+                </div>
+              </div>
+            ) : (
+              <Fragment>
+                <div class="h-1.5 w-full" style={`background:${article.categoryColor};`}></div>
+                <div class="p-5 space-y-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-bold uppercase" style={`color:${article.categoryColor};`}>{article.category}</span>
+                    <span class="text-[10px] text-content-light">{article.readTime} {t.blog.minRead}</span>
+                  </div>
+                  <h3 class="font-headline font-bold text-base leading-snug text-on-surface group-hover:text-primary transition-colors">{article.h1}</h3>
+                  <p class="text-xs line-clamp-2 text-content-muted">{article.excerpt}</p>
+                  <span class="flex items-center gap-1 text-xs font-bold text-primary group-hover:gap-2 transition-all">
+                    {t.common.readMore} <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                  </span>
+                </div>
+              </Fragment>
+            )}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EVENTS SLIDER ═══ -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary">2026年4月10–15日</div>
+          <h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface">{t.home.allEventsTitle}</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="slider-prev" class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-surface-container-high text-outline transition-all hover:bg-primary hover:text-white hover:border-primary">
+            <span class="material-symbols-outlined text-lg">chevron_left</span>
+          </button>
+          <button id="slider-next" class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-surface-container-high text-outline transition-all hover:bg-primary hover:text-white hover:border-primary">
+            <span class="material-symbols-outlined text-lg">chevron_right</span>
+          </button>
+          <a href="/zh/events" class="flex items-center gap-1 text-sm font-bold ml-3 text-primary transition-all hover:gap-3 group">
+            {t.common.seeAllEvents}
+            <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="overflow-hidden" id="events-slider-wrap">
+        <div class="flex gap-5 transition-transform duration-500 ease-out" id="events-slider">
+          {allEvents.map(e => (
+            <div class="flex-shrink-0" style="width:320px;">
+              <a href={`/zh/events#${e.id}`} class="card p-0 overflow-hidden block group" style="height:100%;">
+                <div class="h-1.5 w-full" style={`background:${e.color};`}></div>
+                <div class="p-5 space-y-3">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider" style={`background:${e.color}15;color:${e.colorDark || e.color};`}>
+                      {(e as any).type === 'circuit' ? 'LGBTQ+' : 'Festival'}
+                    </span>
+                    <span class="text-xs font-bold text-outline">{e.dates}</span>
+                  </div>
+                  <h3 class="font-headline text-lg font-extrabold leading-tight text-on-surface group-hover:text-primary transition-colors">{e.name}</h3>
+                  <p class="text-xs leading-relaxed line-clamp-2 text-content-muted">
+                    {(e as any).description || (e as any).desc || (e as any).tagline}
+                  </p>
+                  <div class="flex items-center gap-1.5 text-xs text-outline">
+                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">location_on</span>
+                    {(e as any).venue || (e as any).area}
+                  </div>
+                  <div class="flex items-center justify-between pt-2 border-t border-surface-container-high/50">
+                    <span class="flex items-center gap-1 text-xs font-bold text-primary group-hover:gap-2 transition-all">
+                      {t.common.readMore} <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+function updateCountdown() {
+  const target = new Date('2026-04-10T00:00:00+07:00');
+  const diff = target.getTime() - Date.now();
+  const days = document.getElementById('cd-days');
+  const hours = document.getElementById('cd-hours');
+  const mins = document.getElementById('cd-mins');
+  const secs = document.getElementById('cd-secs');
+  if (!days || !hours || !mins || !secs) return;
+  if (diff <= 0) { days.textContent = '0'; hours.textContent = '0'; mins.textContent = '0'; secs.textContent = '0'; return; }
+  days.textContent = String(Math.floor(diff / 86400000));
+  hours.textContent = String(Math.floor((diff % 86400000) / 3600000));
+  mins.textContent = String(Math.floor((diff % 3600000) / 60000));
+  secs.textContent = String(Math.floor((diff % 60000) / 1000));
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+const slider = document.getElementById('events-slider');
+const wrap = document.getElementById('events-slider-wrap');
+const prevBtn = document.getElementById('slider-prev');
+const nextBtn = document.getElementById('slider-next');
+if (slider && wrap && prevBtn && nextBtn) {
+  let pos = 0;
+  const cardW = 340;
+  function getMaxScroll() { return Math.max(0, slider.scrollWidth - wrap.clientWidth); }
+  function slide(dir: number) {
+    const max = getMaxScroll();
+    pos = Math.min(max, Math.max(0, pos + dir * cardW * 2));
+    slider.style.transform = `translateX(-${pos}px)`;
+  }
+  prevBtn.addEventListener('click', () => slide(-1));
+  nextBtn.addEventListener('click', () => slide(1));
+  let touchStart = 0;
+  wrap.addEventListener('touchstart', (e) => { touchStart = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', (e) => {
+    const diff = touchStart - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) slide(diff > 0 ? 1 : -1);
+  }, { passive: true });
+}
+</script>

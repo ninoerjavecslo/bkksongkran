@@ -1,0 +1,325 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Breadcrumb from '../../components/atoms/Breadcrumb.astro';
+
+const severityConfig = {
+  full: { label: '封闭', color: '#FF3B30', bg: '#FFE8E8', icon: 'block' },
+  partial: { label: '限行', color: '#FF9F0A', bg: '#FFF8E0', icon: 'warning' },
+};
+
+const roadClosures = [
+  { road: 'Silom Road', area: 'Silom', dates: '4月13–15日', severity: 'full', desc: '从 Naradhiwas 至 Pan Road 全线封闭，禁止车辆通行。' },
+  { road: 'Khao San Road', area: 'Banglamphu', dates: '4月12–15日', severity: 'full', desc: '步行专区，周边 Rambuttri 一带街道同步封闭。' },
+  { road: 'Ratchadaphisek（近S2O）', area: 'Ratchada', dates: '4月11–13日', severity: 'partial', desc: 'S2O Land 附近单车道限行，下午3时起严重堵车。' },
+  { road: 'RCA（Royal City Avenue）', area: 'RCA', dates: '4月11–14日', severity: 'partial', desc: 'Bravo BKK Arena 附近车道受限，下午4时后仅允许即停即走。' },
+  { road: 'Sukhumvit Soi 22–26', area: 'Sukhumvit', dates: '4月10–13日', severity: 'partial', desc: 'Emsphere 附近预计严重堵车，建议乘坐 BTS Phrom Phong。' },
+  { road: 'Sanam Luang 周边', area: 'Old City', dates: '4月13–15日', severity: 'full', desc: '联合国教科文组织大宋干节仪式期间，大皇宫周边实施限行。' },
+];
+
+const venueTransport = [
+  {
+    id: 's2o',
+    venue: 'S2O Songkran',
+    location: 'S2O Land, Ratchada Rd',
+    festivalColor: '#40cef3',
+    transport: [
+      { mode: 'MRT', icon: 'subway', color: '#1E3A8A', route: 'MRT 文化中心站（3号出口）', walkTime: '步行8分钟', details: '跟着人群走，根本不会走丢。从3号出口出来后左转。' },
+      { mode: 'Taxi / Grab', icon: 'local_taxi', color: '#FBBF24', route: '叫车至「S2O Land」或「Show DC」', walkTime: '0分钟', details: '告诉司机「Show DC Ratchada」。从 Siam 出发约 ฿200–400，晚上10时后溢价明显。' },
+    ],
+    proTip: 'MRT 是唯一轻松的选择。Ratchada 从下午4时起就会严重堵车。',
+    closureWarning: 'Ratchadaphisek 在场馆附近部分封闭，请从 MRT 步行前往。',
+  },
+  {
+    id: 'siam-songkran',
+    venue: 'Siam Songkran',
+    location: 'Bravo BKK Arena, RCA',
+    festivalColor: '#ff8eb2',
+    transport: [
+      { mode: 'MRT', icon: 'subway', color: '#1E3A8A', route: 'MRT Phra Ram 9 站（3号出口）', walkTime: '步行12分钟', details: '沿 Phra Ram 9 路朝 RCA 方向步行，跟随 Bravo BKK 指示牌。' },
+      { mode: 'BTS + Taxi', icon: 'train', color: '#22C55E', route: 'BTS Asok 站 → 短途 Grab', walkTime: '约5分钟车程', details: '从 Asok 叫车至 RCA 正常约 ฿60-100，节日期间约 ฿150-250。' },
+      { mode: 'Taxi / Grab', icon: 'local_taxi', color: '#FBBF24', route: '叫车至「RCA」或「Bravo BKK」', walkTime: '0分钟', details: '确认司机在 RCA 正确入口下车，Bravo 在 RCA 最远端。' },
+    ],
+    proTip: '别在错误的 RCA 入口下车。Bravo BKK 在最远端——务必告诉司机「Bravo Arena，RCA 末端」。',
+    closureWarning: 'RCA 下午4时后仅允许即停即走，从 MRT Phra Ram 9 步行是最稳妥的方式。',
+  },
+  {
+    id: 'gcircuit',
+    venue: 'GCircuit Songkran',
+    location: 'UOB Live Hall, Emsphere',
+    festivalColor: '#c084fc',
+    transport: [
+      { mode: 'BTS', icon: 'train', color: '#22C55E', route: 'BTS Phrom Phong 站（6号出口）', walkTime: '步行3分钟', details: '有天桥直连 Emsphere，最便捷的场馆，全程空调走廊。' },
+      { mode: 'Taxi / Grab', icon: 'local_taxi', color: '#FBBF24', route: '叫车至「Emsphere Mall」', walkTime: '0分钟', details: '宋干节期间 Sukhumvit 堵得一塌糊涂，坐 BTS 快10倍。' },
+    ],
+    proTip: 'BTS Phrom Phong 有空调天桥直达 Emsphere，无需淋水、无需堵车、无压力，直接坐 BTS 就对了。',
+    closureWarning: null,
+  },
+  {
+    id: 'silom',
+    venue: 'Silom Street Party',
+    location: 'Silom Road, Soi 2 & 4',
+    festivalColor: '#9B59B6',
+    transport: [
+      { mode: 'BTS', icon: 'train', color: '#22C55E', route: 'BTS Sala Daeng 站（4号出口）', walkTime: '步行1分钟', details: '一出站就会被淋湿，这是必然的。' },
+      { mode: 'MRT', icon: 'subway', color: '#1E3A8A', route: 'MRT Si Lom 站（2号出口）', walkTime: '步行2分钟', details: '比 BTS 出口略干一些，但还是逃不过被浇。' },
+    ],
+    proTip: '从 BTS 走到 Silom Soi 2 这段路你一定会被淋透。接受它吧——这就是宋干节的意义。把好鞋留在酒店，认真的。',
+    closureWarning: '4月13–15日 Silom Road 全线封闭，进入只能靠 BTS/MRT 步行。',
+  },
+  {
+    id: 'khaosan',
+    venue: 'Khao San Road',
+    location: 'Khao San, Banglamphu',
+    festivalColor: '#FF3B30',
+    transport: [
+      { mode: 'Taxi / Grab', icon: 'local_taxi', color: '#FBBF24', route: '叫车至「Phra Athit Pier」或「Rambuttri」', walkTime: '步行5分钟', details: '请司机在 Phra Athit Rd 下车，穿过 Rambuttri 巷子步行前往。' },
+      { mode: '渡轮', icon: 'directions_boat', color: '#06B6D4', route: '昭披耶快艇至 Phra Athit Pier（N13）', walkTime: '步行7分钟', details: '最风景宜人的路线，乘坐橙旗快艇，票价 ฿16，早6时至晚7时运营。' },
+      { mode: '公交', icon: 'directions_bus', color: '#EF4444', route: '2、15、44、59路公交至 Ratchadamnoen', walkTime: '步行10分钟', details: '最便宜但最慢，仅适合本来就在附近的情况。' },
+    ],
+    proTip: 'Khao San 附近没有 BTS 或 MRT。昭披耶快艇到 Phra Athit Pier 其实是最可靠（也最美）的选择，每10分钟一班。',
+    closureWarning: '4月12–15日 Khao San 及周边街道全面步行化，大范围禁止车辆进入。',
+  },
+  {
+    id: 'siam-square',
+    venue: 'Siam Square',
+    location: 'Siam, Pathum Wan',
+    festivalColor: '#34C759',
+    transport: [
+      { mode: 'BTS', icon: 'train', color: '#22C55E', route: 'BTS Siam 站（1号或4号出口）', walkTime: '0分钟', details: '你就在那里。BTS Siam = 一切的中心。' },
+    ],
+    proTip: '从 BTS 走空调连廊到 CentralWorld / Siam Paragon 可以多保持一会儿干燥——但谁都知道这是徒劳的。',
+    closureWarning: null,
+  },
+];
+
+const transportTips = [
+  { icon: 'train', title: 'BTS 是你最好的朋友', desc: '凌驾于堵车之上。宋干节期间延长运营（早6时至午夜以后）。用 Rabbit 卡可省去排队买票的麻烦。', color: '#22C55E' },
+  { icon: 'trending_up', title: 'Grab 溢价预警', desc: '高峰时段（下午2至8时）预计溢价3–4倍。计划离开前30分钟提前叫车。', color: '#EF4444' },
+  { icon: 'payments', title: '嘟嘟车记得带现金', desc: '上车前务必先谈好价格。短途约 ฿100–150，不打表。', color: '#FBBF24' },
+  { icon: 'water_drop', title: '防水保护好行李', desc: '哪怕只是从 BTS 走到场馆，也会被淋湿。防水袋或密封袋保护好所有东西。', color: '#06B6D4' },
+  { icon: 'schedule', title: '早去晚归', desc: '交通最混乱的时段：下午3至7时。要么早点出发，要么等高峰过了再走。深夜 BTS 出乎意料地空旷。', color: '#8B5CF6' },
+  { icon: 'map', title: '提前下载离线地图', desc: '节日人群中移动数据会慢到崩溃。提前下载曼谷的 Google Maps 离线地图。', color: '#FF9F0A' },
+];
+---
+
+<BaseLayout title="如何前往宋干节曼谷2026 — 交通与路线指南" description="宋干节期间如何在曼谷出行。BTS/MRT路线、机场接送、各场馆前往方式及交通小贴士。" canonical="https://bkksongkran.com/zh/getting-there" lang="zh" enUrl="https://bkksongkran.com/getting-there" noindex={true}>
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-16 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
+      <Breadcrumb crumbs={[{ label: "首页", href: "/zh" }, { label: "交通指南" }]} />
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#34C759;">交通指南</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(3rem,8vw,6rem);color:#003345;line-height:0.9;">
+        如何<br/>
+        <span style="background:linear-gradient(135deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">前往</span>
+      </h1>
+      <p class="text-lg max-w-2xl" style="color:#326177;">宋干节把曼谷的马路变成了河流。以下是如何驾驭这场美丽的混乱——并真正抵达目的地。</p>
+    </div>
+  </section>
+
+  <!-- ROAD CLOSURES MAP SECTION -->
+  <section class="px-6 pb-16">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section header -->
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FF3B3015;">
+          <span class="material-symbols-outlined text-xl" style="color:#FF3B30;font-variation-settings:'FILL' 1;">road</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">道路封闭情况</h2>
+          <p class="text-xs" style="color:#6b8fa3;">2026年4月10–15日 — 宋干节期间主要道路封闭</p>
+        </div>
+      </div>
+
+      <!-- Bangkok Road Closure Map (CSS illustration) -->
+      <div class="relative rounded-2xl overflow-hidden mb-8" style="height:340px;background:linear-gradient(160deg,#E8F4FD,#D1ECFF);border:1px solid rgba(192,232,255,0.6);">
+        <!-- Grid lines -->
+        {[...Array(8)].map((_,i) => (
+          <div class="absolute left-0 right-0 h-px" style={`top:${i*14}%;background:rgba(0,100,200,0.04);`}></div>
+        ))}
+        {[...Array(8)].map((_,i) => (
+          <div class="absolute top-0 bottom-0 w-px" style={`left:${i*14}%;background:rgba(0,100,200,0.04);`}></div>
+        ))}
+
+        <!-- Chao Phraya River -->
+        <div class="absolute" style="bottom:10%;left:8%;width:6px;height:80%;background:rgba(100,180,255,0.3);border-radius:999px;transform:rotate(3deg);"></div>
+
+        <!-- BTS Lines -->
+        <!-- Sukhumvit (green) -->
+        <div class="absolute" style="top:38%;left:25%;width:60%;height:3px;background:#22C55E;opacity:0.5;border-radius:2px;"></div>
+        <!-- Silom (green) -->
+        <div class="absolute" style="top:38%;left:35%;width:3px;height:35%;background:#22C55E;opacity:0.5;border-radius:2px;"></div>
+        <!-- MRT Blue line -->
+        <div class="absolute rounded-full" style="top:18%;left:30%;width:40%;height:55%;border:3px solid rgba(30,58,138,0.25);background:transparent;"></div>
+
+        <!-- Closed road zones -->
+        <!-- Silom closed -->
+        <div class="absolute rounded-lg" style="left:30%;top:58%;width:80px;height:24px;background:rgba(255,59,48,0.15);border:1.5px dashed rgba(255,59,48,0.5);"></div>
+        <!-- Khao San closed -->
+        <div class="absolute rounded-lg" style="left:12%;top:18%;width:70px;height:28px;background:rgba(255,59,48,0.15);border:1.5px dashed rgba(255,59,48,0.5);"></div>
+        <!-- Sanam Luang -->
+        <div class="absolute rounded-lg" style="left:14%;top:28%;width:60px;height:20px;background:rgba(255,59,48,0.15);border:1.5px dashed rgba(255,59,48,0.5);"></div>
+        <!-- RCA restricted -->
+        <div class="absolute rounded-lg" style="left:62%;top:48%;width:70px;height:22px;background:rgba(255,159,10,0.12);border:1.5px dashed rgba(255,159,10,0.5);"></div>
+        <!-- Ratchada restricted -->
+        <div class="absolute rounded-lg" style="left:52%;top:16%;width:75px;height:22px;background:rgba(255,159,10,0.12);border:1.5px dashed rgba(255,159,10,0.5);"></div>
+
+        <!-- Venue pins -->
+        {[
+          {l:'15%',t:'15%',name:'Khao San',c:'#FF3B30',icon:'water_drop'},
+          {l:'33%',t:'62%',name:'Silom',c:'#9B59B6',icon:'celebration'},
+          {l:'36%',t:'35%',name:'Siam',c:'#34C759',icon:'storefront'},
+          {l:'56%',t:'12%',name:'S2O',c:'#40cef3',icon:'music_note'},
+          {l:'72%',t:'35%',name:'GCircuit',c:'#c084fc',icon:'nightlife'},
+          {l:'66%',t:'50%',name:'Siam Songkran',c:'#ff8eb2',icon:'music_note'},
+          {l:'17%',t:'30%',name:'Sanam Luang',c:'#964300',icon:'temple_buddhist'},
+        ].map(p => (
+          <div class="absolute flex flex-col items-center cursor-pointer group" style={`left:${p.l};top:${p.t};`}>
+            <div class="px-2.5 py-1.5 rounded-xl text-white text-[10px] font-black flex items-center gap-1 transition-transform group-hover:scale-110 shadow-md" style={`background:${p.c};`}>
+              <span class="material-symbols-outlined text-[11px]" style="font-variation-settings:'FILL' 1;">{p.icon}</span>
+              {p.name}
+            </div>
+            <div class="w-0 h-0 border-l-[5px] border-r-[5px] border-l-transparent border-r-transparent border-t-[5px]" style={`border-top-color:${p.c};`}></div>
+          </div>
+        ))}
+
+        <!-- Legend -->
+        <div class="absolute bottom-3 left-3 flex flex-wrap gap-3 items-center px-4 py-2.5 rounded-xl text-[10px] font-bold" style="background:rgba(255,255,255,0.92);border:1px solid rgba(192,232,255,0.5);">
+          <span class="flex items-center gap-1.5"><span class="w-6 h-0.5 rounded" style="background:#22C55E;"></span>BTS</span>
+          <span class="flex items-center gap-1.5"><span class="w-6 h-0.5 rounded" style="background:#1E3A8A;"></span>MRT</span>
+          <span class="flex items-center gap-1.5"><span class="w-4 h-3 rounded border-dashed border" style="border-color:#FF3B30;background:#FF3B3015;"></span>封闭</span>
+          <span class="flex items-center gap-1.5"><span class="w-4 h-3 rounded border-dashed border" style="border-color:#FF9F0A;background:#FF9F0A12;"></span>限行</span>
+        </div>
+
+        <!-- BKK watermark -->
+        <div class="absolute bottom-1/3 right-6 font-headline font-black text-5xl pointer-events-none select-none" style="color:rgba(0,100,200,0.04);transform:rotate(-28deg);letter-spacing:8px;">BKK</div>
+      </div>
+
+      <!-- Road closure cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {roadClosures.map(closure => {
+          const sev = severityConfig[closure.severity as keyof typeof severityConfig];
+          return (
+            <div class="rounded-xl p-4 transition-all hover:shadow-md" style={`background:white;border:1px solid ${sev.color}20;`}>
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <h4 class="font-bold text-sm" style="color:#003345;">{closure.road}</h4>
+                <span class="flex-shrink-0 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1" style={`background:${sev.bg};color:${sev.color};`}>
+                  <span class="material-symbols-outlined text-[10px]" style="font-variation-settings:'FILL' 1;">{sev.icon}</span>
+                  {sev.label}
+                </span>
+              </div>
+              <p class="text-xs mb-2" style="color:#6b8fa3;">{closure.desc}</p>
+              <div class="flex items-center gap-2 text-[10px] font-bold" style="color:#326177;">
+                <span class="material-symbols-outlined text-xs">calendar_today</span>
+                {closure.dates}
+                <span class="text-[8px]" style="color:#6b8fa3;">|</span>
+                {closure.area}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- VENUE-BY-VENUE TRANSPORT GUIDES -->
+  <section class="px-6 pb-16">
+    <div class="max-w-7xl mx-auto">
+
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#006479;15;">
+          <span class="material-symbols-outlined text-xl" style="color:#006479;font-variation-settings:'FILL' 1;">pin_drop</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">各场馆前往方式</h2>
+          <p class="text-xs" style="color:#6b8fa3;">一步步带你到达目的地。因为 Google Maps 不会提醒你有水炮在等着你。</p>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        {venueTransport.map(venue => (
+          <div class="rounded-2xl overflow-hidden transition-all hover:shadow-lg" style={`border:1px solid ${venue.festivalColor}25;`}>
+            <!-- Venue header -->
+            <div class="p-6 flex flex-col sm:flex-row sm:items-center gap-4" style={`background:linear-gradient(135deg,${venue.festivalColor}10,${venue.festivalColor}05);`}>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                  <div class="w-3 h-3 rounded-full" style={`background:${venue.festivalColor};`}></div>
+                  <h3 class="font-headline font-extrabold text-xl tracking-tight" style="color:#003345;">{venue.venue}</h3>
+                </div>
+                <p class="text-sm flex items-center gap-1.5" style="color:#6b8fa3;">
+                  <span class="material-symbols-outlined text-sm">location_on</span>
+                  {venue.location}
+                </p>
+              </div>
+              {venue.closureWarning && (
+                <div class="flex items-start gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold max-w-xs" style="background:#FFF8E0;color:#92400E;border:1px solid rgba(255,159,10,0.2);">
+                  <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">warning</span>
+                  {venue.closureWarning}
+                </div>
+              )}
+            </div>
+
+            <!-- Transport options -->
+            <div class="p-6 bg-white/70 space-y-3">
+              {venue.transport.map(t => (
+                <div class="flex items-start gap-4 p-4 rounded-xl transition-all hover:shadow-sm" style="background:rgba(238,248,255,0.5);border:1px solid rgba(192,232,255,0.3);">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${t.color}15;`}>
+                    <span class="material-symbols-outlined text-lg" style={`color:${t.color};font-variation-settings:'FILL' 1;`}>{t.icon}</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                      <span class="font-bold text-sm" style="color:#003345;">{t.mode}</span>
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style={`background:${t.color}15;color:${t.color};`}>{t.walkTime}</span>
+                    </div>
+                    <p class="text-sm font-semibold mb-1" style="color:#326177;">{t.route}</p>
+                    <p class="text-xs" style="color:#6b8fa3;">{t.details}</p>
+                  </div>
+                </div>
+              ))}
+
+              <!-- Pro tip -->
+              <div class="flex items-start gap-3 p-4 rounded-xl" style="background:linear-gradient(135deg,rgba(0,100,121,0.06),rgba(64,206,243,0.04));border:1px solid rgba(0,100,121,0.1);">
+                <span class="material-symbols-outlined text-lg flex-shrink-0 mt-0.5" style="color:#006479;font-variation-settings:'FILL' 1;">tips_and_updates</span>
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider block mb-1" style="color:#006479;">小贴士</span>
+                  <p class="text-sm" style="color:#326177;">{venue.proTip}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- GENERAL TRANSPORT TIPS -->
+  <section class="px-6 pb-24">
+    <div class="max-w-7xl mx-auto">
+
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#8B5CF615;">
+          <span class="material-symbols-outlined text-xl" style="color:#8B5CF6;font-variation-settings:'FILL' 1;">lightbulb</span>
+        </div>
+        <div>
+          <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">通用交通小贴士</h2>
+          <p class="text-xs" style="color:#6b8fa3;">那些你希望在堵了两小时车之前就知道的事。</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {transportTips.map(tip => (
+          <div class="rounded-2xl p-5 transition-all hover:shadow-lg hover:-translate-y-0.5 bg-white/70" style={`border:1px solid ${tip.color}20;`}>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={`background:${tip.color}12;`}>
+              <span class="material-symbols-outlined text-2xl" style={`color:${tip.color};font-variation-settings:'FILL' 1;`}>{tip.icon}</span>
+            </div>
+            <h3 class="font-bold text-base mb-2" style="color:#003345;">{tip.title}</h3>
+            <p class="text-sm leading-relaxed" style="color:#6b8fa3;">{tip.desc}</p>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+</BaseLayout>

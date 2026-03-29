@@ -9,6 +9,8 @@ interface Props {
   class?: string;
   noindex?: boolean;
   ogImage?: string;
+  lang?: 'en' | 'zh';
+  enUrl?: string;
 }
 
 const {
@@ -18,11 +20,13 @@ const {
   class: className = '',
   noindex = false,
   ogImage = 'https://bkksongkran.com/og-image.jpg',
+  lang = 'en',
+  enUrl,
 } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang={lang === 'zh' ? 'zh-Hans' : 'en'} class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,6 +56,20 @@ const {
 
   <!-- Canonical & indexing -->
   {canonical && <link rel="canonical" href={canonical} />}
+  {lang === 'zh' && enUrl && (
+    <>
+      <link rel="alternate" hreflang="zh-Hans" href={canonical ?? Astro.url.href} />
+      <link rel="alternate" hreflang="en" href={enUrl} />
+      <link rel="alternate" hreflang="x-default" href={enUrl} />
+    </>
+  )}
+  {lang === 'en' && canonical && (
+    <>
+      <link rel="alternate" hreflang="en" href={canonical} />
+      <link rel="alternate" hreflang="zh-Hans" href={canonical.replace('https://bkksongkran.com', 'https://bkksongkran.com/zh')} />
+      <link rel="alternate" hreflang="x-default" href={canonical} />
+    </>
+  )}
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
   <meta name="googlebot" content={noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
 
@@ -176,13 +194,38 @@ const {
           </ul>
         </div>
       </div>
-      <div class="pt-8 border-t flex flex-col sm:flex-row justify-between gap-4" style="border-color:rgba(192,232,255,0.6);">
+      <div class="pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-4" style="border-color:rgba(192,232,255,0.6);">
         <p class="text-xs" style="color:#4f7d93;">© 2026 BKK Songkran · Bangkok, Thailand</p>
+        <a id="footer-lang-switch" href="#" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold border transition-all hover:scale-105" style="border-color:rgba(0,100,121,0.25);color:#006479;background:rgba(0,100,121,0.06);"></a>
         <p class="text-xs" style="color:#4f7d93;">Independent guide — not affiliated with any festival organiser</p>
       </div>
     </div>
   </footer>
 
 
+<script is:inline>
+(function() {
+  var path = window.location.pathname;
+  var isZh = path.startsWith('/zh');
+  var noZh = ['/tickets', '/meetup', '/privacy', '/terms', '/disclaimer', '/delete-ticket'];
+  function switchPath(p) {
+    if (p.startsWith('/zh')) return p.replace(/^\/zh/, '') || '/';
+    if (p === '/') return '/zh';
+    if (noZh.some(function(x) { return p === x || p.startsWith(x + '/'); })) return '/zh';
+    return '/zh' + p;
+  }
+  var el = document.getElementById('footer-lang-switch');
+  if (el) {
+    el.href = switchPath(path);
+    el.setAttribute('aria-label', isZh ? 'Switch to English' : '切换到中文');
+    var flag = document.createElement('span');
+    flag.style.fontSize = '14px';
+    flag.textContent = isZh ? '🇬🇧' : '🇨🇳';
+    var label = document.createTextNode(isZh ? ' English' : ' 中文');
+    el.appendChild(flag);
+    el.appendChild(label);
+  }
+})();
+</script>
 </body>
 </html>

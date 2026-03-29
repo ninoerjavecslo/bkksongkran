@@ -1,0 +1,664 @@
+---
+import BaseLayout from '../../components/layout/BaseLayout.astro';
+import Breadcrumb from '../../components/atoms/Breadcrumb.astro';
+import { zh } from '../../data/zh';
+---
+
+<BaseLayout
+  title="曼谷宋干节同志指南2026 — LGBTQ+完整攻略"
+  description="2026年曼谷宋干节完整同志攻略。GCircuit、Silom、同志俱乐部、交通贴士、生存建议及更多。"
+  lang="zh"
+  canonical="https://bkksongkran.com/zh/gay-guide"
+  enUrl="https://bkksongkran.com/gay-guide"
+>
+
+<style>
+  .guide-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #326177;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .guide-sidebar a:hover { background: rgba(168,85,247,0.1); color: #7c3aed; }
+  .guide-sidebar a.active { background: rgba(168,85,247,0.08); color: #7c3aed; border-left: 3px solid #a855f7; padding-left: 9px; }
+  .guide-sidebar .section-group { margin-bottom: 6px; }
+  .guide-sidebar .section-group-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6b8fa3;
+    padding: 10px 12px 4px;
+  }
+  .section-anchor { scroll-margin-top: 100px; }
+  .tip-card {
+    background: white;
+    border: 1px solid rgba(192,232,255,0.5);
+    border-radius: 16px;
+    padding: 18px 20px;
+  }
+  .tip-card.warn   { border-left: 4px solid #FF9F0A; background: rgba(255,159,10,0.03); }
+  .tip-card.danger { border-left: 4px solid #ef4444; background: rgba(239,68,68,0.03); }
+  .tip-card.good   { border-left: 4px solid #34C759; background: rgba(52,199,89,0.03); }
+  .tip-card.info   { border-left: 4px solid #40cef3; background: rgba(64,206,243,0.03); }
+  .tip-card.purple { border-left: 4px solid #a855f7; background: rgba(168,85,247,0.03); }
+  .section-title {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: #003345;
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+  .section-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a855f7;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .venue-card {
+    background: white;
+    border: 1px solid rgba(192,232,255,0.5);
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .venue-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px; font-weight: 700;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 13px; font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer; border: none;
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.12); }
+  .btn-primary { background: linear-gradient(135deg,#a855f7,#ec4899); color: white; }
+  .btn-outline { background: rgba(168,85,247,0.08); color: #7c3aed; border: 1px solid rgba(168,85,247,0.2); }
+  .btn-dark { background: rgba(0,100,121,0.08); color: #006479; border: 1px solid rgba(0,100,121,0.15); }
+  .event-card {
+    background: white;
+    border: 1px solid rgba(192,232,255,0.5);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+  .event-card:hover { box-shadow: 0 4px 20px rgba(168,85,247,0.1); }
+  .event-card-header { padding: 16px 18px 12px; border-bottom: 1px solid rgba(192,232,255,0.3); }
+  .event-card-body { padding: 14px 18px 16px; }
+  .festival-card {
+    background: white;
+    border: 1px solid rgba(192,232,255,0.5);
+    border-radius: 18px;
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: all 0.15s;
+  }
+  .festival-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+
+  /* Mobile */
+  #mobile-nav-toggle { display: block; }
+  #guide-sidebar { display: none; }
+  #guide-sidebar.open {
+    display: block !important;
+    position: fixed; inset: 0; z-index: 100;
+    background: white; overflow-y: auto; padding: 24px;
+  }
+  #guide-layout { display: block; }
+  #guide-sidebar-desktop { display: none; }
+
+  @media (min-width: 1024px) {
+    #mobile-nav-toggle { display: none !important; }
+    #guide-layout { display: flex; gap: 40px; align-items: flex-start; }
+    #guide-sidebar-desktop { display: block; width: 256px; flex-shrink: 0; position: sticky; top: 96px; }
+    #guide-sidebar { display: none; }
+  }
+</style>
+
+<!-- HEADER -->
+<section class="pt-36 pb-12 px-6" style="background:linear-gradient(160deg,rgba(88,28,135,0.06) 0%,rgba(225,243,255,0.7) 60%,rgba(238,248,255,0) 100%);">
+  <div class="max-w-7xl mx-auto">
+    <Breadcrumb crumbs={[{ label: "首页", href: "/zh" }, { label: "同志指南" }]} />
+    <span class="section-label">LGBTQ+ 指南</span>
+    <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.8rem,8vw,5.5rem);color:#003345;line-height:0.9;">
+      同志<br/>
+      <span style="background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">宋干节</span><br/>
+      <span style="font-size:0.5em;color:#003345;">曼谷 2026</span>
+    </h1>
+    <p class="text-lg max-w-2xl mt-4 mb-6" style="color:#326177;line-height:1.6;">GCircuit、Silom、GOD club、cruising bar、派对后续——亚洲最嗨同志周完整攻略。</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="/zh/events" class="btn btn-dark"><span class="material-symbols-outlined text-base">calendar_month</span>全部活动</a>
+      <a href="/meetup" class="btn btn-dark"><span class="material-symbols-outlined text-base">diversity_3</span>谁要去？</a>
+      <a href="/tickets" class="btn btn-dark"><span class="material-symbols-outlined text-base">confirmation_number</span>购买/出售门票</a>
+      <a href="/zh/survival-kit" class="btn btn-dark"><span class="material-symbols-outlined text-base">backpack</span>生存指南</a>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile floating button -->
+<div id="mobile-nav-toggle" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;">
+  <button onclick="document.getElementById('guide-sidebar').classList.toggle('open')" class="btn btn-primary" style="box-shadow:0 4px 20px rgba(168,85,247,0.4);">
+    <span class="material-symbols-outlined" style="font-size:18px;">menu_book</span>
+    跳转章节
+  </button>
+</div>
+
+<!-- Mobile sidebar overlay -->
+<aside id="guide-sidebar" class="guide-sidebar">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid rgba(192,232,255,0.4);margin-bottom:8px;">
+    <span style="font-weight:700;font-size:15px;color:#003345;">目录</span>
+    <button onclick="document.getElementById('guide-sidebar').classList.remove('open')" style="background:none;border:none;cursor:pointer;" class="material-symbols-outlined">close</button>
+  </div>
+  <div class="section-group"><div class="section-group-label">节日与活动</div>
+    <a href="#festivals" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#a855f7;">festival</span>主要节日</a>
+    <a href="#gcircuit" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#a855f7;">nightlife</span>GCircuit</a>
+    <a href="#silom" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#ec4899;">celebration</span>Silom Soi 2 & 4</a>
+    <a href="#special" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#a855f7;">local_activity</span>特别活动</a>
+    <a href="#clubs" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#ec4899;">nightlife</span>俱乐部与酒吧</a>
+    <a href="#totems" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#FF9F0A;">flag</span>图腾与集合点</a>
+  </div>
+  <div class="section-group"><div class="section-group-label">社区</div>
+    <a href="#tickets-section" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#34C759;">confirmation_number</span>购买/出售门票</a>
+    <a href="#whos-going" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#006479;">diversity_3</span>谁要去？</a>
+  </div>
+  <div class="section-group"><div class="section-group-label">实用信息</div>
+    <a href="#transport" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#34C759;">directions_transit</span>交通</a>
+    <a href="#safety" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#ef4444;">health_and_safety</span>安全与贴士</a>
+    <a href="#map" onclick="closeMobileNav()"><span class="material-symbols-outlined text-sm" style="color:#006479;">map</span>曼谷同志地图</a>
+  </div>
+</aside>
+
+<!-- LAYOUT -->
+<div id="guide-layout" class="max-w-7xl mx-auto px-4 pb-32" style="overflow-x:clip;">
+
+  <!-- Desktop sidebar -->
+  <aside id="guide-sidebar-desktop" class="guide-sidebar">
+    <div class="rounded-2xl overflow-hidden" style="background:white;border:1px solid rgba(192,232,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+      <div class="section-group"><div class="section-group-label">节日与活动</div>
+        <a href="#festivals"><span class="material-symbols-outlined text-sm" style="color:#a855f7;">festival</span>主要节日</a>
+        <a href="#gcircuit"><span class="material-symbols-outlined text-sm" style="color:#a855f7;">nightlife</span>GCircuit</a>
+        <a href="#silom"><span class="material-symbols-outlined text-sm" style="color:#ec4899;">celebration</span>Silom Soi 2 & 4</a>
+        <a href="#special"><span class="material-symbols-outlined text-sm" style="color:#a855f7;">local_activity</span>特别活动</a>
+        <a href="#clubs"><span class="material-symbols-outlined text-sm" style="color:#ec4899;">nightlife</span>俱乐部与酒吧</a>
+        <a href="#totems"><span class="material-symbols-outlined text-sm" style="color:#FF9F0A;">flag</span>图腾与集合点</a>
+      </div>
+      <div class="section-group"><div class="section-group-label">社区</div>
+        <a href="#tickets-section"><span class="material-symbols-outlined text-sm" style="color:#34C759;">confirmation_number</span>购买/出售门票</a>
+        <a href="#whos-going"><span class="material-symbols-outlined text-sm" style="color:#006479;">diversity_3</span>谁要去？</a>
+      </div>
+      <div class="section-group"><div class="section-group-label">实用信息</div>
+        <a href="#transport"><span class="material-symbols-outlined text-sm" style="color:#34C759;">directions_transit</span>交通</a>
+        <a href="#safety"><span class="material-symbols-outlined text-sm" style="color:#ef4444;">health_and_safety</span>安全与贴士</a>
+        <a href="#map"><span class="material-symbols-outlined text-sm" style="color:#006479;">map</span>曼谷同志地图</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 min-w-0 space-y-16">
+
+    <!-- ── MAIN FESTIVALS ── -->
+    <section id="festivals" class="section-anchor">
+      <span class="section-label">主要节日</span>
+      <h2 class="section-title">三大盛会</h2>
+      <p class="text-sm mb-5" style="color:#326177;line-height:1.7;">长周末期间有三大付费节日同时举行。所有活动均对LGBTQ+友好——但GCircuit是同志旗舰活动。</p>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <!-- S2O -->
+        <div class="festival-card">
+          <div>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="badge" style="background:rgba(64,206,243,0.12);color:#006479;">4月11–13日</span>
+              <span class="badge" style="background:rgba(64,206,243,0.08);color:#006479;">S2O Land, Ratchada</span>
+            </div>
+            <div class="font-headline font-bold text-xl" style="color:#003345;">S2O Songkran</div>
+            <div class="text-xs font-semibold mt-0.5 mb-2" style="color:#40cef3;">全球最湿派对</div>
+            <p class="text-sm" style="color:#326177;line-height:1.5;">每次Drop都有巨型水炮齐射。国际EDM。非常同志友好，混合人群。你<strong style="color:#003345;">全程都会被淋透</strong>。</p>
+          </div>
+          <a href="/zh/events#s2o" class="btn btn-primary mt-auto" style="font-size:12px;">
+            <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>完整阵容
+          </a>
+        </div>
+        <!-- Siam -->
+        <div class="festival-card">
+          <div>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="badge" style="background:rgba(180,0,93,0.1);color:#b4005d;">4月11–14日</span>
+              <span class="badge" style="background:rgba(180,0,93,0.07);color:#b4005d;">Bravo BKK Arena, RCA</span>
+            </div>
+            <div class="font-headline font-bold text-xl" style="color:#003345;">Siam Songkran</div>
+            <div class="text-xs font-semibold mt-0.5 mb-2" style="color:#b4005d;">4晚EDM盛宴</div>
+            <p class="text-sm" style="color:#326177;line-height:1.5;">室内场馆，水量少于S2O。Martin Garrix、Marshmello、John Summit。RCA旁边有很多俱乐部适合散场后继续嗨。</p>
+          </div>
+          <a href="/zh/events#siam" class="btn btn-primary mt-auto" style="font-size:12px;">
+            <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>完整阵容
+          </a>
+        </div>
+        <!-- GCircuit -->
+        <div id="gcircuit" class="festival-card section-anchor">
+          <div>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="badge" style="background:rgba(168,85,247,0.12);color:#7c3aed;">4月11–14日</span>
+              <span class="badge" style="background:rgba(168,85,247,0.1);color:#7c3aed;">Emsphere + Tribe Sky</span>
+            </div>
+            <div class="font-headline font-bold text-xl" style="color:#003345;">GCircuit</div>
+            <div class="text-xs font-semibold mt-0.5 mb-2" style="color:#a855f7;">亚洲第一同志Circuit派对</div>
+            <p class="text-sm" style="color:#326177;line-height:1.5;">4场活动，4天，10,000+同志男生。泳池派对门票早早售罄。<strong style="color:#003345;">这才是重头戏。</strong></p>
+          </div>
+          <a href="/zh/events#gcircuit" class="btn btn-primary mt-auto" style="font-size:12px;">
+            <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>完整阵容
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SILOM ── -->
+    <section id="silom" class="section-anchor">
+      <span class="section-label">免费街头派对</span>
+      <h2 class="section-title">Silom Soi 2 & 4</h2>
+      <div class="space-y-3">
+        <div class="tip-card purple">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0 mt-0.5" style="color:#a855f7;font-size:20px;font-variation-settings:'FILL' 1;">celebration</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">4月12–14日 · 免费 · 欢迎所有人</p>
+              <p class="text-sm" style="color:#326177;line-height:1.6;">曼谷历史悠久的同志区封街，化身全球最大免费LGBTQ+街头派对。每个路口都有音响车，泼水大战、泡沫、变装表演。整个同志社群加上成千上万游客齐聚。4月13日达到高峰。</p>
+            </div>
+          </div>
+        </div>
+        <div class="tip-card warn">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0 mt-0.5" style="color:#FF9F0A;font-size:20px;font-variation-settings:'FILL' 1;">warning</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">4月12–14日Silom路单行道且完全堵死</p>
+              <p class="text-sm" style="color:#326177;">不要叫Grab穿越Silom。从BTS Sala Daeng或Chong Nonsi步行前往。BTS是唯一可靠的交通方式。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SPECIAL EVENTS ── -->
+    <section id="special" class="section-anchor">
+      <span class="section-label">特别活动</span>
+      <h2 class="section-title">不容错过</h2>
+      <div class="space-y-3">
+
+        <!-- Unleash -->
+        <div class="event-card" style="border-color:rgba(168,85,247,0.25);">
+          <div class="event-card-header" style="background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(236,72,153,0.05));">
+            <div class="flex flex-wrap gap-2 mb-2">
+              <span class="badge" style="background:rgba(168,85,247,0.12);color:#7c3aed;"><span class="material-symbols-outlined" style="font-size:11px;">calendar_today</span>4月13日 · 下午4–9时</span>
+              <span class="badge" style="background:rgba(168,85,247,0.08);color:#7c3aed;"><span class="material-symbols-outlined" style="font-size:11px;">location_on</span>Side Bar, Silom</span>
+              <span class="badge" style="background:rgba(236,72,153,0.1);color:#be185d;"><span class="material-symbols-outlined" style="font-size:11px;">local_activity</span>需购票</span>
+            </div>
+            <div class="font-headline font-bold text-lg" style="color:#003345;">Unleash — Wet Your Throat</div>
+            <div class="text-sm font-semibold mt-0.5" style="color:#a855f7;">by Party Gay Asia</div>
+          </div>
+          <div class="event-card-body">
+            <p class="text-sm mb-3" style="color:#326177;line-height:1.6;">一场下午cruising bar派对。暗室氛围、主题玩乐区、无拘cruising，让你完全做自己的空间。全程现场DJ。完美衔接下午泼水大战与夜晚俱乐部之间的空档。</p>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span class="badge" style="background:rgba(168,85,247,0.08);color:#7c3aed;"><span class="material-symbols-outlined" style="font-size:11px;">wb_twilight</span>暗室</span>
+              <span class="badge" style="background:rgba(168,85,247,0.08);color:#7c3aed;"><span class="material-symbols-outlined" style="font-size:11px;">music_note</span>现场DJ</span>
+              <span class="badge" style="background:rgba(168,85,247,0.08);color:#7c3aed;"><span class="material-symbols-outlined" style="font-size:11px;">groups</span>Cruising</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <a href="https://yourtessera.com/e/unleash" target="_blank" rel="noopener" class="btn btn-primary">
+                <span class="material-symbols-outlined" style="font-size:14px;">confirmation_number</span>购票
+              </a>
+              <a href="https://instagram.com/partygayasia" target="_blank" rel="noopener" class="btn btn-outline">
+                <span class="material-symbols-outlined" style="font-size:14px;">photo_camera</span>@partygayasia
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CLUBS & BARS ── -->
+    <section id="clubs" class="section-anchor">
+      <span class="section-label">夜生活</span>
+      <h2 class="section-title">同志俱乐部与酒吧</h2>
+      <div class="space-y-3">
+
+        {[
+          {
+            name: 'GOD Club',
+            area: 'Silom附近',
+            icon: 'nightlife', color: '#1a1a2e',
+            badges: [
+              {label:'散场后继续', bg:'rgba(0,0,0,0.06)', c:'#003345'},
+              {label:'凌晨3时关门', bg:'rgba(52,199,89,0.1)', c:'#16a34a'},
+              {label:'宋干节排队极长', bg:'rgba(239,68,68,0.1)', c:'#dc2626'},
+            ],
+            desc: '曼谷最著名的同志散场俱乐部。多层楼，暗黑氛围，circuit音乐。宋干节期间排队可达45–60分钟——午夜前到达可避开长龙。',
+            hours: '深夜开始 · 凌晨3时关门',
+            entry: '฿400',
+          },
+          {
+            name: 'DJ Station',
+            area: 'Silom Soi 2',
+            icon: 'nightlife', color: '#a855f7',
+            badges: [
+              {label:'旗舰同志俱乐部', bg:'rgba(168,85,247,0.1)', c:'#7c3aed'},
+            ],
+            desc: '曼谷最具代表性的同志俱乐部。3层楼，宋干节期间人山人海。入场含一杯饮品。跳舞，氛围极好。早点来——排队会很长。',
+            hours: '凌晨3时关门',
+            entry: '฿400 含饮品',
+          },
+          {
+            name: 'Balcony Bar',
+            area: 'Silom Soi 4',
+            icon: 'local_bar', color: '#ec4899',
+            badges: [
+              {label:'俯瞰街景', bg:'rgba(236,72,153,0.1)', c:'#be185d'},
+              {label:'轻松氛围', bg:'rgba(236,72,153,0.07)', c:'#be185d'},
+            ],
+            desc: '高台酒吧，俯瞰Silom Soi 4街头派对。端着酒看楼下热闹的绝佳位置。在各个场馆之间穿梭时的绝佳休息站。',
+            hours: '深夜',
+            entry: '免费',
+          },
+          {
+            name: 'Strangers Bar',
+            area: 'Silom附近',
+            icon: 'local_bar', color: '#7c3aed',
+            badges: [
+              {label:'同志酒吧', bg:'rgba(124,58,237,0.1)', c:'#7c3aed'},
+              {label:'变装秀', bg:'rgba(168,85,247,0.1)', c:'#7c3aed'},
+            ],
+            desc: 'Silom区人气同志酒吧，定期举办变装秀。本地人与游客混合，友好氛围，饮品不错。Silom酒吧爬行的可靠一站。',
+            hours: '深夜',
+            entry: '฿450起',
+          },
+          {
+            name: 'Banana Bar',
+            area: 'Silom Soi 4',
+            icon: 'local_bar', color: '#FF9F0A',
+            badges: [
+              {label:'经典老店', bg:'rgba(255,159,10,0.1)', c:'#d97706'},
+              {label:'散场后继续', bg:'rgba(255,159,10,0.07)', c:'#d97706'},
+            ],
+            desc: '老牌Silom酒吧，以高能人群著称。热门散场地点——其他地方关门后营业至凌晨5时。适合在Soi 4沿途bar hopping。',
+            hours: '凌晨5时关门',
+            entry: '฿400',
+          },
+        ].map(v => (
+          <div class="venue-card">
+            <div class="venue-icon" style={`background:${v.color}18;`}>
+              <span class="material-symbols-outlined" style={`color:${v.color};font-variation-settings:'FILL' 1;`}>{v.icon}</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="font-bold text-base" style="color:#003345;">{v.name}</span>
+                <span class="text-xs" style="color:#6b8fa3;">· {v.area}</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mb-2">
+                {v.badges.map(b => <span class="badge" style={`background:${b.bg};color:${b.c};`}>{b.label}</span>)}
+              </div>
+              <p class="text-sm mb-2" style="color:#326177;line-height:1.5;">{v.desc}</p>
+              <div class="flex gap-3 text-xs" style="color:#6b8fa3;">
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:12px;">schedule</span>{v.hours}</span>
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:12px;">payments</span>{v.entry}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── TOTEMS ── -->
+    <section id="totems" class="section-anchor">
+      <span class="section-label">找到你的队友</span>
+      <h2 class="section-title">图腾与集合点</h2>
+      <p class="text-sm mb-5" style="color:#326177;line-height:1.7;">节日场馆内信号几乎全无。图腾是人群中找到同伴的方式。每场活动前请回来查看——我们会公布各团体的集合位置和图腾信息。</p>
+
+      <div class="space-y-3">
+        <div class="tip-card" style="border:2px dashed rgba(168,85,247,0.3);background:rgba(168,85,247,0.02);">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#a855f7;font-size:28px;font-variation-settings:'FILL' 1;">flag</span>
+            <div>
+              <p class="font-bold text-base mb-1" style="color:#003345;">图腾信息即将公布</p>
+              <p class="text-sm" style="color:#326177;line-height:1.6;">我们将在活动前公布每个节日的集合地点和图腾描述。关注我们并在4月前回来查看。与此同时——加入<a href="/meetup" style="color:#a855f7;font-weight:700;">谁要去</a>页面，找到参加同一活动的伙伴。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card good">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#34C759;font-variation-settings:'FILL' 1;">tips_and_updates</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">什么是图腾？</p>
+              <p class="text-sm" style="color:#326177;line-height:1.6;">图腾是某人在节日上携带的高大醒目物件，让同伴在人群中找到他们。通常是绑在杆子上的东西——旗帜、搞笑标牌、装饰雨伞。当信号消失、WhatsApp断联，就去找图腾。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BUY/SELL TICKETS ── -->
+    <section id="tickets-section" class="section-anchor">
+      <span class="section-label">社区</span>
+      <h2 class="section-title">购买与出售门票</h2>
+      <p class="text-sm mb-5" style="color:#326177;line-height:1.7;">计划有变？节日售罄？我们的点对点票务市场让你在社区内安全买卖任何宋干节活动的门票。</p>
+
+      <div class="space-y-3">
+        <div class="tip-card purple">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0 mt-0.5" style="color:#a855f7;font-size:22px;font-variation-settings:'FILL' 1;">confirmation_number</span>
+            <div class="flex-1">
+              <p class="font-bold text-sm mb-1" style="color:#003345;">使用方式</p>
+              <ul class="text-sm space-y-1.5" style="color:#326177;">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px;color:#a855f7;margin-top:1px;">sell</span>发布清单——节日、档次、价格、你的联系方式（Telegram、WhatsApp、Instagram）</li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px;color:#a855f7;margin-top:1px;">search</span>浏览清单——用邮箱解锁联系信息（一次性，无需注册）</li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px;color:#a855f7;margin-top:1px;">handshake</span>直接交易——在平台外商定付款和转让方式</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tip-card warn">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#FF9F0A;font-variation-settings:'FILL' 1;">warning</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">付款前务必核实</p>
+              <p class="text-sm" style="color:#326177;">尽量在公共场所当面交换票务。要求出示购票凭证。不要向无法核实身份的人预付全款。使用PayPal商品与服务或确认卖家姓名后的银行转账。</p>
+            </div>
+          </div>
+        </div>
+        <a href="/tickets" class="btn btn-primary" style="display:inline-flex;">
+          <span class="material-symbols-outlined" style="font-size:16px;">confirmation_number</span>
+          前往票务市场
+        </a>
+      </div>
+    </section>
+
+    <!-- ── WHO'S GOING ── -->
+    <section id="whos-going" class="section-anchor">
+      <span class="section-label">社区</span>
+      <h2 class="section-title">谁要去？</h2>
+      <p class="text-sm mb-5" style="color:#326177;line-height:1.7;">查看哪些人参加相同活动，协调预饮、散场后续和聚会。无需注册——只需你的昵称和参加的活动。</p>
+
+      <div class="space-y-3">
+        <div class="tip-card purple">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0 mt-0.5" style="color:#a855f7;font-size:22px;font-variation-settings:'FILL' 1;">diversity_3</span>
+            <div class="flex-1">
+              <p class="font-bold text-sm mb-1" style="color:#003345;">落地前就找好队友</p>
+              <ul class="text-sm space-y-1.5" style="color:#326177;">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px;color:#a855f7;margin-top:1px;">person_add</span>为每个你要参加的活动报名</li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px;color:#a855f7;margin-top:1px;">chat</span>留下你的Instagram或WhatsApp方便大家联系你</li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px;color:#a855f7;margin-top:1px;">add_circle</span>添加自己的预饮或聚会活动邀请他人加入</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <a href="/meetup" class="btn btn-primary" style="display:inline-flex;">
+          <span class="material-symbols-outlined" style="font-size:16px;">diversity_3</span>
+          查看谁要去
+        </a>
+      </div>
+    </section>
+
+    <!-- ── TRANSPORT ── -->
+    <section id="transport" class="section-anchor">
+      <span class="section-label">出行方式</span>
+      <h2 class="section-title">交通</h2>
+      <div class="space-y-3">
+        <div class="tip-card good">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#34C759;font-size:20px;font-variation-settings:'FILL' 1;">directions_transit</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">BTS空铁——万能首选</p>
+              <p class="text-sm mb-2" style="color:#326177;">宋干节期间运营至凌晨约2时。在任意站点办理兔子卡。</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs" style="color:#326177;">
+                <span><strong style="color:#003345;">GCircuit (Emsphere)：</strong>BTS Phrom Phong · 步行3分钟</span>
+                <span><strong style="color:#003345;">Silom / GOD / Soi 2&4：</strong>BTS Sala Daeng</span>
+                <span><strong style="color:#003345;">Sukhumvit酒吧区：</strong>BTS Nana或Asok</span>
+                <span><strong style="color:#003345;">Siam Songkran (RCA)：</strong>BTS Phetchaburi + 短程打车</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card danger">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#ef4444;font-size:20px;font-variation-settings:'FILL' 1;">car_crash</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">大型活动结束后Grab会让你失望——备好现金</p>
+              <p class="text-sm" style="color:#326177;line-height:1.6;">任何节日散场后（GCircuit、S2O、Siam Songkran），数千人同时打开Grab。App要么找不到司机，要么溢价4–5倍。备好<strong style="color:#003345;">฿500–800现金</strong>叫本地嘟嘟车或计价出租车。上车前先谈好价格——本地司机了解情况会多收费，但仍比等Grab快。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card warn">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#FF9F0A;font-size:20px;font-variation-settings:'FILL' 1;">smartphone</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">打车软件贴士</p>
+              <p class="text-sm" style="color:#326177;line-height:1.6;">下载<strong style="color:#003345;">Bolt</strong>（溢价时通常比Grab便宜）和<strong style="color:#003345;">InDriver</strong>（自己出价）。离开场馆出口步行10–15分钟再打开任何App——远离人群后价格会大幅下降。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SAFETY ── -->
+    <section id="safety" class="section-anchor">
+      <span class="section-label">贴士</span>
+      <h2 class="section-title">安全与内行贴士</h2>
+      <div class="space-y-3">
+
+        <div class="tip-card good">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#34C759;font-size:20px;font-variation-settings:'FILL' 1;">share_location</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">进场前分享实时位置</p>
+              <p class="text-sm" style="color:#326177;">进入任何节日前用Google Maps实时位置与同伴共享。场内信号中断——提前约好实体集合点和时间。不要假设WhatsApp会正常工作。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card warn">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#FF9F0A;font-size:20px;font-variation-settings:'FILL' 1;">water_drop</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">泳池派对时做好防水</p>
+              <p class="text-sm" style="color:#326177;">在任意7-Eleven购买防水手机袋（฿80–100）。把钱包留在酒店——只带一张卡和装在密封袋里的现金。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card warn">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#FF9F0A;font-size:20px;font-variation-settings:'FILL' 1;">thermostat</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">中暑是真实风险</p>
+              <p class="text-sm" style="color:#326177;">38–42°C，跳舞、喝酒、直晒。每小时喝一瓶水。路边椰子水富含电解质。感到头晕或恶心 = 立即找阴凉处喝水。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card info">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#40cef3;font-size:20px;font-variation-settings:'FILL' 1;">local_pharmacy</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">曼谷可在药店直接购买PrEP</p>
+              <p class="text-sm" style="color:#326177;">大多数药店有售通用PrEP（替诺福韦/恩曲他滨）。一个月约฿300–500，无需处方。询问Ricovir-EM或Teno-EM。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card info">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined flex-shrink-0" style="color:#40cef3;font-size:20px;font-variation-settings:'FILL' 1;">emergency</span>
+            <div>
+              <p class="font-bold text-sm mb-1" style="color:#003345;">紧急联系方式</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs mt-1" style="color:#326177;">
+                <span><strong style="color:#003345;">旅游警察（英语）：</strong>1155</span>
+                <span><strong style="color:#003345;">紧急救援：</strong>191</span>
+                <span><strong style="color:#003345;">救护车：</strong>1669</span>
+                <span><strong style="color:#003345;">Bumrungrad医院：</strong>+66 2 066 8888</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── MAP ── -->
+    <section id="map" class="section-anchor">
+      <span class="section-label">探索曼谷</span>
+      <h2 class="section-title">曼谷同志地图</h2>
+      <p class="text-sm mb-5" style="color:#326177;line-height:1.7;">同志酒吧、俱乐部、桑拿、酒店、美食等——Silom、Sukhumvit及周边全部标注在地图上。</p>
+      <a href="/map" class="btn btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white" style="background:linear-gradient(135deg,#006479,#40cef3);">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">map</span>
+        打开曼谷地图
+      </a>
+    </section>
+
+  </main>
+</div>
+
+</BaseLayout>
+
+<script>
+const sections = document.querySelectorAll('.section-anchor');
+const navLinks = document.querySelectorAll('.guide-sidebar a[href^="#"]');
+
+function updateActive() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= (s as HTMLElement).offsetTop - 120) current = '#' + s.id;
+  });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === current));
+}
+
+window.addEventListener('scroll', updateActive, { passive: true });
+updateActive();
+
+(window as any).closeMobileNav = function() {
+  document.getElementById('guide-sidebar')?.classList.remove('open');
+};
+</script>
