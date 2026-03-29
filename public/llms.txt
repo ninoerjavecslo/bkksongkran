@@ -1,0 +1,45 @@
+# BKK Songkran
+
+> The ultimate guide to Songkran 2026 in Bangkok, Thailand. Festival dates, lineups, survival tips, water fight zones, and community meetups.
+
+## What is this site
+
+BKK Songkran (bkksongkran.com) is a travel guide for Songkran 2026 in Bangkok. It covers the three major ticketed festival events (S2O, Siam Songkran, GCircuit), free street celebrations, practical survival tips, and a community meetup board for travellers.
+
+Songkran is Thailand's New Year water festival, celebrated April 10–14 in Bangkok. It is the world's largest water fight.
+
+## Pages
+
+- [Home](https://bkksongkran.com/) — Overview, featured festivals, top blog posts
+- [Events](https://bkksongkran.com/events) — All Songkran 2026 events: S2O, Siam Songkran, GCircuit, street parties, cultural events
+- [Blog / Guide](https://bkksongkran.com/blog) — 12 in-depth articles covering what to do, where to go, what to pack
+- [Survival Kit](https://bkksongkran.com/survival-kit) — Interactive packing checklist for Songkran
+- [Heat Map](https://bkksongkran.com/map) — Water fight zone map across Bangkok
+- [Who's Going?](https://bkksongkran.com/meetup) — Community board where travellers sign up to meet others at events
+- [Ticket Exchange](https://bkksongkran.com/tickets) — Peer-to-peer board for buying and selling festival tickets
+- [AI Guide](https://bkksongkran.com/ai) — GPT-4o powered Songkran assistant
+- [Gay & LGBTQ+ Guide](https://bkksongkran.com/gay-guide) — GCircuit, Silom, LGBTQ+ Songkran scene
+
+## Key facts
+
+- Songkran 2026 dates in Bangkok: April 10–14, 2026
+- S2O Songkran Festival: April 11–13, S2O Land (Ratchada), ฿1,800–฿2,500
+- Siam Songkran Music Festival: April 12–14, Bravo BKK Arena (RCA), ฿1,500–฿2,000
+- GCircuit Bangkok Songkran Party: April 11–13, UOB Live Hall (Emsphere), ฿2,800–฿4,900
+- Best free water fight zones: Silom Road, Siam Square, RCA, Khao San Road area
+- Best transport: BTS Skytrain (extended hours), avoid Grab 2pm–8pm due to surge pricing
+
+## Blog articles
+
+- [What is Songkran Festival?](https://bkksongkran.com/blog/what-is-songkran-festival)
+- [When is Songkran 2026?](https://bkksongkran.com/blog/when-is-songkran-2026)
+- [Where to Celebrate Songkran in Bangkok](https://bkksongkran.com/blog/where-to-celebrate-songkran-bangkok)
+- [What to Do During Songkran](https://bkksongkran.com/blog/what-to-do-during-songkran)
+- [Songkran Practical Guide](https://bkksongkran.com/blog/songkran-practical-guide)
+- [Songkran Bangkok vs Chiang Mai](https://bkksongkran.com/blog/songkran-bangkok-vs-chiang-mai)
+- [S2O Festival 2026 Lineup](https://bkksongkran.com/blog/s2o-festival-2026-lineup)
+- [Siam Songkran 2026 Lineup](https://bkksongkran.com/blog/siam-songkran-2026-lineup)
+- [GCircuit Songkran 2026 Lineup](https://bkksongkran.com/blog/gcircuit-songkran-2026-lineup)
+- [Silom Road Songkran Guide](https://bkksongkran.com/blog/silom-road-songkran-guide)
+- [Songkran Water and Cash Guide](https://bkksongkran.com/blog/songkran-water-and-cash-guide)
+- [Songkran Bangkok First Timer Guide](https://bkksongkran.com/blog/songkran-bangkok-first-timer-guide)
