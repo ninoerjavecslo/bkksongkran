@@ -66,7 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const { error } = await resend.emails.send({
     from:    'BKK Songkran <onboarding@resend.dev>',
-    to:      'nino.erjavec.2000@gmail.com',
+    to:      import.meta.env.CONTACT_RECIPIENT_EMAIL,
     subject: subjectMap[type],
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;">

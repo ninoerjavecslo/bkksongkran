@@ -39,7 +39,7 @@ const {
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:site_name" content="BKK Songkran" />
   <meta property="og:locale" content="en_US" />
-  {canonical && <meta property="og:url" content={canonical} />}
+  <meta property="og:url" content={canonical ?? Astro.url.href} />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
