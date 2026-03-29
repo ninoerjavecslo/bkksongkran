@@ -69,6 +69,8 @@ const type = Astro.url.searchParams.get('type') || 'general';
           <textarea id="contact-message" maxlength="2000" rows="6" placeholder="Tell us more..." class="w-full px-4 py-3 rounded-xl text-sm font-medium outline-none resize-none" style="background:rgba(225,243,255,0.7);border:1.5px solid rgba(192,232,255,0.8);color:#003345;"></textarea>
         </div>
 
+        <div id="turnstile-contact" class="mt-1"></div>
+
         <p id="contact-error" class="hidden text-xs font-bold" style="color:#b31b25;"></p>
         <p id="contact-success" class="hidden text-sm font-bold" style="color:#16a34a;">Message sent! We'll get back to you soon.</p>
 
@@ -123,12 +125,15 @@ document.getElementById('contact-submit')!.addEventListener('click', async () =>
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = 'Please enter a valid email.'; errEl.classList.remove('hidden'); return; }
   if (!message) { errEl.textContent = 'Please enter a message.'; errEl.classList.remove('hidden'); return; }
 
+  const turnstileToken = (window as any).__contactTurnstileId !== null ? ((window as any).turnstile?.getResponse((window as any).__contactTurnstileId) || '') : '';
+  if (!turnstileToken) { errEl.textContent = 'Please complete the security check.'; errEl.classList.remove('hidden'); return; }
+
   btn.setAttribute('disabled', 'true'); btn.style.opacity = '0.6';
   try {
     const res = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type, name, email, message }),
+      body: JSON.stringify({ type, name, email, message, turnstileToken }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed');
@@ -136,6 +141,7 @@ document.getElementById('contact-submit')!.addEventListener('click', async () =>
     (document.getElementById('contact-name') as HTMLInputElement).value = '';
     (document.getElementById('contact-email') as HTMLInputElement).value = '';
     (document.getElementById('contact-message') as HTMLTextAreaElement).value = '';
+    if ((window as any).turnstile && (window as any).__contactTurnstileId !== null) (window as any).turnstile.reset((window as any).__contactTurnstileId);
   } catch (e: any) {
     errEl.textContent = e.message || 'Something went wrong. Try again.';
     errEl.classList.remove('hidden');
@@ -143,4 +149,18 @@ document.getElementById('contact-submit')!.addEventListener('click', async () =>
     btn.removeAttribute('disabled'); btn.style.opacity = '1';
   }
 });
+</script>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script is:inline>
+  window.__contactTurnstileId = null;
+  function onContactTurnstileLoad() {
+    if (window.turnstile && window.__contactTurnstileId === null) {
+      window.__contactTurnstileId = window.turnstile.render('#turnstile-contact', {
+        sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+        theme: 'light',
+      });
+    }
+  }
+  var _ct = setInterval(function() { if (window.turnstile) { clearInterval(_ct); onContactTurnstileLoad(); } }, 100);
 </script>

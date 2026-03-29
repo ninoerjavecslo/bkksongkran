@@ -106,7 +106,10 @@ function jsonError(message: string, status: number) {
 const TURNSTILE_SECRET = import.meta.env.TURNSTILE_SECRET_KEY;
 
 async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
-  if (!TURNSTILE_SECRET) return true; // skip in dev if not set
+  if (!TURNSTILE_SECRET) {
+    if (import.meta.env.DEV) return true; // skip only in local dev
+    return false; // fail closed in production
+  }
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

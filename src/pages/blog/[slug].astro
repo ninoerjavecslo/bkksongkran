@@ -59,22 +59,24 @@ function renderContent(md: string): string {
 
     // Table
     if (trimmed.startsWith('|')) {
-      const cells = trimmed.split('|').filter(c => c.trim());
-      // Skip separator rows
-      if (cells.every(c => /^[\s\-:]+$/.test(c))) {
+      // Split and preserve empty cells: strip leading/trailing pipe then split
+      const rawCells = trimmed.replace(/^\||\|$/g, '').split('|');
+      // Skip separator rows (---|--- etc)
+      if (rawCells.every(c => /^[\s\-:]+$/.test(c))) {
         tableHead = false;
         continue;
       }
+      const cells = rawCells.map(c => c.trim());
       if (!inTable) {
         out.push('<div class="table-wrap"><table>');
         out.push('<thead>');
-        out.push(`<tr>${cells.map(c => `<th>${fmt(c.trim())}</th>`).join('')}</tr>`);
+        out.push(`<tr>${cells.map(c => `<th>${fmt(c)}</th>`).join('')}</tr>`);
         out.push('</thead><tbody>');
         inTable = true;
         tableHead = true;
         continue;
       }
-      out.push(`<tr>${cells.map(c => `<td>${fmt(c.trim())}</td>`).join('')}</tr>`);
+      out.push(`<tr>${cells.map(c => `<td>${fmt(c)}</td>`).join('')}</tr>`);
       continue;
     }
 

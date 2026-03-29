@@ -228,7 +228,6 @@ Centered around Siam Paragon and MBK, this is where Bangkok's young and trendy c
 **Best for:** EDM fans, premium experience
 **Crowd level:** Insane
 **Dates:** April 11–13
-**Price:** ฿1,800–2,500
 **Lineup 2026:** Alan Walker × Steve Aoki, Zedd, Kygo
 
 The world's wettest music festival. Massive water cannons sync to the DJ drops. Premium production, international headliners, and an electric atmosphere.
@@ -239,7 +238,6 @@ The world's wettest music festival. Massive water cannons sync to the DJ drops. 
 **Best for:** Festival-goers who want variety
 **Crowd level:** High
 **Dates:** April 11–14
-**Price:** ฿1,500–2,000
 **Lineup 2026:** Martin Garrix, Marshmello, John Summit, ARTBAT
 
 Four nights of world-class DJs at Bravo BKK Arena. Slightly more accessible than S2O, great lineup, and in the heart of Bangkok's nightlife district.
@@ -250,7 +248,6 @@ Four nights of world-class DJs at Bravo BKK Arena. Slightly more accessible than
 **Best for:** LGBTQ+ travelers, circuit party fans
 **Crowd level:** High
 **Dates:** April 10–13
-**Price:** ฿2,800–4,900
 
 The 20th anniversary of Asia's largest gay circuit festival. Night parties at UOB Live Hall (Emsphere) plus daytime pool parties at Tribe Sky Beach Club. Inclusive, welcoming, and spectacular.
 
@@ -517,7 +514,6 @@ Three nights. Three headliners. One massive water stage.
 **Dates:** April 11–13, 2026
 **Venue:** S2O Land, Ratchada Road, Bangkok
 **Nearest station:** MRT Thailand Cultural Centre
-**Tickets:** ฿1,800–2,500 (day pass)
 **Age requirement:** 20+ (original passport required)
 
 ---
@@ -526,7 +522,7 @@ Three nights. Three headliners. One massive water stage.
 
 ### Day 1 — Friday, April 11
 
-| Time | Artist |
+| Slot | Artist |
 |------|--------|
 | Opening | AC Slater |
 | | William Black |
@@ -538,7 +534,7 @@ The opening night culminates in the world premiere of "Lonely Club" — the firs
 
 ### Day 2 — Saturday, April 12
 
-| Time | Artist |
+| Slot | Artist |
 |------|--------|
 | Opening | Marie Vaunt |
 | | Dabin |
@@ -550,7 +546,7 @@ Don Diablo brings his CTRL ALT DELETE show to Asia for the first time. Zedd clos
 
 ### Day 3 — Sunday, April 13
 
-| Time | Artist |
+| Slot | Artist |
 |------|--------|
 | Opening | Da Tweekaz |
 | | Ray Volpe |
@@ -580,9 +576,34 @@ The new S2O Land venue is directly accessible from **MRT Thailand Cultural Centr
 
 ## Tickets
 
-Day passes run ฿1,800–2,500 depending on which day and how early you book. VIP packages with dedicated zones and premium viewing are available for ฿3,500+.
+Day passes and VIP packages with dedicated zones and premium viewing are available on the official S2O website.
 
 **All ticket holders must be 20+ with original passport.** Photocopies are not accepted. There are no exceptions.
+
+---
+
+## Also Happening During Songkran Week
+
+### Siam Songkran "The Melora" (Apr 11–14)
+Four-night festival at RCA's Bravo BKK Arena. Four headliners on four consecutive nights:
+- **Apr 11:** Afrojack b2b R3HAB
+- **Apr 12:** Marshmello
+- **Apr 13:** Martin Garrix (#1 DJ in the world)
+- **Apr 14:** John Summit
+
+**Venue:** Bravo BKK Arena, Royal City Avenue · **Nearest station:** MRT Phetchaburi or Asoke
+
+### GCircuit 20th Anniversary "ADRO-MADA" (Apr 10–13)
+Asia's biggest LGBTQ+ circuit party celebrates 20 years at Emsphere. Four themed nights across UOB Live Hall and Tribe Sky Beach Club rooftop pool:
+- **Apr 10:** Illuminate Opening — Mario Beckman
+- **Apr 11:** Boy Pool Party — Luis Vazquez
+- **Apr 12:** Bear Pool Party / AquaXXL — Tomer Maizner
+- **Apr 13:** Automata Closing — Tom Stephan
+
+**Venue:** Emsphere, Sukhumvit · **Nearest station:** BTS Phrom Phong
+
+### Silom Soi 2 & 4 — Free Street Party (Apr 13–15)
+Bangkok's gay epicenter transforms into an open-air block party. Bars open from noon, completely packed by 2pm. Free entry — the heart of Songkran for the LGBTQ+ community.
     `,
   },
   {
@@ -609,7 +630,6 @@ This is the festival for people who want big names, an indoor/outdoor hybrid ven
 **Dates:** April 11–14, 2026
 **Venue:** Bravo BKK Arena, Royal City Avenue (RCA), Bangkok
 **Nearest station:** MRT Phetchaburi or Asoke (then taxi/Grab to RCA)
-**Tickets:** ฿1,500–2,000 (day pass)
 **Age requirement:** 20+ (original passport required)
 
 ---
@@ -618,9 +638,9 @@ This is the festival for people who want big names, an indoor/outdoor hybrid ven
 
 ### Night 1 — Friday, April 11
 
-| Order | Artist |
-|-------|--------|
-| | 22Bullets |
+| Slot | Artist |
+|------|--------|
+| Opening | 22Bullets |
 | | Andromedik |
 | | Ben Nicky |
 | HEADLINER | **Afrojack b2b R3HAB** |
@@ -629,9 +649,9 @@ Afrojack and R3HAB back-to-back is an insane way to open the festival. Two of th
 
 ### Night 2 — Saturday, April 12
 
-| Order | Artist |
-|-------|--------|
-| | Arcando |
+| Slot | Artist |
+|------|--------|
+| Opening | Arcando |
 | | Slushii |
 | | Third Party b3b DubVision b3b Matisse&Sadko |
 | | Alok (Urban Theory Show) |
@@ -641,9 +661,9 @@ The Saturday lineup is stacked. Alok brings his special Urban Theory visual show
 
 ### Night 3 — Sunday, April 13
 
-| Order | Artist |
-|-------|--------|
-| | Layton Giordani |
+| Slot | Artist |
+|------|--------|
+| Opening | Layton Giordani |
 | | Agents of Time |
 | | ARTBAT b2b R3HAB |
 | HEADLINER | **Martin Garrix** |
@@ -652,9 +672,9 @@ This is the headline event of the entire Siam Songkran festival. Martin Garrix i
 
 ### Night 4 — Monday, April 14
 
-| Order | Artist |
-|-------|--------|
-| | DCR Milda |
+| Slot | Artist |
+|------|--------|
+| Opening | DCR Milda |
 | | Gorgon City |
 | | Vini Vici |
 | HEADLINER | **John Summit** |
@@ -675,7 +695,31 @@ RCA is not directly on the BTS/MRT. The closest stations are:
 - **MRT Phetchaburi** — then 15-minute taxi/Grab (~฿60-80)
 - **MRT Asoke / BTS Asok** — then 20-minute taxi/Grab
 
-During Songkran, Grab will surge. Budget ฿150-300 each way and use the pool option if available. **Do not rent a motorbike taxi for this** — the roads around RCA will be chaotic on festival nights.
+During Songkran, Grab will surge. Budget accordingly and use the pool option if available. **Do not rent a motorbike taxi for this** — the roads around RCA will be chaotic on festival nights.
+
+---
+
+## Also Happening During Songkran Week
+
+### S2O Songkran Music Festival (Apr 11–13)
+Asia's premier water music festival with industrial water cannons and three massive headliners:
+- **Apr 11:** Alan Walker × Steve Aoki (world premiere "Lonely Club")
+- **Apr 12:** Zedd
+- **Apr 13:** Kygo
+
+**Venue:** S2O Land, Ratchada Road · **Nearest station:** MRT Thailand Cultural Centre
+
+### GCircuit 20th Anniversary "ADRO-MADA" (Apr 10–13)
+Asia's biggest LGBTQ+ circuit party at Emsphere. Four themed nights:
+- **Apr 10:** Illuminate Opening — Mario Beckman
+- **Apr 11:** Boy Pool Party — Luis Vazquez
+- **Apr 12:** Bear Pool Party / AquaXXL — Tomer Maizner
+- **Apr 13:** Automata Closing — Tom Stephan
+
+**Venue:** Emsphere, Sukhumvit · **Nearest station:** BTS Phrom Phong
+
+### Silom Soi 2 & 4 — Free Street Party (Apr 13–15)
+Bangkok's gay district becomes an open-air block party. Bars open from noon, no ticket needed. One of the most electric free events of Songkran week.
     `,
   },
   {
@@ -702,7 +746,6 @@ GCircuit is Asia's premier LGBTQ+ circuit party and one of the longest-running e
 - UOB Live Hall, Emsphere (indoor, capacity 5,000+)
 - Tribe Sky Beach Club, Emsphere (outdoor rooftop pool deck)
 **Nearest station:** BTS Phrom Phong (direct access to Emsphere)
-**Tickets:** ฿2,800–4,900 (single night / multi-night packages)
 **Age requirement:** 20+ (original passport required)
 
 GCircuit is **inclusive regardless of age, looks, or body type** — it's one of the rare circuit events that explicitly maintains this culture. Straight allies are welcome.
@@ -715,9 +758,9 @@ GCircuit is **inclusive regardless of age, looks, or body type** — it's one of
 **Theme:** Chrome / Tactical
 **Venue:** UOB Live Hall
 
-| Order | DJ |
-|-------|----|
-| | TAKI & RITA |
+| Slot | Artist |
+|------|--------|
+| Opening | TAKI & RITA |
 | HEADLINER | **Mario Beckman** |
 | Closing | Allan Natal |
 
@@ -728,9 +771,9 @@ The opening night sets the tone for the entire weekend. Chrome and Tactical dres
 **Time:** Noon – 7pm
 **Venue:** Tribe Sky Beach Club (outdoor rooftop)
 
-| Order | DJ |
-|-------|----|
-| | CHU & SUN JUNE |
+| Slot | Artist |
+|------|--------|
+| Opening | CHU & SUN JUNE |
 | HEADLINER | **Luis Vazquez** |
 | Closing | Alex Ramos |
 
@@ -741,9 +784,9 @@ The Boy Pool Party is GCircuit's daytime outdoor event on the Emsphere rooftop. 
 **Time:** Noon – 7pm
 **Venue:** Tribe Sky Beach Club (outdoor rooftop)
 
-| Order | DJ |
-|-------|----|
-| | Grant Jang |
+| Slot | Artist |
+|------|--------|
+| Opening | Grant Jang |
 | HEADLINER | **Tomer Maizner** |
 | Closing | Sagi Kariv |
 
@@ -753,9 +796,9 @@ AquaXXL / Bear Pool Party is Bangkok's biggest annual bear event. Silver, Chrome
 **Theme:** Kinky / Leather
 **Venue:** UOB Live Hall
 
-| Order | DJ |
-|-------|----|
-| | Herric Pu |
+| Slot | Artist |
+|------|--------|
+| Opening | Herric Pu |
 | | Isak Salazar |
 | HEADLINER | **Tom Stephan** (closing set) |
 
@@ -782,10 +825,33 @@ Recommended hotels within walking distance: Hilton Sukhumvit, DoubleTree Sukhumv
 
 ## Tickets & Multi-Night Packages
 
-Single night tickets: ฿2,800–3,500
-Full weekend packages: ฿4,900+
+Single night tickets and multi-night packages are available on the official GCircuit website. Multi-night packages offer significant savings. Given that opening and closing nights often sell out first, booking early is recommended.
 
-Multi-night packages offer significant savings. Given that opening and closing nights often sell out first, booking a package early is recommended.
+---
+
+## Also Happening During Songkran Week
+
+GCircuit runs alongside two of the world's biggest water music festivals:
+
+### S2O Songkran Music Festival (Apr 11–13)
+Asia's premier water music festival. Industrial water cannons, massive EDM stage, and three headliners:
+- **Apr 11:** Alan Walker × Steve Aoki (world premiere of "Lonely Club")
+- **Apr 12:** Zedd
+- **Apr 13:** Kygo
+
+**Venue:** S2O Land, Ratchada Road · **Nearest station:** MRT Thailand Cultural Centre
+
+### Siam Songkran "The Melora" (Apr 11–14)
+Four-night festival at RCA (Royal City Avenue). Current #1 DJ Martin Garrix headlines on Apr 13:
+- **Apr 11:** Afrojack b2b R3HAB
+- **Apr 12:** Marshmello
+- **Apr 13:** Martin Garrix
+- **Apr 14:** John Summit
+
+**Venue:** Bravo BKK Arena, Royal City Avenue · **Nearest station:** MRT Phetchaburi or Asoke
+
+### Silom Soi 2 & 4 — Free LGBTQ+ Street Party (Apr 13–15)
+Bangkok's gay epicenter transforms into an open-air block party. Bars open from noon, the street floods by 2pm. No ticket needed — this is the free heart of Songkran for the LGBTQ+ community.
     `,
   },
   {
@@ -1068,9 +1134,9 @@ You're attending a water festival. Pack accordingly.
 - Sanam Luang / Maha Songkran (Apr 12-15) — traditional, near the Grand Palace
 
 **Ticketed events:**
-- S2O Songkran Music Festival (Apr 11-13) — ฿1,800-2,500/night, S2O Land, Ratchada
-- Siam Songkran "The Melora" (Apr 11-14) — ฿1,500-2,000/night, Bravo BKK Arena, RCA
-- GCircuit "ADRO-MADA" (Apr 10-13) — ฿2,800-4,900/night, UOB Live Hall, Emsphere
+- S2O Songkran Music Festival (Apr 11-13) — S2O Land, Ratchada · MRT Thailand Cultural Centre
+- Siam Songkran "The Melora" (Apr 11-14) — Bravo BKK Arena, RCA · MRT Phetchaburi or Asoke
+- GCircuit "ADRO-MADA" (Apr 10-13) — UOB Live Hall, Emsphere · BTS Phrom Phong
 
 You don't need to attend any ticketed events to have an amazing Songkran. But if you like electronic music and want a guaranteed crowd in a controlled environment, they're worth it.
 

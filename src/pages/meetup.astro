@@ -674,7 +674,10 @@ function renderChips(containerEl, entries, color) {
 
       if (isHandle || isPhone) {
         const link = document.createElement('a');
-        link.href = isHandle ? 'https://instagram.com/' + contact.slice(1) : 'https://wa.me/' + contact.replace(/\D/g,'');
+        const builtUrl = isHandle ? 'https://instagram.com/' + contact.slice(1) : 'https://wa.me/' + contact.replace(/\D/g,'');
+        const SAFE = ['https://instagram.com/','https://wa.me/','https://t.me/'];
+        if (!SAFE.some(p => builtUrl.startsWith(p))) return;
+        link.href = builtUrl;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.style.cssText = `padding:2px 8px;border-radius:20px;background:${color}18;font-size:11px;font-weight:700;color:${color};text-decoration:none;white-space:nowrap;flex-shrink:0;`;
@@ -825,7 +828,10 @@ function buildCustomCard(ev, day) {
   if (platform && PLATFORM_META[platform] && handle) {
     const pm = PLATFORM_META[platform];
     const contactBtn = document.createElement('a');
-    contactBtn.href = pm.href(handle);
+    const builtContactUrl = pm.href(handle);
+    const SAFE_PREFIXES = ['https://instagram.com/','https://wa.me/','https://t.me/'];
+    if (!SAFE_PREFIXES.some(p => builtContactUrl.startsWith(p))) return wrap;
+    contactBtn.href = builtContactUrl;
     contactBtn.target = '_blank';
     contactBtn.rel = 'noopener noreferrer';
     contactBtn.style.cssText = `display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:700;color:white;background:${pm.bg};box-shadow:0 4px 16px ${pm.shadow};text-decoration:none;transition:opacity 0.15s;`;
