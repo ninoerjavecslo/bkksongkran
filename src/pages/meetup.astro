@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 
-const SUPABASE_URL = 'https://wipegwhwfbykbjznfpry.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_e6nl9yCyxI_LFRrxqQKalw_Hhhm26r9';
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
 const days = [
   { id: 'apr11', label: 'Apr 11', sub: 'Friday' },
