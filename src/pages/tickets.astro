@@ -704,14 +704,9 @@ function ago(d:string) {
 load();
 </script>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileTicketsLoad" async defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script>
 let ticketsTurnstileId: any = null;
-let turnstileTicketsReady = false;
-
-(window as any).onTurnstileTicketsLoad = function() {
-  turnstileTicketsReady = true;
-};
 
 (window as any).openUnlockModal = (function(orig: any) {
   return function() {
@@ -724,7 +719,7 @@ let turnstileTicketsReady = false;
           'refresh-expired': 'auto',
         });
       } else {
-        setTimeout(tryRender, 200);
+        setTimeout(tryRender, 100);
       }
     }
     tryRender();

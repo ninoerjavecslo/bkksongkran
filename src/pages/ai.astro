@@ -178,6 +178,7 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 
 const history: { role: 'user' | 'assistant'; content: string }[] = [];
 let busy = false;
+let chatTurnstileId: any = null;
 
 // Cache static DOM elements
 const msgsEl = document.getElementById('chat-messages')!;
@@ -280,17 +281,29 @@ async function sendMessage() {
   addTyping(typingId);
 
   try {
+    // Render once, reuse after
     let turnstileToken = '';
     try {
-      turnstileToken = await (window as any).turnstile?.getResponse?.() || '';
-      if (!turnstileToken && (window as any).turnstile) {
-        turnstileToken = await new Promise(resolve => {
-          (window as any).turnstile.render('#turnstile-chat', {
+      if (!(window as any).turnstile) await new Promise<void>(r => { const t = setInterval(() => { if ((window as any).turnstile) { clearInterval(t); r(); } }, 100); });
+      if (chatTurnstileId === null) {
+        chatTurnstileId = await new Promise(resolve => {
+          const id = (window as any).turnstile.render('#turnstile-chat', {
             sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
-            callback: resolve,
+            callback: () => {},
             'refresh-expired': 'auto',
           });
+          // Wait for widget to complete
+          const poll = setInterval(() => {
+            const t = (window as any).turnstile.getResponse(id);
+            if (t) { clearInterval(poll); resolve(id); }
+          }, 200);
         });
+      }
+      // Wait for token if not ready yet
+      let waited = 0;
+      while (!(turnstileToken = (window as any).turnstile.getResponse(chatTurnstileId) || '') && waited < 30000) {
+        await new Promise(r => setTimeout(r, 300));
+        waited += 300;
       }
     } catch { turnstileToken = ''; }
 
@@ -305,9 +318,11 @@ async function sendMessage() {
     history.push({ role: 'assistant', content: reply });
     document.getElementById(typingId)?.remove();
     addMessage('bot', reply);
-  } catch {
+    // Reset so next message gets a fresh token
+    if (chatTurnstileId !== null) (window as any).turnstile.reset(chatTurnstileId);
+  } catch (err: any) {
     document.getElementById(typingId)?.remove();
-    addMessage('bot', 'Connection issue — check your internet and try again!');
+    addMessage('bot', err?.message?.includes('Bot check') ? 'Security check failed — please refresh and try again.' : 'Connection issue — check your internet and try again!');
   }
 
   busy = false;
