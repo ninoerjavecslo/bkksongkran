@@ -93,12 +93,21 @@ const {
   <style is:inline>
     @font-face { font-family: 'Bebas Neue'; font-display: swap; src: local('Bebas Neue'); }
     .font-headline { font-family: 'Bebas Neue', 'Arial Narrow', Arial, sans-serif; }
+    /* Fallback for Material Symbols before font loads */
+    .material-symbols-outlined { font-family: 'Material Symbols Outlined', 'Helvetica Neue', sans-serif; }
   </style>
 
-  <!-- Fonts — single combined request, display=swap avoids invisible text -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- Material Symbols — swap so text stays visible while icon font loads -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <!-- Fonts — async load to avoid render blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </noscript>
+
+  <!-- Material Symbols — defer below-fold font -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  </noscript>
 
   <!-- Organization Schema -->
   <script type="application/ld+json" is:inline>{"@context":"https://schema.org","@type":"Organization","name":"BKK Songkran","url":"https://bkksongkran.com","logo":"https://bkksongkran.com/og-image.jpg","sameAs":[]}</script>
