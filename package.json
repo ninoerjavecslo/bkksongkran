@@ -8,6 +8,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/netlify": "^5.5.4",
     "@astrojs/node": "^8.3.4",
     "astro": "^4.5.0",
     "firebase": "^10.9.0",
