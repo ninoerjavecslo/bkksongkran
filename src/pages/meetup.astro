@@ -5,31 +5,35 @@ const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
 const days = [
-  { id: 'apr11', label: 'Apr 11', sub: 'Friday' },
-  { id: 'apr12', label: 'Apr 12', sub: 'Saturday' },
-  { id: 'apr13', label: 'Apr 13', sub: '🔥 Peak Day' },
-  { id: 'apr14', label: 'Apr 14', sub: 'Monday' },
+  { id: 'apr10', label: 'Apr 10', sub: 'Friday' },
+  { id: 'apr11', label: 'Apr 11', sub: 'Saturday' },
+  { id: 'apr12', label: 'Apr 12', sub: 'Sunday' },
+  { id: 'apr13', label: 'Apr 13', sub: 'Monday 🔥' },
+  { id: 'apr14', label: 'Apr 14', sub: 'Tuesday' },
 ];
 
 const parties = [
-  { id: 's2o-night-1',      day: 'apr11', name: 'S2O Night 1',                      headliner: 'Alan Walker × Steve Aoki',   venue: 'S2O Land, Ratchada',        color: '#0ea5e9', icon: 'water_drop',  type: 'Festival' },
+  { id: 'gcircuit-opening',  day: 'apr10', name: 'GCircuit — Opening Party: Team Alpha', headliner: 'Brian Solis, Mario Beckman', venue: 'UOB Live Hall, Emsphere',   color: '#a855f7', icon: 'nightlife',   type: 'Circuit' },
+
+  { id: 's2o-night-1',      day: 'apr11', name: 'S2O Night 1',                      headliner: 'Alan Walker × Steve Aoki',    venue: 'S2O Land, Ratchada',        color: '#0ea5e9', icon: 'water_drop',  type: 'Festival' },
   { id: 'siam-night-1',     day: 'apr11', name: 'Siam Songkran Night 1',             headliner: 'Afrojack b2b R3HAB',          venue: 'Bravo BKK Arena, RCA',      color: '#006479', icon: 'festival',    type: 'Festival' },
-  { id: 'gcircuit-opening', day: 'apr11', name: 'GCircuit Illuminate Opening',       headliner: 'Mario Beckman',               venue: 'UOB Live Hall, Emsphere',   color: '#a855f7', icon: 'nightlife',   type: 'Circuit' },
+  { id: 'gcircuit-pool-1',  day: 'apr11', name: 'GCircuit — Boy Pool Party: AQUA',  headliner: 'Boren, Kai',                  venue: 'Tribe Sky Beach Club, Emsphere', color: '#a855f7', icon: 'pool',   type: 'Circuit' },
+  { id: 'gcircuit-main-1',  day: 'apr11', name: 'GCircuit — Main Party Vol. One: Empire Of The World', headliner: 'MisterMiss, Tomer Maizner', venue: 'UOB Live Hall, Emsphere', color: '#a855f7', icon: 'nightlife', type: 'Circuit' },
   { id: 'silom-apr11',      day: 'apr11', name: 'Silom Soi 2 & 4',                  headliner: 'Free street party',           venue: 'Silom Road',                color: '#f59e0b', icon: 'celebration', type: 'Free' },
 
   { id: 's2o-night-2',      day: 'apr12', name: 'S2O Night 2',                      headliner: 'Zedd',                        venue: 'S2O Land, Ratchada',        color: '#0ea5e9', icon: 'water_drop',  type: 'Festival' },
   { id: 'siam-night-2',     day: 'apr12', name: 'Siam Songkran Night 2',             headliner: 'Marshmello',                  venue: 'Bravo BKK Arena, RCA',      color: '#006479', icon: 'festival',    type: 'Festival' },
-  { id: 'gcircuit-boy-pool',day: 'apr12', name: 'GCircuit Boy Pool Party',           headliner: 'Luis Vazquez',                venue: 'Tribe Sky Beach Club',      color: '#a855f7', icon: 'pool',        type: 'Circuit' },
+  { id: 'gcircuit-pool-2',  day: 'apr12', name: 'GCircuit — Bear Pool Party: AQUAXXL', headliner: 'Pat+, CallMeKevin',        venue: 'Tribe Sky Beach Club, Emsphere', color: '#a855f7', icon: 'pool',   type: 'Circuit' },
+  { id: 'gcircuit-main-2',  day: 'apr12', name: 'GCircuit — Main Party Vol. Two: Adro Mada', headliner: 'Karsten Sollors, Fran Albuquerque', venue: 'UOB Live Hall, Emsphere', color: '#a855f7', icon: 'nightlife', type: 'Circuit' },
   { id: 'silom-apr12',      day: 'apr12', name: 'Silom Soi 2 & 4',                  headliner: 'Free street party',           venue: 'Silom Road',                color: '#f59e0b', icon: 'celebration', type: 'Free' },
 
   { id: 's2o-night-3',      day: 'apr13', name: 'S2O Night 3',                      headliner: 'Kygo',                        venue: 'S2O Land, Ratchada',        color: '#0ea5e9', icon: 'water_drop',  type: 'Festival' },
   { id: 'siam-night-3',     day: 'apr13', name: 'Siam Songkran Night 3',             headliner: 'Martin Garrix',               venue: 'Bravo BKK Arena, RCA',      color: '#006479', icon: 'festival',    type: 'Festival' },
-  { id: 'gcircuit-bear-pool',day:'apr13', name: 'GCircuit Bear Pool / AquaXXL',     headliner: 'Tomer Maizner',               venue: 'Tribe Sky Beach Club',      color: '#a855f7', icon: 'pool',        type: 'Circuit' },
+  { id: 'gcircuit-closing', day: 'apr13', name: 'GCircuit — Closing Party: Kink',   headliner: 'Jair Sandoval, Alex Acosta',  venue: 'UOB Live Hall, Emsphere',   color: '#a855f7', icon: 'nightlife',   type: 'Circuit' },
   { id: 'silom-apr13',      day: 'apr13', name: 'Silom Soi 2 & 4',                  headliner: 'Peak day — FREE',             venue: 'Silom Road',                color: '#f59e0b', icon: 'celebration', type: 'Free' },
   { id: 'khao-san-apr13',   day: 'apr13', name: 'Khao San Road',                    headliner: 'Street water fight — FREE',   venue: 'Khao San Road',             color: '#ef4444', icon: 'water_drop',  type: 'Free' },
 
   { id: 'siam-night-4',     day: 'apr14', name: 'Siam Songkran Night 4',             headliner: 'John Summit',                 venue: 'Bravo BKK Arena, RCA',      color: '#006479', icon: 'festival',    type: 'Festival' },
-  { id: 'gcircuit-closing', day: 'apr14', name: 'GCircuit Automata Closing',         headliner: 'Tom Stephan',                 venue: 'UOB Live Hall, Emsphere',   color: '#a855f7', icon: 'nightlife',   type: 'Circuit' },
   { id: 'silom-apr14',      day: 'apr14', name: 'Silom Soi 2 & 4',                  headliner: 'Free street party',           venue: 'Silom Road',                color: '#f59e0b', icon: 'celebration', type: 'Free' },
 ];
 
@@ -53,7 +57,7 @@ const partiesJson = JSON.stringify(parties);
       <p class="text-lg max-w-xl mb-3" style="color:#326177;">Find your crew. Sign up for events, add pre-drinks, after-parties — coordinate everything in one place.</p>
       <p class="text-sm flex items-center gap-1.5" style="color:#6b8fa3;">
         <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;color:#40cef3;">info</span>
-        Nickname only. No account needed.
+        No account needed. Organising a group or large meetup? <a href="/contact?type=whos-going" class="font-bold underline transition-colors hover:text-primary" style="color:#006479;">Contact us</a> — we can feature it.
       </p>
     </div>
   </section>
@@ -62,22 +66,22 @@ const partiesJson = JSON.stringify(parties);
   <div class="sticky top-20 z-30 px-6" style="border-bottom:1px solid rgba(192,232,255,0.3);">
     <div class="max-w-7xl mx-auto">
       <!-- Row 1: Add event button -->
-      <div class="flex justify-end pt-2 pb-1">
+      <div class="flex justify-end gap-2 pt-2 pb-1">
         <button onclick="openAddEvent()" class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 hover:scale-105" style="background:linear-gradient(135deg,#b4005d,#e91e8c);">
           <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">add</span>
           Add event
         </button>
       </div>
       <!-- Row 2: Day tabs -->
-      <div class="flex overflow-x-auto no-scrollbar">
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
         {days.map((day, i) => (
           <button
             data-day={day.id}
             onclick={`switchDay('${day.id}')`}
-            class={`day-tab flex-shrink-0 px-5 py-3 rounded-xl text-sm font-bold transition-all ${i === 0 ? 'active-day' : ''}`}
+            class={`day-tab flex-shrink-0 flex flex-col items-center px-5 py-3 rounded-2xl border-2 transition-all font-bold min-w-[80px] ${i === 0 ? 'active-day' : ''}`}
           >
-            <div class="day-tab-label">{day.label}</div>
-            <div class="day-tab-sub text-[9px] font-medium mt-0.5 opacity-70">{day.sub}</div>
+            <div class="day-tab-label text-sm font-black">{day.label}</div>
+            <div class="day-tab-sub text-[11px] font-semibold mt-0.5">{day.sub}</div>
           </button>
         ))}
       </div>
@@ -96,7 +100,7 @@ const partiesJson = JSON.stringify(parties);
   </div>
 
   <!-- ADD EVENT MODAL -->
-  <div id="add-event-modal" class="hidden fixed inset-0 flex items-end sm:items-center justify-center" style="z-index:9999;background:rgba(0,20,40,0.6);backdrop-filter:blur(6px);isolation:isolate;">
+  <div id="add-event-modal" class="hidden fixed inset-0 flex items-end sm:items-center justify-center" style="z-index:10000;background:rgba(0,20,40,0.6);backdrop-filter:blur(6px);">
     <div class="w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 overflow-y-auto" style="background:white;box-shadow:0 32px 80px rgba(0,0,0,0.3);max-height:90vh;">
       <div class="flex items-center justify-between mb-1">
         <h2 class="font-headline font-extrabold text-2xl" style="color:#003345;">Add Your Event</h2>
@@ -117,15 +121,16 @@ const partiesJson = JSON.stringify(parties);
             <label class="field-label">Day *</label>
             <div class="custom-select-wrap" id="day-select-wrap">
               <button type="button" class="custom-select-btn field-input flex items-center justify-between gap-2" onclick="toggleSelect('day-select-wrap')">
-                <span id="day-select-label">April 11 — Friday</span>
+                <span id="day-select-label">April 10 — Friday</span>
                 <span class="material-symbols-outlined text-base flex-shrink-0" style="color:#6b8fa3;">expand_more</span>
               </button>
-              <input type="hidden" id="custom-event-day" value="apr11" />
+              <input type="hidden" id="custom-event-day" value="apr10" />
               <div class="custom-select-menu hidden">
-                <button type="button" class="custom-select-option active" onclick="selectOption('day-select-wrap','custom-event-day','apr11','April 11 — Friday')">April 11 — Friday</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr12','April 12 — Saturday')">April 12 — Saturday</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr13','April 13 — Peak Day 🔥')">April 13 — Peak Day 🔥</button>
-                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr14','April 14 — Monday')">April 14 — Monday</button>
+                <button type="button" class="custom-select-option active" onclick="selectOption('day-select-wrap','custom-event-day','apr10','April 10 — Friday')">April 10 — Friday</button>
+                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr11','April 11 — Saturday')">April 11 — Saturday</button>
+                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr12','April 12 — Sunday')">April 12 — Sunday</button>
+                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr13','April 13 — Monday 🔥')">April 13 — Monday 🔥</button>
+                <button type="button" class="custom-select-option" onclick="selectOption('day-select-wrap','custom-event-day','apr14','April 14 — Tuesday')">April 14 — Tuesday</button>
               </div>
             </div>
           </div>
@@ -169,12 +174,10 @@ const partiesJson = JSON.stringify(parties);
           <input id="custom-event-contact" type="text" maxlength="50" placeholder="@yourhandle or +66..." class="field-input" />
           <p class="text-[10px] mt-1" style="color:#6b8fa3;">Shown publicly so people can join</p>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="field-label">Your email *</label>
-            <input id="custom-event-email" type="email" maxlength="100" placeholder="you@email.com" class="field-input" />
-            <p class="text-[10px] mt-1" style="color:#6b8fa3;">Private — only used if there's an issue</p>
-          </div>
+        <div>
+          <label class="field-label">Your email *</label>
+          <input id="custom-event-email" type="email" maxlength="100" placeholder="you@email.com" class="field-input" />
+          <p class="text-[10px] mt-1" style="color:#6b8fa3;">Private — only used if there's an issue</p>
         </div>
         <div>
           <label class="field-label">Details <span class="font-normal normal-case" style="color:#6b8fa3;">(optional)</span></label>
@@ -206,7 +209,11 @@ const partiesJson = JSON.stringify(parties);
     <div class="max-w-3xl mx-auto space-y-4">
 
       {days.map(day => (
-        <div id={`day-${day.id}`} class="day-panel space-y-4" style={day.id !== 'apr11' ? 'display:none;' : ''}>
+        <div id={`day-${day.id}`} class="day-panel space-y-4" style={day.id !== 'apr10' ? 'display:none;' : ''}>
+          <div class="flex items-baseline gap-3 pt-2 pb-1">
+            <h2 class="font-headline font-black text-3xl tracking-tight" style="color:#003345;">{day.label}</h2>
+            <span class="text-sm font-bold" style="color:#6b8fa3;">{day.sub}</span>
+          </div>
           {parties.filter(p => p.day === day.id).map(party => (
             <div class="party-card" data-party-id={party.id} data-filter-cat={party.type.toLowerCase()} style={`--party-color:${party.color};`}>
               <!-- Top accent bar -->
@@ -350,10 +357,15 @@ const partiesJson = JSON.stringify(parties);
   .active-filter { background: #003345 !important; color: white !important; border-color: #003345 !important; }
 
   /* Tabs */
-  .day-tab { color:#6b8fa3; background:transparent; text-align:center; border:none; border-bottom:2px solid transparent; border-radius:0; padding:8px 16px; }
-  .day-tab:hover { color:#006479; background:transparent; }
-  .active-day { color:#006479 !important; border-bottom-color:#006479 !important; background:transparent !important; }
-  .active-day .day-tab-sub { opacity:1 !important; color:#006479 !important; }
+  .day-tab { color:#6b8fa3; background:#f1f5f9; border-color:#e2e8f0; text-align:center; }
+  .day-tab .day-tab-label { color:#334155; }
+  .day-tab .day-tab-sub { color:#94a3b8; }
+  .day-tab:hover { background:#e8f4ff; border-color:#b0d4e8; }
+  .day-tab:hover .day-tab-label { color:#006479; }
+  .day-tab:hover .day-tab-sub { color:#006479; }
+  .active-day { background:#003345 !important; border-color:#003345 !important; }
+  .active-day .day-tab-label { color:#fff !important; }
+  .active-day .day-tab-sub { color:rgba(255,255,255,0.7) !important; }
 
   /* Party cards */
   .party-card {
@@ -468,9 +480,16 @@ PARTIES.forEach(p => { colorMap[p.id] = p.color; });
 let byParty = {};
 let customByDay = {};
 
-// ── Rate limiting (max 3 submissions per session) ─────────────
-let sessionSubmits = 0;
-const MAX_SUBMITS = 3;
+// ── One entry per event (tracked in localStorage) ────────────
+const STORAGE_KEY = 'meetup_signed_events';
+function getSignedEvents() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+function markEventSigned(eventId) {
+  const signed = getSignedEvents();
+  if (!signed.includes(eventId)) { signed.push(eventId); localStorage.setItem(STORAGE_KEY, JSON.stringify(signed)); }
+}
+function hasSignedEvent(eventId) { return getSignedEvents().includes(eventId); }
 
 // ── Spam / promo detection ────────────────────────────────────
 const SPAM_PATTERNS = [
@@ -558,6 +577,13 @@ async function load() {
 
     PARTIES.forEach(p => renderParty(p.id));
     renderAllCustom();
+    // Restore signed-up button states from localStorage
+    getSignedEvents().forEach(pid => {
+      const btn = document.getElementById('btn-' + pid);
+      const suc = document.getElementById('success-' + pid);
+      if (btn) { const s = btn.querySelector('span'); if (s) s.textContent = 'check_circle'; btn.style.opacity = '0.6'; btn.style.cursor = 'default'; }
+      if (suc) suc.classList.remove('hidden');
+    });
     document.getElementById('loading-state').style.display = 'none';
   } catch {
     document.getElementById('loading-state').style.display = 'none';
@@ -693,7 +719,7 @@ function renderChips(containerEl, entries, color) {
 
 // ── Custom events ─────────────────────────────────────────────
 function renderAllCustom() {
-  ['apr11','apr12','apr13','apr14'].forEach(day => {
+  ['apr10','apr11','apr12','apr13','apr14'].forEach(day => {
     const el = document.getElementById('custom-events-' + day);
     if (!el) return;
     while (el.firstChild) el.removeChild(el.firstChild);
@@ -777,7 +803,15 @@ function buildCustomCard(ev, day) {
 
   // Divider + Contact Host button
   const divider = document.createElement('div');
-  divider.style.cssText = 'margin-top:16px;padding-top:16px;border-top:1px solid rgba(192,232,255,0.4);display:flex;align-items:center;gap:12px;flex-wrap:wrap;';
+  divider.style.cssText = 'margin-top:16px;padding-top:16px;border-top:1px solid rgba(192,232,255,0.4);';
+
+  const contactLabel = document.createElement('p');
+  contactLabel.style.cssText = 'font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6b8fa3;margin-bottom:10px;';
+  contactLabel.textContent = 'Contact host for joining & more info';
+  divider.appendChild(contactLabel);
+
+  const contactRow = document.createElement('div');
+  contactRow.style.cssText = 'display:flex;align-items:center;gap:12px;flex-wrap:wrap;';
 
   // Parse platform prefix: ig:@handle, wa:+66..., tg:@handle, or legacy bare value
   let platform = null, handle = contactRaw;
@@ -803,18 +837,19 @@ function buildCustomCard(ev, day) {
     cIco.textContent = pm.icon;
     contactBtn.appendChild(cIco);
     contactBtn.appendChild(document.createTextNode(pm.label));
-    divider.appendChild(contactBtn);
+    contactRow.appendChild(contactBtn);
 
     const hint = document.createElement('span');
     hint.style.cssText = 'font-size:12px;color:#6b8fa3;font-weight:600;';
     hint.textContent = handle;
-    divider.appendChild(hint);
+    contactRow.appendChild(hint);
   } else if (contactRaw) {
     const hint = document.createElement('span');
     hint.style.cssText = 'font-size:12px;color:#6b8fa3;font-weight:600;';
     hint.textContent = 'Contact: ' + contactRaw;
-    divider.appendChild(hint);
+    contactRow.appendChild(hint);
   }
+  divider.appendChild(contactRow);
 
   body.appendChild(divider);
   wrap.appendChild(body);
@@ -858,6 +893,7 @@ window.switchDay = function(id) {
 
 // ── Official form toggles ─────────────────────────────────────
 window.toggleForm = function(pid) {
+  if (hasSignedEvent(pid)) return; // already signed up, button is disabled
   const form = document.getElementById('form-' + pid);
   const btn  = document.getElementById('btn-' + pid);
   const suc  = document.getElementById('success-' + pid);
@@ -900,8 +936,8 @@ window.submitEntry = async function(pid, dayId) {
   const valErr = validateText(name, contact, note);
   if (valErr) { errEl.textContent = valErr; errEl.classList.remove('hidden'); return; }
 
-  if (sessionSubmits >= MAX_SUBMITS) {
-    errEl.textContent = 'You\'ve reached the maximum of 3 sign-ups per session.';
+  if (hasSignedEvent(pid)) {
+    errEl.textContent = 'You\'ve already signed up for this event.';
     errEl.classList.remove('hidden');
     return;
   }
@@ -915,7 +951,7 @@ window.submitEntry = async function(pid, dayId) {
     });
     if (!res.ok) throw new Error();
     const [entry] = await res.json();
-    sessionSubmits++;
+    markEventSigned(pid);
     if (!byParty[pid]) byParty[pid] = [];
     byParty[pid].push(entry);
     renderParty(pid);
@@ -946,7 +982,7 @@ window.closeAddEvent = function() {
   if (defaultRadio) defaultRadio.checked = true;
   const catInput = document.getElementById('custom-event-category'); if (catInput) catInput.value = 'pre-drinks';
   const catLabel = document.querySelector('#cat-select-wrap [id$="-select-label"]'); if (catLabel) catLabel.textContent = '🍹 Pre-drinks';
-  const dayInput = document.getElementById('custom-event-day'); if (dayInput) dayInput.value = 'apr11';
+  const dayInput = document.getElementById('custom-event-day'); if (dayInput) dayInput.value = 'apr10';
   const dayLabel = document.querySelector('#day-select-wrap [id$="-select-label"]'); if (dayLabel) dayLabel.textContent = 'April 11 — Friday';
   const gdprEl = document.getElementById('custom-event-gdpr'); if (gdprEl) gdprEl.checked = false;
   if (window.turnstile && window.__meetupTurnstileId !== null) window.turnstile.reset(window.__meetupTurnstileId);
@@ -984,8 +1020,6 @@ window.submitCustomEvent = async function() {
   const contactErr = validateContact(contact);
   if (contactErr) { errEl.textContent = contactErr; errEl.classList.remove('hidden'); contactEl.focus(); return; }
 
-  if (sessionSubmits >= MAX_SUBMITS) { errEl.textContent = 'You\'ve reached the maximum of 3 sign-ups per session.'; errEl.classList.remove('hidden'); return; }
-
   const turnstileToken = (window.turnstile && window.__meetupTurnstileId !== null) ? window.turnstile.getResponse(window.__meetupTurnstileId) : '';
   if (!turnstileToken) { errEl.textContent = 'Please complete the security check.'; errEl.classList.remove('hidden'); return; }
 
@@ -1004,7 +1038,6 @@ window.submitCustomEvent = async function() {
     }
     const [entry] = await res.json();
 
-    sessionSubmits++;
     if (!customByDay[day]) customByDay[day] = {};
     entry.category = category;
     customByDay[day][evName] = { id: evId, name: evName, entries: [entry] };

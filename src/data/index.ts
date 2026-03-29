@@ -127,27 +127,18 @@ export const festivals = [
     description: "Asia's largest gay circuit festival. 20th Anniversary. Night parties + Bear & Boy pool parties at Emsphere, Sukhumvit (BTS Phrom Phong).",
     schedule: {
       'Apr 10': [
-        { time: '19:00', end: '21:00', name: 'Opening: Illuminate', sub: 'Theme: Chrome & Tactical', genre: 'Circuit', headliner: false },
-        { time: '21:00', end: '23:00', name: 'TAKI & RITA', genre: 'Progressive Circuit', headliner: false },
-        { time: '23:00', end: '02:00', name: 'Mario Beckman', genre: 'Deep Circuit', headliner: true },
-        { time: '02:00', end: '06:00', name: 'Allan Natal', genre: 'Tribal House', headliner: false },
+        { time: '19:00', end: '06:00', name: 'Opening Party — Team Alpha', sub: 'Brian Solis, Mario Beckman · Theme: Chrome', genre: 'Circuit', headliner: true },
       ],
       'Apr 11': [
-        { time: '12:00', end: '19:00', name: 'Boy Pool Party', sub: 'Tribe Sky Beach Club — Mercury Rising', genre: 'Pool Party', headliner: false, isPool: true },
-        { time: '19:00', end: '21:00', name: 'Main Party Vol.1', sub: 'Theme: Galactic Royalty', genre: 'Circuit', headliner: false },
-        { time: '21:00', end: '23:00', name: 'CHU & SUN JUNE', genre: 'Progressive House', headliner: false },
-        { time: '23:00', end: '06:00', name: 'Luis Vazquez', genre: 'Circuit', headliner: true },
+        { time: '12:00', end: '19:00', name: 'Boy Pool Party — AQUA', sub: 'Boren, Kai · Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true },
+        { time: '19:00', end: '06:00', name: 'Main Party Vol. One — Empire Of The World', sub: 'MisterMiss, Tomer Maizner · Theme: Galactic Royalty', genre: 'Circuit', headliner: true },
       ],
       'Apr 12': [
-        { time: '12:00', end: '19:00', name: 'Bear Pool Party (AquaXXL)', sub: 'Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true },
-        { time: '19:00', end: '21:00', name: 'Main Party Vol.2', sub: 'Theme: Silver, Chrome & Glow', genre: 'Circuit', headliner: false },
-        { time: '21:00', end: '23:00', name: 'Grant Jang', genre: 'Circuit', headliner: false },
-        { time: '23:00', end: '06:00', name: 'Tomer Maizner', genre: 'Deep Circuit', headliner: true },
+        { time: '12:00', end: '19:00', name: 'Bear Pool Party — AQUAXXL', sub: 'Pat+, CallMeKevin · Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true },
+        { time: '19:00', end: '06:00', name: 'Main Party Vol. Two — Adro Mada', sub: 'Karsten Sollors, Fran Albuquerque · Theme: Chrome & Glow', genre: 'Circuit', headliner: true },
       ],
       'Apr 13': [
-        { time: '19:00', end: '21:00', name: 'Automata Closing', sub: 'Theme: Kinky / Full Leather', genre: 'Circuit', headliner: false },
-        { time: '21:00', end: '23:00', name: 'Isak Salazar', genre: 'Circuit', headliner: false },
-        { time: '23:00', end: '06:00', name: 'Tom Stephan', sub: 'Grand Finale Closing Set', genre: 'Classic Circuit', headliner: true },
+        { time: '19:00', end: '06:00', name: 'Closing Party — Kink', sub: 'Jair Sandoval, Alex Acosta · Theme: Leather & Kink', genre: 'Circuit', headliner: true },
       ],
     }
   },
