@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase';
 
 const ALLOWED_FESTIVALS    = ['S2O', 'Siam Songkran', 'GCircuit', 'Other'];
 const ALLOWED_TYPES        = ['selling', 'buying'];
-const ALLOWED_CONTACT_TYPES = ['telegram', 'line', 'whatsapp', 'email'];
+const ALLOWED_CONTACT_TYPES = ['telegram', 'line', 'whatsapp', 'instagram'];
 
 // Rate limiter: max 5 POSTs per IP per hour
 const postRateMap = new Map<string, { count: number; reset: number }>();

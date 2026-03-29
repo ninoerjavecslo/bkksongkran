@@ -25,8 +25,9 @@ export const prerender = false;
 
   <!-- UNLOCK CONTACTS BUTTON (shown when not yet unlocked) -->
   <section class="px-6 pb-4" id="unlock-banner">
-    <div class="max-w-7xl mx-auto">
-      <button id="btn-unlock-contacts" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
+    <div class="max-w-7xl mx-auto flex items-center gap-4 flex-wrap">
+      <p class="text-sm" style="color:#326177;">Contact info is hidden. Enter your email once to reveal all contacts.</p>
+      <button id="btn-unlock-contacts" class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
         <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
         Unlock Contact Info
       </button>
@@ -118,10 +119,15 @@ export const prerender = false;
           </div>
         </div>
         <div class="tpl-contact-revealed hidden pt-2 border-t" style="border-color:rgba(192,232,255,0.5);">
-          <div class="flex items-center gap-2">
-            <span class="tpl-contact-icon material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;"></span>
-            <span class="tpl-contact text-sm font-bold" style="color:#003345;"></span>
-            <span class="tpl-contact-type text-[10px] px-1.5 py-0.5 rounded font-bold uppercase"></span>
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="tpl-contact-icon material-symbols-outlined text-sm flex-shrink-0" style="font-variation-settings:'FILL' 1;"></span>
+              <span class="tpl-contact text-sm font-bold truncate" style="color:#003345;"></span>
+              <span class="tpl-contact-type text-[10px] px-1.5 py-0.5 rounded font-bold uppercase flex-shrink-0"></span>
+            </div>
+            <button class="tpl-copy-btn flex-shrink-0 p-1.5 rounded-lg transition-all hover:bg-surface-container-high" title="Copy contact">
+              <span class="material-symbols-outlined text-sm" style="color:#86b3cc;">content_copy</span>
+            </button>
           </div>
         </div>
       </div>
@@ -254,8 +260,8 @@ export const prerender = false;
                 <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">WhatsApp</div>
               </label>
               <label>
-                <input type="radio" name="contact_type" value="email" class="peer hidden" />
-                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Email</div>
+                <input type="radio" name="contact_type" value="instagram" class="peer hidden" />
+                <div class="peer-checked:border-primary peer-checked:bg-primary/5 border border-surface-container-high rounded-lg p-2 text-center cursor-pointer transition-all text-xs font-bold" style="color:#003345;">Instagram</div>
               </label>
             </div>
             <input type="text" name="contact" placeholder="@username, phone, or email" class="form-input" />
@@ -332,7 +338,7 @@ const FC: Record<string,{c:string;d:string}> = {
   'Siam Songkran': {c:'#ff8eb2',d:'#b4005d'},
   'GCircuit':      {c:'#c084fc',d:'#7c3aed'},
 };
-const CI: Record<string,string> = { telegram:'send', line:'chat', whatsapp:'call', email:'mail' };
+const CI: Record<string,string> = { telegram:'send', line:'chat', whatsapp:'call', instagram:'photo_camera' };
 
 let tickets: any[] = [];
 let fType = 'all', fFest = 'all';
@@ -661,6 +667,16 @@ function render() {
       ct.textContent = rev.contact_type;
       ct.style.cssText = `background:${fc.c}15;color:${fc.d};`;
     }
+
+    const copyBtn = clone.querySelector('.tpl-copy-btn') as HTMLElement;
+    copyBtn.addEventListener('click', () => {
+      const contact = (copyBtn.closest('.tpl-contact-revealed')?.querySelector('.tpl-contact') as HTMLElement)?.textContent || '';
+      navigator.clipboard.writeText(contact).then(() => {
+        const icon = copyBtn.querySelector('.material-symbols-outlined')!;
+        icon.textContent = 'check';
+        setTimeout(() => { icon.textContent = 'content_copy'; }, 1500);
+      });
+    });
 
     grid.appendChild(clone);
   });
