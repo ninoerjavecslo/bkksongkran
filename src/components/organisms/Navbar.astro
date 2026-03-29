@@ -58,28 +58,51 @@ const links = [
   id="mobile-menu"
   class="fixed inset-0 z-40 glass pt-24 pb-8 px-6 flex flex-col gap-4 translate-x-full transition-transform duration-300"
 >
+  <!-- Close button -->
+  <button
+    id="mobile-menu-close"
+    class="fixed top-5 right-5 p-2 rounded-full hover:bg-surface-container-high transition-colors"
+    aria-label="Close menu"
+  >
+    <span class="material-symbols-outlined text-on-surface">close</span>
+  </button>
+
   {links.map(link => (
     <a
       href={link.href}
-      class="font-headline font-bold text-2xl text-on-surface py-3 border-b border-surface-container-high hover:text-primary transition-colors"
+      class="mobile-menu-link font-headline font-bold text-2xl text-on-surface py-3 border-b border-surface-container-high hover:text-primary transition-colors"
     >
       {link.label}
     </a>
   ))}
-  <Button href="/ai" variant="primary" size="lg" class="mt-4">
+  <Button href="/ai" variant="primary" size="lg" class="mt-4 mobile-menu-link">
     Ask AI — Plan My Trip
   </Button>
 </div>
 
 <script>
 const btn = document.getElementById('mobile-menu-btn');
+const closeBtn = document.getElementById('mobile-menu-close');
 const menu = document.getElementById('mobile-menu');
 let open = false;
 
-btn?.addEventListener('click', () => {
-  open = !open;
-  menu?.classList.toggle('translate-x-full', !open);
-  menu?.classList.toggle('translate-x-0', open);
+function openMenu() {
+  open = true;
+  menu?.classList.remove('translate-x-full');
+  menu?.classList.add('translate-x-0');
+}
+
+function closeMenu() {
+  open = false;
+  menu?.classList.add('translate-x-full');
+  menu?.classList.remove('translate-x-0');
+}
+
+btn?.addEventListener('click', () => open ? closeMenu() : openMenu());
+closeBtn?.addEventListener('click', closeMenu);
+
+document.querySelectorAll('.mobile-menu-link').forEach(link => {
+  link.addEventListener('click', closeMenu);
 });
 
 // Scroll effect
