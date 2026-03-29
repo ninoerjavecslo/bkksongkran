@@ -126,19 +126,15 @@ const CAT_EMOJIS = {
 let map, popupInstance, markerObjs = {};
 let currentCat = 'all';
 
-function makeMarkerEl(cat) {
+function makeMarkerEl(cat, onClickFn) {
   const c = catMap[cat];
-  // Wrapper: zero-size, no transform — Mapbox anchors to this
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'width:0;height:0;position:relative;';
-  // Inner pin: offset by half its size so it centres on the coordinate
-  const pin = document.createElement('div');
-  pin.style.cssText = `position:absolute;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;background:${c ? c.color : '#006479'};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:transform .15s;`;
-  pin.textContent = CAT_EMOJIS[cat] || '📍';
-  pin.addEventListener('mouseenter', () => { pin.style.transform = 'translate(-50%,-50%) scale(1.2)'; });
-  pin.addEventListener('mouseleave', () => { pin.style.transform = 'translate(-50%,-50%) scale(1)'; });
-  wrapper.appendChild(pin);
-  return wrapper;
+  const el = document.createElement('div');
+  el.style.cssText = `width:32px;height:32px;border-radius:50%;background:${c ? c.color : '#006479'};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;pointer-events:all;transition:box-shadow .15s;`;
+  el.textContent = CAT_EMOJIS[cat] || '📍';
+  el.addEventListener('mouseenter', () => { el.style.boxShadow = '0 4px 16px rgba(0,0,0,0.35)'; });
+  el.addEventListener('mouseleave', () => { el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.22)'; });
+  el.addEventListener('click', onClickFn);
+  return el;
 }
 
 function showPopup(place) {
@@ -175,19 +171,17 @@ function initMap() {
   mapboxgl.accessToken = mapboxToken;
   map = new mapboxgl.Map({
     container: 'guide-map',
-    style: 'mapbox://styles/mapbox/light-v11',
+    style: 'mapbox://styles/ninoerjavec/cmnbmfwyi001m01qt79mi86hx',
     center: [100.5290, 13.7270],
     zoom: 13.5,
   });
   map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
   places.forEach(p => {
-    const el = makeMarkerEl(p.category);
+    const el = makeMarkerEl(p.category, () => showPopup(p));
     const m = new mapboxgl.Marker({ element: el, anchor: 'center' })
       .setLngLat([p.lng, p.lat])
       .addTo(map);
-    // Click goes on the inner pin (first child), not the zero-size wrapper
-    el.firstChild.addEventListener('click', () => showPopup(p));
     markerObjs[p.id] = { marker: m, el, place: p };
   });
 }
