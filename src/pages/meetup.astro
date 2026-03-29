@@ -954,7 +954,10 @@ window.submitCustomEvent = async function() {
       headers: { ...HDRS, 'Prefer': 'return=representation' },
       body: JSON.stringify({ name: host, party: evId, day, note: combinedNote, event_name: evName, is_custom: true, category, email }),
     });
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody.message || errBody.hint || errBody.details || res.status);
+    }
     const [entry] = await res.json();
 
     sessionSubmits++;
@@ -966,8 +969,8 @@ window.submitCustomEvent = async function() {
     const container = document.getElementById('custom-events-' + day);
     if (container) container.appendChild(buildCustomCard(customByDay[day][evName], day));
     closeAddEvent();
-  } catch {
-    errEl.textContent = 'Something went wrong. Try again.';
+  } catch(e) {
+    errEl.textContent = 'Something went wrong: ' + (e.message || 'unknown error');
     errEl.classList.remove('hidden');
   } finally {
     subBtn.disabled = false; subBtn.style.opacity = '1';
