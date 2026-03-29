@@ -6,6 +6,7 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'hybrid',
   adapter: netlify(),
+
   devToolbar: {
     enabled: false,
   },
