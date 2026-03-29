@@ -122,54 +122,37 @@ const festivalsJson = JSON.stringify(festivalMarkers);
     </section>
   </div>
 
-  <!-- ═══ TAB: BKK GUIDE MAP ═══ -->
+  <!-- ═══ TAB: BKK GUIDE ═══ -->
   <div id="panel-bkk" class="hidden">
     <section class="px-6 pt-6 pb-20">
       <div class="max-w-7xl mx-auto">
-        <div class="flex items-center gap-3 mb-4 p-4 rounded-2xl" style="background:rgba(0,100,121,0.06);border:1px solid rgba(0,100,121,0.12);">
-          <span class="material-symbols-outlined text-2xl flex-shrink-0" style="color:#006479;font-variation-settings:'FILL' 1;">map</span>
-          <div>
-            <p class="text-sm font-semibold" style="color:#003345;">Community-curated Bangkok guide</p>
-            <p class="text-xs" style="color:#6b8fa3;">Gay bars, clubs, saunas, massage, sightseeing, food & more — 60,000+ views</p>
+        <div class="rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8" style="background:linear-gradient(135deg,#1a0030,#b4005d,#ff8eb2);">
+          <div class="flex-1 text-center md:text-left">
+            <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:rgba(255,255,255,0.7);">Community Guide</div>
+            <h2 class="font-headline font-extrabold text-3xl md:text-4xl text-white mb-3">BKK Guide</h2>
+            <p class="text-white/80 text-base max-w-lg mb-6">Gay bars, clubs, saunas, sightseeing, food, hotels & more. 80+ places across Bangkok with tips from the community.</p>
+            <div class="flex flex-wrap gap-3 justify-center md:justify-start mb-6">
+              {[
+                { label: 'Gay Bars & Clubs', icon: 'nightlife' },
+                { label: 'Saunas',           icon: 'hot_tub' },
+                { label: 'Food & Shopping',  icon: 'restaurant' },
+                { label: 'Sightseeing',      icon: 'photo_camera' },
+                { label: 'Hotels',           icon: 'hotel' },
+              ].map(c => (
+                <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.15);color:white;">
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
+                  {c.label}
+                </span>
+              ))}
+            </div>
+            <a href="/bkk-guide" class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105" style="background:white;color:#b4005d;">
+              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">map</span>
+              Open BKK Guide
+              <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
           </div>
+          <div class="text-7xl">🗺️</div>
         </div>
-
-        <!-- Google My Maps embed -->
-        <div class="rounded-2xl overflow-hidden" style="border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);">
-          <iframe
-            src="https://www.google.com/maps/d/embed?mid=1Hu4iX1n_BKKTecs&ehbc=2E312F"
-            width="100%"
-            height="600"
-            style="border:0;display:block;"
-            allowfullscreen
-            loading="lazy"
-            title="BKK Recs — Bangkok Community Guide Map"
-          ></iframe>
-        </div>
-
-        <!-- Category chips -->
-        <div class="mt-5 flex flex-wrap gap-2">
-          {[
-            { label: 'Gay Bars',   icon: 'local_bar',       color: '#b4005d' },
-            { label: 'Gay Clubs',  icon: 'nightlife',       color: '#b4005d' },
-            { label: 'Saunas',     icon: 'hot_tub',         color: '#006479' },
-            { label: 'Sightseeing',icon: 'photo_camera',    color: '#40cef3' },
-            { label: 'Shopping',   icon: 'shopping_bag',    color: '#964300' },
-            { label: 'Food',       icon: 'restaurant',      color: '#34C759' },
-            { label: 'Massage',    icon: 'self_improvement',color: '#006479' },
-            { label: 'Hotels',     icon: 'hotel',           color: '#FF9F0A' },
-          ].map(c => (
-            <span class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style={`background:${c.color}12;color:${c.color};border:1px solid ${c.color}25;`}>
-              <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
-              {c.label}
-            </span>
-          ))}
-        </div>
-
-        <p class="text-xs mt-4" style="color:#6b8fa3;">
-          Map curated by the community ·
-          <a href="https://www.google.com/maps/d/viewer?mid=1Hu4iX1n_BKKTecs" target="_blank" rel="noopener" class="underline hover:text-primary transition-colors">Open full map in Google Maps →</a>
-        </p>
       </div>
     </section>
   </div>

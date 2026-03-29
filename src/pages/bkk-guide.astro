@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import { guidePlaces, guideCategories } from '../data/bkkGuide';
+
+const placesJson = JSON.stringify(guidePlaces);
+const catsJson   = JSON.stringify(guideCategories);
+---
+
+<BaseLayout
+  title="Bangkok Gay Guide 2026 — Bars, Clubs, Saunas, Hotels & More"
+  description="The complete Bangkok gay travel guide. Best gay bars, clubs, saunas, massage, hotels, food and sightseeing around Silom and beyond."
+  canonical="https://bkksongkran.com/bkk-guide"
+>
+
+  <!-- HEADER -->
+  <section class="pt-36 pb-10 px-6" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#b4005d;">Bangkok Guide</div>
+      <h1 class="font-headline font-extrabold tracking-tighter mb-4" style="font-size:clamp(2.5rem,7vw,5rem);color:#003345;line-height:0.9;">
+        BKK<br/>
+        <span style="background:linear-gradient(135deg,#b4005d,#ff8eb2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GUIDE</span>
+      </h1>
+      <p class="text-lg max-w-2xl" style="color:#326177;">
+        Community-curated Bangkok guide. Gay bars, clubs, saunas, sightseeing, food & more.
+        <span class="font-semibold" style="color:#b4005d;">60,000+ views</span> on the original map.
+      </p>
+
+      <!-- Stats row -->
+      <div class="flex flex-wrap gap-6 mt-6">
+        {guideCategories.map(c => (
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-base" style={`color:${c.color};font-variation-settings:'FILL' 1;`}>{c.icon}</span>
+            <span class="text-xs font-semibold" style="color:#326177;">
+              {guidePlaces.filter(p => p.category === c.id).length} {c.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER TABS -->
+  <section class="px-6 pb-4 sticky top-20 z-30" style="background:rgba(238,248,255,0.96);backdrop-filter:blur(12px);">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 pt-2">
+        <button
+          data-cat="all"
+          onclick="filterCat('all')"
+          class="cat-btn active-cat flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all"
+        >
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">apps</span>
+          All
+        </button>
+        {guideCategories.map(c => (
+          <button
+            data-cat={c.id}
+            onclick={`filterCat('${c.id}')`}
+            class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all"
+            style="background:rgba(0,0,0,0.04);color:#6b8fa3;"
+          >
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">{c.icon}</span>
+            {c.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="px-6 pb-6">
+    <div class="max-w-7xl mx-auto">
+      <div id="guide-map" class="rounded-2xl overflow-hidden" style="height:420px;border:1px solid rgba(192,232,255,0.5);box-shadow:0 4px 32px rgba(0,100,121,0.1);"></div>
+    </div>
+  </section>
+
+  <!-- PLACE CARDS -->
+  <section class="px-6 pb-24">
+    <div class="max-w-7xl mx-auto">
+      <div id="places-count" class="text-xs font-semibold mb-4" style="color:#6b8fa3;">
+        Showing all {guidePlaces.length} places
+      </div>
+      <div id="places-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {guidePlaces.map(place => {
+          const cat = guideCategories.find(c => c.id === place.category);
+          return (
+            <button
+              data-cat={place.category}
+              data-id={place.id}
+              onclick={`focusPlace(${place.lat}, ${place.lng}, '${place.id}')`}
+              class="place-card text-left rounded-2xl p-4 transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer w-full"
+              style="background:white;border:1px solid rgba(192,232,255,0.5);"
+            >
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={`background:${cat?.color}15;`}>
+                  <span class="material-symbols-outlined text-base" style={`color:${cat?.color};font-variation-settings:'FILL' 1;`}>{cat?.icon}</span>
+                </div>
+                <div class="min-w-0">
+                  <h3 class="font-headline font-bold text-sm leading-tight" style="color:#003345;">{place.name}</h3>
+                  <p class="text-[10px] mt-0.5 font-semibold" style={`color:${cat?.color};`}>{cat?.label} · {place.area}</p>
+                </div>
+              </div>
+              {place.tip && (
+                <p class="text-[11px] mt-2.5 leading-relaxed line-clamp-2" style="color:#6b8fa3;">{place.tip}</p>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+  .cat-btn { border: 1px solid transparent; }
+  .active-cat { background: #003345 !important; color: white !important; border-color: #003345 !important; }
+  .place-card.hidden { display: none; }
+  .custom-pin { display:flex;align-items:center;justify-content:center;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);font-size:13px;cursor:pointer;transition:transform .15s; }
+  .custom-pin:hover { transform:scale(1.2); }
+</style>
+
+<script define:vars={{ placesJson, catsJson }}>
+const places = JSON.parse(placesJson);
+const cats   = JSON.parse(catsJson);
+
+const catMap = {};
+cats.forEach(c => { catMap[c.id] = c; });
+
+let map = null;
+let markerMap = {};
+let currentCat = 'all';
+
+const CAT_ICONS = {
+  sightseeing: '📸', shopping: '🛍️', 'gay-bars': '🍸', 'gay-clubs': '🎉',
+  hotels: '🏨', food: '🍜', massage: '💆', shows: '🎭', saunas: '🧖', useful: '🏪',
+};
+
+function buildIcon(cat, size = 28) {
+  const c = catMap[cat];
+  const color = c ? c.color : '#006479';
+  const emoji = CAT_ICONS[cat] || '📍';
+  return L.divIcon({
+    className: '',
+    html: `<div class="custom-pin" style="width:${size}px;height:${size}px;background:${color};">${emoji}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+}
+
+function initMap() {
+  if (map) return;
+  map = L.map('guide-map').setView([13.7270, 100.5290], 14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://carto.com/">CARTO</a>',
+    maxZoom: 19,
+  }).addTo(map);
+
+  places.forEach(p => {
+    const m = L.marker([p.lat, p.lng], { icon: buildIcon(p.category) }).addTo(map);
+    const cat = catMap[p.category];
+    const tipHtml = p.tip ? `<p style="margin:4px 0 0;font-size:11px;color:#6b8fa3;">${p.tip}</p>` : '';
+    m.bindPopup(
+      `<div style="font-family:'Be Vietnam Pro',sans-serif;min-width:180px;">
+        <strong style="font-size:13px;color:#003345;">${p.name}</strong>
+        <p style="margin:2px 0 0;font-size:11px;font-weight:600;color:${cat ? cat.color : '#006479'};">${cat ? cat.label : ''} · ${p.area}</p>
+        ${tipHtml}
+      </div>`,
+      { maxWidth: 260 }
+    );
+    markerMap[p.id] = m;
+  });
+}
+
+function updateMarkers(cat) {
+  if (!map) return;
+  places.forEach(p => {
+    const m = markerMap[p.id];
+    if (!m) return;
+    if (cat === 'all' || p.category === cat) {
+      m.addTo(map);
+    } else {
+      m.remove();
+    }
+  });
+
+  // Fit bounds to visible markers
+  const visible = places.filter(p => cat === 'all' || p.category === cat);
+  if (visible.length > 0) {
+    const bounds = L.latLngBounds(visible.map(p => [p.lat, p.lng]));
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
+  }
+}
+
+window.filterCat = function(cat) {
+  currentCat = cat;
+
+  // Update button styles
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    const btnCat = btn.getAttribute('data-cat');
+    if (btnCat === cat) {
+      btn.classList.add('active-cat');
+    } else {
+      btn.classList.remove('active-cat');
+      btn.style.background = 'rgba(0,0,0,0.04)';
+      btn.style.color = '#6b8fa3';
+    }
+  });
+
+  // Filter cards
+  const cards = document.querySelectorAll('.place-card');
+  let visible = 0;
+  cards.forEach(card => {
+    if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+      card.classList.remove('hidden');
+      visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  // Update count
+  const countEl = document.getElementById('places-count');
+  if (countEl) {
+    const label = cat === 'all' ? 'all places' : (catMap[cat]?.label || cat);
+    countEl.textContent = `Showing ${visible} ${label}`;
+  }
+
+  updateMarkers(cat);
+};
+
+window.focusPlace = function(lat, lng, id) {
+  if (!map) return;
+  map.flyTo([lat, lng], 17, { duration: 0.8 });
+  const m = markerMap[id];
+  if (m) setTimeout(() => m.openPopup(), 900);
+  document.getElementById('guide-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
+
+function loadLeaflet(cb) {
+  if (window.L) { cb(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  s.onload = cb;
+  document.head.appendChild(s);
+}
+
+document.addEventListener('DOMContentLoaded', () => loadLeaflet(initMap));
+</script>
