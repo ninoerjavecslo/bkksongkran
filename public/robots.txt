@@ -1,5 +1,4 @@
 User-agent: *
 Disallow: /delete-ticket
-Disallow: /bkk-guide
 
 Sitemap: https://bkksongkran.com/sitemap.xml
