@@ -124,68 +124,8 @@ const featuredArticles = articles.slice(0, 3);
     </div>
   </section>
 
-  <!-- ═══ EVENTS SLIDER ═══ -->
-  <section class="section">
-    <div class="section-inner">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-        <div>
-          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary">April 10–15, 2026</div>
-          <h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface">All Events</h2>
-        </div>
-        <div class="flex items-center gap-2">
-          <button id="slider-prev" class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-surface-container-high text-outline transition-all hover:bg-primary hover:text-white hover:border-primary">
-            <span class="material-symbols-outlined text-lg">chevron_left</span>
-          </button>
-          <button id="slider-next" class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-surface-container-high text-outline transition-all hover:bg-primary hover:text-white hover:border-primary">
-            <span class="material-symbols-outlined text-lg">chevron_right</span>
-          </button>
-          <a href="/events" class="flex items-center gap-1 text-sm font-bold ml-3 text-primary transition-all hover:gap-3 group">
-            View all
-            <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="overflow-hidden" id="events-slider-wrap">
-        <div class="flex gap-5 transition-transform duration-500 ease-out" id="events-slider">
-          {allEvents.map(e => (
-            <div class="flex-shrink-0" style="width:320px;">
-              <a href={`/events#${e.id}`} class="card p-0 overflow-hidden block group" style="height:100%;">
-                <div class="h-1.5 w-full" style={`background:${e.color};`}></div>
-                <div class="p-5 space-y-3">
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider" style={`background:${e.color}15;color:${e.colorDark || e.color};`}>
-                      {(e as any).type === 'circuit' ? 'LGBTQ+' : 'Festival'}
-                    </span>
-                    <span class="text-xs font-bold text-outline">{e.dates}</span>
-                  </div>
-                  <h3 class="font-headline text-lg font-extrabold leading-tight text-on-surface group-hover:text-primary transition-colors">{e.name}</h3>
-                  <p class="text-xs leading-relaxed line-clamp-2 text-content-muted">
-                    {(e as any).description || (e as any).desc || (e as any).tagline}
-                  </p>
-                  <div class="flex items-center gap-1.5 text-xs text-outline">
-                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">location_on</span>
-                    {(e as any).venue || (e as any).area}
-                  </div>
-                  <div class="flex items-center justify-between pt-2 border-t border-surface-container-high/50">
-                    <span class="font-headline font-black text-base" style={`color:${e.colorDark || e.color};`}>
-                      {(e as any).price || 'Free'}
-                    </span>
-                    <span class="flex items-center gap-1 text-xs font-bold text-primary group-hover:gap-2 transition-all">
-                      Details <span class="material-symbols-outlined text-xs">arrow_forward</span>
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ═══ BENTO HIGHLIGHTS ═══ -->
-  <section class="px-6 pb-20">
+  <section class="section">
     <div class="section-inner">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
@@ -333,6 +273,114 @@ const featuredArticles = articles.slice(0, 3);
             )}
           </a>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EVENTS SLIDER ═══ -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-primary">April 10–15, 2026</div>
+          <h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface">All Events</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="slider-prev" class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-surface-container-high text-outline transition-all hover:bg-primary hover:text-white hover:border-primary">
+            <span class="material-symbols-outlined text-lg">chevron_left</span>
+          </button>
+          <button id="slider-next" class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-surface-container-high text-outline transition-all hover:bg-primary hover:text-white hover:border-primary">
+            <span class="material-symbols-outlined text-lg">chevron_right</span>
+          </button>
+          <a href="/events" class="flex items-center gap-1 text-sm font-bold ml-3 text-primary transition-all hover:gap-3 group">
+            View all
+            <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="overflow-hidden" id="events-slider-wrap">
+        <div class="flex gap-5 transition-transform duration-500 ease-out" id="events-slider">
+          {allEvents.map(e => (
+            <div class="flex-shrink-0" style="width:320px;">
+              <a href={`/events#${e.id}`} class="card p-0 overflow-hidden block group" style="height:100%;">
+                <div class="h-1.5 w-full" style={`background:${e.color};`}></div>
+                <div class="p-5 space-y-3">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider" style={`background:${e.color}15;color:${e.colorDark || e.color};`}>
+                      {(e as any).type === 'circuit' ? 'LGBTQ+' : 'Festival'}
+                    </span>
+                    <span class="text-xs font-bold text-outline">{e.dates}</span>
+                  </div>
+                  <h3 class="font-headline text-lg font-extrabold leading-tight text-on-surface group-hover:text-primary transition-colors">{e.name}</h3>
+                  <p class="text-xs leading-relaxed line-clamp-2 text-content-muted">
+                    {(e as any).description || (e as any).desc || (e as any).tagline}
+                  </p>
+                  <div class="flex items-center gap-1.5 text-xs text-outline">
+                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">location_on</span>
+                    {(e as any).venue || (e as any).area}
+                  </div>
+                  <div class="flex items-center justify-between pt-2 border-t border-surface-container-high/50">
+                    <span class="font-headline font-black text-base" style={`color:${e.colorDark || e.color};`}>
+                      {(e as any).price || 'Free'}
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-bold text-primary group-hover:gap-2 transition-all">
+                      Details <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TICKET MARKETPLACE ═══ -->
+  <section class="px-6 pb-20">
+    <div class="section-inner">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <div class="text-xs font-bold tracking-[0.2em] uppercase mb-2 text-tertiary">Community Exchange</div>
+          <h2 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface">Ticket Marketplace</h2>
+          <p class="text-sm text-content-muted mt-2 max-w-lg">Buy, sell, or swap festival tickets with other attendees. Peer-to-peer — no middleman fees.</p>
+        </div>
+        <a href="/tickets" class="flex items-center gap-2 text-sm font-bold text-tertiary transition-all hover:gap-4 group">
+          Browse all listings
+          <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="card p-6 space-y-4 text-center">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto" style="background:rgba(180,0,93,0.1);">
+            <span class="material-symbols-outlined text-2xl text-tertiary" style="font-variation-settings:'FILL' 1;">sell</span>
+          </div>
+          <h3 class="font-headline font-bold text-lg text-on-surface">Sell Tickets</h3>
+          <p class="text-sm text-content-muted">Can't make it? List your tickets and find a buyer instantly.</p>
+        </div>
+        <div class="card p-6 space-y-4 text-center">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto" style="background:rgba(0,100,121,0.1);">
+            <span class="material-symbols-outlined text-2xl text-primary" style="font-variation-settings:'FILL' 1;">shopping_cart</span>
+          </div>
+          <h3 class="font-headline font-bold text-lg text-on-surface">Buy Tickets</h3>
+          <p class="text-sm text-content-muted">Sold-out event? Find tickets from other festival-goers.</p>
+        </div>
+        <div class="card p-6 space-y-4 text-center">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto" style="background:rgba(150,67,0,0.1);">
+            <span class="material-symbols-outlined text-2xl text-secondary" style="font-variation-settings:'FILL' 1;">swap_horiz</span>
+          </div>
+          <h3 class="font-headline font-bold text-lg text-on-surface">Swap Dates</h3>
+          <p class="text-sm text-content-muted">Wrong night? Trade your ticket for a different date.</p>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="/tickets" class="btn-primary px-8 py-4 text-base">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">confirmation_number</span>
+          Go to Marketplace
+        </a>
       </div>
     </div>
   </section>

@@ -41,15 +41,15 @@ import { articles } from '../../data/articles';
         <div class="card overflow-hidden relative" style="min-height:280px;">
           <div class="absolute inset-0">
             <img src={articles[0].featuredImage} alt={articles[0].title} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-            <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,30,50,0.9) 0%,rgba(0,30,50,0.3) 60%,transparent 100%);"></div>
+            <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(0,20,35,0.95) 0%,rgba(0,25,40,0.7) 50%,rgba(0,20,35,0.5) 100%);"></div>
           </div>
           <div class="relative p-8 flex flex-col justify-end" style="min-height:280px;">
             <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3 self-start" style={`background:${articles[0].categoryColor}30;color:${articles[0].categoryColor};border:1px solid ${articles[0].categoryColor}40;`}>
               {articles[0].category}
             </span>
-            <h2 class="font-headline font-extrabold text-2xl md:text-3xl text-white mb-2 leading-tight">{articles[0].title}</h2>
-            <p class="text-sm text-white/70 max-w-lg">{articles[0].excerpt}</p>
-            <div class="flex items-center gap-4 mt-3 text-xs text-white/50">
+            <h2 class="font-headline font-extrabold text-2xl md:text-3xl text-white mb-2 leading-tight" style="text-shadow:0 2px 12px rgba(0,0,0,0.6);">{articles[0].title}</h2>
+            <p class="text-sm text-white max-w-lg">{articles[0].excerpt}</p>
+            <div class="flex items-center gap-4 mt-3 text-xs text-white/80">
               <span>{articles[0].readTime} min read</span>
               <span>Updated {new Date(articles[0].modifiedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             </div>
