@@ -1,5 +1,5 @@
 // src/data/zh.ts
-export const zh = {
+export const zh: Record<string, Record<string, unknown>> = {
   // Navbar
   nav: {
     home: '首页',

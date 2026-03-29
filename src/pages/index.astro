@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import EventCard from '../components/molecules/EventCard.astro';
-import { festivals, additionalEvents } from '../data/index';
+import { festivals, additionalEvents, FESTIVAL_DATES } from '../data/index';
 import { articles } from '../data/articles';
 
 // Combine all events for the slider
@@ -341,10 +341,10 @@ const featuredArticles = articles.slice(0, 3);
 
 </BaseLayout>
 
-<script>
-// Countdown
+<script define:vars={{ festivalStart: FESTIVAL_DATES.start }}>
+// Countdown timer to Songkran
 function updateCountdown() {
-  const target = new Date('2026-04-10T00:00:00+07:00');
+  const target = new Date(festivalStart);
   const diff = target.getTime() - Date.now();
 
   const days = document.getElementById('cd-days');
@@ -369,36 +369,7 @@ function updateCountdown() {
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
-
-// Events slider
-const slider = document.getElementById('events-slider');
-const wrap = document.getElementById('events-slider-wrap');
-const prevBtn = document.getElementById('slider-prev');
-const nextBtn = document.getElementById('slider-next');
-
-if (slider && wrap && prevBtn && nextBtn) {
-  let pos = 0;
-  const cardW = 340; // 320 + 20 gap
-
-  function getMaxScroll() {
-    return Math.max(0, slider.scrollWidth - wrap.clientWidth);
-  }
-
-  function slide(dir: number) {
-    const max = getMaxScroll();
-    pos = Math.min(max, Math.max(0, pos + dir * cardW * 2));
-    slider.style.transform = `translateX(-${pos}px)`;
-  }
-
-  prevBtn.addEventListener('click', () => slide(-1));
-  nextBtn.addEventListener('click', () => slide(1));
-
-  // Touch swipe
-  let touchStart = 0;
-  wrap.addEventListener('touchstart', (e) => { touchStart = e.touches[0].clientX; }, { passive: true });
-  wrap.addEventListener('touchend', (e) => {
-    const diff = touchStart - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) slide(diff > 0 ? 1 : -1);
-  }, { passive: true });
-}
 </script>
+
+<!-- Events slider extracted to src/scripts/events-slider.ts -->
+<script src="../scripts/events-slider.ts"></script>

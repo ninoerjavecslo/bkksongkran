@@ -1,3 +1,66 @@
+// ── Type Interfaces ────────────────────────────
+export interface FestivalScheduleEntry {
+  name: string;
+  sub?: string;
+  genre: string;
+  headliner: boolean;
+  isPool?: boolean;
+}
+
+export interface Festival {
+  id: string;
+  name: string;
+  tagline: string;
+  theme: string;
+  dates: string;
+  venue: string;
+  area: string;
+  price: string;
+  color: string;
+  colorDark: string;
+  type: string;
+  featured: boolean;
+  url: string;
+  crowd: 'insane' | 'high' | 'medium' | 'low';
+  description: string;
+  timetableNote?: string;
+  schedule: Record<string, FestivalScheduleEntry[]>;
+  regionalSupport?: string[];
+}
+
+export interface Zone {
+  id: string;
+  name: string;
+  area: string;
+  type: 'street' | 'cultural';
+  crowd: 'insane' | 'high' | 'medium' | 'low';
+  lat: number;
+  lng: number;
+  desc: string;
+  bestTime: string;
+}
+
+export interface AdditionalEvent {
+  id: string;
+  name: string;
+  dates: string;
+  venue: string;
+  area: string;
+  price: string;
+  type: string;
+  color: string;
+  icon: string;
+  desc: string;
+}
+
+// ── Festival Dates ─────────────────────────────
+export const FESTIVAL_DATES = {
+  start: '2026-04-10T00:00:00+07:00',
+  end: '2026-04-15T23:59:59+07:00',
+  timezone: 'Asia/Bangkok',
+  year: 2026,
+} as const;
+
 // ── Design Tokens ──────────────────────────────
 export const tokens = {
   colors: {
@@ -25,7 +88,7 @@ export const nav = [
 ];
 
 // ── Events / Festivals ─────────────────────────
-export const festivals = [
+export const festivals: Festival[] = [
   {
     id: 's2o',
     name: 'S2O Songkran Festival',
@@ -136,7 +199,7 @@ export const festivals = [
 ];
 
 // ── Street Zones (for heat map) ────────────────
-export const zones = [
+export const zones: Zone[] = [
   { id: 'silom', name: 'Silom Road', area: 'Silom', type: 'street', crowd: 'insane', lat: 13.7241, lng: 100.5283, desc: 'Bangkok\'s iconic LGBTQ+ street party. Full road closure. Water guns, DJs, bars. Non-stop from 1pm–9pm.', bestTime: '1pm–9pm' },
   { id: 'khaosan', name: 'Khao San Road', area: 'Banglamphu', type: 'street', crowd: 'insane', lat: 13.7589, lng: 100.4977, desc: 'The wildest water battlefield in Bangkok. Backpacker hub turned war zone. Expect powder, buckets, water guns.', bestTime: '2pm–midnight' },
   { id: 'siam', name: 'Siam Square', area: 'Siam', type: 'street', crowd: 'high', lat: 13.7455, lng: 100.5330, desc: 'Traditional "Pha Khao Ma" theme. Concerts, water fights, cultural zones. Dress code enforced.', bestTime: '11am–10pm' },
@@ -148,7 +211,7 @@ export const zones = [
 ];
 
 // ── Additional Events (beyond the 3 major festivals) ──
-export const additionalEvents = [
+export const additionalEvents: AdditionalEvent[] = [
   // Ticketed music festivals
   {
     id: 'splash-nation',
