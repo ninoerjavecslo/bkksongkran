@@ -2,7 +2,7 @@
 
 ## Project
 Songkran 2026 Bangkok festival guide. Live at **bkksongkran.com**.
-GitHub: `ninoerjavecslo/bkksongkran` → auto-deploys to Vercel on push to `main`.
+GitHub: `ninoerjavecslo/bkksongkran` → auto-deploys to Netlify on push to `main`.
 
 ## Stack
 - **Astro 4** — hybrid output (static + SSR)

@@ -166,7 +166,8 @@ export const POST: APIRoute = async ({ request }) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch {
-    return jsonError('API error', 500);
+  } catch (err: any) {
+    console.error('[chat API error]', err?.message ?? err);
+    return jsonError('API error: ' + (err?.message ?? 'unknown'), 500);
   }
 };
