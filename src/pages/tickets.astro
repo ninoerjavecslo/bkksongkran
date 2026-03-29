@@ -32,14 +32,38 @@ export const prerender = false;
           <div class="font-bold text-sm mb-0.5" style="color:#003345;">Unlock all contact info</div>
           <div class="text-xs" style="color:#326177;">Enter your email once to reveal seller and buyer contacts across all listings.</div>
         </div>
-        <div class="flex gap-2 w-full sm:w-auto">
-          <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input flex-1 sm:w-52" style="padding:0.5rem 0.75rem;font-size:0.8125rem;" />
-          <button id="unlock-btn" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">Unlock</button>
-        </div>
+        <button id="unlock-btn" onclick="openUnlockModal()" class="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:scale-105" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 4px 16px rgba(0,100,121,0.25);">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
+          Unlock contacts
+        </button>
       </div>
-      <p id="unlock-error" class="hidden text-xs font-bold mt-2 ml-1" style="color:#b31b25;"></p>
     </div>
   </section>
+
+  <!-- UNLOCK MODAL -->
+  <div id="unlock-modal" class="hidden fixed inset-0 flex items-center justify-center px-4" style="z-index:9999;background:rgba(0,20,40,0.6);backdrop-filter:blur(6px);">
+    <div class="w-full max-w-sm rounded-3xl p-8" style="background:white;box-shadow:0 32px 80px rgba(0,0,0,0.25);">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl flex items-center justify-center" style="background:rgba(0,100,121,0.1);">
+            <span class="material-symbols-outlined text-xl" style="color:#006479;font-variation-settings:'FILL' 1;">lock_open</span>
+          </div>
+          <h2 class="font-headline font-extrabold text-xl" style="color:#003345;">Unlock contacts</h2>
+        </div>
+        <button onclick="closeUnlockModal()" class="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
+          <span class="material-symbols-outlined" style="color:#6b8fa3;">close</span>
+        </button>
+      </div>
+      <p class="text-sm mb-5" style="color:#326177;">Enter your email to reveal all seller and buyer contacts across every listing. One-time only.</p>
+      <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input w-full mb-2" style="padding:0.75rem 1rem;font-size:0.9375rem;" />
+      <p id="unlock-error" class="hidden text-xs font-bold mb-3" style="color:#b31b25;"></p>
+      <button id="unlock-submit" onclick="doUnlock()" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.02]" style="background:linear-gradient(135deg,#006479,#40cef3);box-shadow:0 4px 16px rgba(0,100,121,0.25);">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
+        Unlock all contacts
+      </button>
+      <p class="text-[10px] text-center mt-3" style="color:#6b8fa3;">Your email is stored privately and never shared.</p>
+    </div>
+  </div>
 
   <!-- FILTERS -->
   <section class="px-6 pb-4">
@@ -448,8 +472,6 @@ document.getElementById('copy-link-btn')!.addEventListener('click', () => {
 });
 
 // --- Unlock contacts ---
-const unlockBtn = document.getElementById('unlock-btn')!;
-const unlockEmail = document.getElementById('unlock-email') as HTMLInputElement;
 const unlockError = document.getElementById('unlock-error')!;
 
 // Hide banner if already unlocked
@@ -459,7 +481,22 @@ function updateUnlockBanner() {
 }
 updateUnlockBanner();
 
-unlockBtn.addEventListener('click', async () => {
+(window as any).openUnlockModal = function() {
+  document.getElementById('unlock-modal')!.classList.remove('hidden');
+  setTimeout(() => (document.getElementById('unlock-email') as HTMLInputElement)?.focus(), 50);
+};
+(window as any).closeUnlockModal = function() {
+  document.getElementById('unlock-modal')!.classList.add('hidden');
+  unlockError.classList.add('hidden');
+  (document.getElementById('unlock-email') as HTMLInputElement).value = '';
+};
+document.getElementById('unlock-modal')!.addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) (window as any).closeUnlockModal();
+});
+
+(window as any).doUnlock = async function() {
+  const unlockEmail = document.getElementById('unlock-email') as HTMLInputElement;
+  const submitBtn = document.getElementById('unlock-submit')!;
   const email = unlockEmail.value.trim();
   unlockError.classList.add('hidden');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -467,8 +504,8 @@ unlockBtn.addEventListener('click', async () => {
     unlockError.classList.remove('hidden');
     return;
   }
-  unlockBtn.textContent = '...';
-  unlockBtn.setAttribute('disabled', 'true');
+  submitBtn.textContent = 'Unlocking...';
+  submitBtn.setAttribute('disabled', 'true');
   try {
     const res = await fetch('/api/reveal', {
       method: 'POST',
@@ -480,18 +517,18 @@ unlockBtn.addEventListener('click', async () => {
       unlockError.textContent = data.error || 'Failed to unlock. Try again.';
       unlockError.classList.remove('hidden');
     } else {
-      // Store all contacts in localStorage
       saveRevealed(data.contacts || {});
       unlockBanner.classList.add('hidden');
+      (window as any).closeUnlockModal();
       render();
     }
   } catch {
     unlockError.textContent = 'Connection error. Try again.';
     unlockError.classList.remove('hidden');
   }
-  unlockBtn.textContent = 'Unlock';
-  unlockBtn.removeAttribute('disabled');
-});
+  submitBtn.textContent = 'Unlock all contacts';
+  submitBtn.removeAttribute('disabled');
+};
 
 // --- Submit ---
 document.getElementById('ticket-form')!.addEventListener('submit', async (e) => {
