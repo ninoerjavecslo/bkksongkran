@@ -23,26 +23,41 @@ export const prerender = false;
     </div>
   </section>
 
-  <!-- UNLOCK CONTACTS BANNER -->
+  <!-- UNLOCK CONTACTS BUTTON (shown when not yet unlocked) -->
   <section class="px-6 pb-4" id="unlock-banner">
     <div class="max-w-7xl mx-auto">
-      <div class="p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-3" style="background:rgba(225,243,255,0.8);border:1.5px solid rgba(64,206,243,0.4);">
-        <span class="material-symbols-outlined text-2xl flex-shrink-0" style="color:#006479;font-variation-settings:'FILL' 1;">lock</span>
-        <div class="flex-1 min-w-0">
-          <div class="font-bold text-sm mb-0.5" style="color:#003345;">Unlock all contact info</div>
-          <div class="text-xs" style="color:#326177;">Enter your email once to reveal seller and buyer contacts across all listings.</div>
-        </div>
-        <div class="flex flex-col gap-2 w-full sm:w-auto">
-          <div class="flex gap-2">
-            <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input flex-1 sm:w-52" style="padding:0.5rem 0.75rem;font-size:0.8125rem;" />
-            <button id="unlock-btn" class="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">Unlock</button>
-          </div>
-          <div id="turnstile-unlock"></div>
-        </div>
-      </div>
-      <p id="unlock-error" class="hidden text-xs font-bold mt-2 ml-1" style="color:#b31b25;"></p>
+      <button id="btn-unlock-contacts" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
+        Unlock Contact Info
+      </button>
     </div>
   </section>
+
+  <!-- UNLOCK MODAL -->
+  <div id="unlock-modal" class="modal-overlay hidden">
+    <div class="modal-backdrop" id="unlock-modal-backdrop"></div>
+    <div class="modal-scroll">
+      <div class="modal-center">
+        <div class="card w-full max-w-sm p-6 space-y-4 modal-card">
+          <div class="flex items-center justify-between">
+            <h3 class="font-headline font-bold text-lg" style="color:#003345;">Unlock Contact Info</h3>
+            <button id="unlock-close-btn" class="p-1 rounded-full hover:bg-surface-container-high transition-colors">
+              <span class="material-symbols-outlined text-on-surface-variant">close</span>
+            </button>
+          </div>
+          <p class="text-sm" style="color:#326177;">Enter your email once to reveal seller and buyer contacts across all listings.</p>
+          <input type="email" id="unlock-email" placeholder="your@email.com" class="form-input" />
+          <div id="turnstile-unlock"></div>
+          <button id="unlock-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all" style="background:linear-gradient(135deg,#006479,#40cef3);">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">lock_open</span>
+            Unlock all contacts
+          </button>
+          <p id="unlock-error" class="hidden text-xs font-bold" style="color:#b31b25;"></p>
+          <p class="text-[11px] text-center" style="color:#86b3cc;">Your email is stored privately and never shared.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FILTERS -->
   <section class="px-6 pb-4">
@@ -310,6 +325,8 @@ export const prerender = false;
 </style>
 
 <script>
+(window as any).__unlockTurnstileId = null;
+
 const FC: Record<string,{c:string;d:string}> = {
   'S2O':           {c:'#40cef3',d:'#006479'},
   'Siam Songkran': {c:'#ff8eb2',d:'#b4005d'},
@@ -398,6 +415,20 @@ function closeFormView() {
 document.getElementById('btn-open-form')!.addEventListener('click', openForm);
 document.getElementById('close-form-btn')!.addEventListener('click', closeFormView);
 
+// Unlock modal
+function openUnlockModal() {
+  document.getElementById('unlock-modal')!.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  initUnlockTurnstile();
+}
+function closeUnlockModal() {
+  document.getElementById('unlock-modal')!.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+document.getElementById('btn-unlock-contacts')!.addEventListener('click', openUnlockModal);
+document.getElementById('unlock-close-btn')!.addEventListener('click', closeUnlockModal);
+document.getElementById('unlock-modal-backdrop')!.addEventListener('click', closeUnlockModal);
+
 // Success modal
 document.getElementById('success-close-btn')!.addEventListener('click', () => {
   document.getElementById('success-modal')!.classList.add('hidden');
@@ -429,6 +460,17 @@ const unlockEmailEl = document.getElementById('unlock-email') as HTMLInputElemen
 const unlockError = document.getElementById('unlock-error')!;
 
 if (Object.keys(getRevealed()).length > 0) unlockBanner.classList.add('hidden');
+
+function initUnlockTurnstile() {
+  if ((window as any).__unlockTurnstileId !== null && (window as any).__unlockTurnstileId !== undefined) return;
+  if ((window as any).turnstile) {
+    (window as any).__unlockTurnstileId = (window as any).turnstile.render('#turnstile-unlock', {
+      sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
+      theme: 'light',
+      size: 'normal',
+    });
+  }
+}
 
 unlockBtn.addEventListener('click', async () => {
   const email = unlockEmailEl.value.trim();
@@ -463,6 +505,7 @@ unlockBtn.addEventListener('click', async () => {
       if (_tsId !== null && _tsId !== undefined && (window as any).turnstile) (window as any).turnstile.reset(_tsId);
     } else {
       saveRevealed(data.contacts || {});
+      closeUnlockModal();
       unlockBanner.classList.add('hidden');
       render();
     }
@@ -636,21 +679,3 @@ load();
 </script>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-<script>
-(window as any).__unlockTurnstileId = null;
-function initUnlockTurnstile() {
-  if ((window as any).__unlockTurnstileId !== null) return;
-  if ((window as any).turnstile) {
-    (window as any).__unlockTurnstileId = (window as any).turnstile.render('#turnstile-unlock', {
-      sitekey: '0x4AAAAAACxlzbfzLTTpR49t',
-      theme: 'light',
-      size: 'compact',
-    });
-  }
-}
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => setTimeout(initUnlockTurnstile, 500));
-} else {
-  setTimeout(initUnlockTurnstile, 500);
-}
-</script>
