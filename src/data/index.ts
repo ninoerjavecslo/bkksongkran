@@ -5,6 +5,8 @@ export interface FestivalScheduleEntry {
   genre: string;
   headliner: boolean;
   isPool?: boolean;
+  time?: string;
+  end?: string;
 }
 
 export interface Festival {
@@ -104,32 +106,36 @@ export const festivals: Festival[] = [
     featured: true,
     url: 'https://www.eventpop.me/e/87299/s2o2026',
     crowd: 'insane',
-    description: 'Massive water cannons fire on every drop. Lonely Club (Alan Walker b2b Steve Aoki) World Premiere, Zedd, Kygo, Lost Frequencies and more. New venue S2O Land near MRT Cultural Centre.',
-    timetableNote: 'Full timetable coming soon — set times will be added here.',
+    description: 'Massive water cannons fire on every drop. Lonely Club World Premiere, Zedd, Kygo, Lost Frequencies and more. New venue S2O Land near MRT Cultural Centre.',
     schedule: {
       'Apr 11': [
-        { name: 'Lonely Club', sub: 'Alan Walker b2b Steve Aoki — World Premiere', genre: 'EDM', headliner: true },
-        { name: 'Lost Frequencies', genre: 'Future House', headliner: true },
-        { name: 'I Hate Models', genre: 'Techno', headliner: false },
-        { name: 'William Black', genre: 'Melodic Bass', headliner: false },
-        { name: 'AC Slater', genre: 'House', headliner: false },
+        { name: 'Lonely Club', sub: 'World Premiere', genre: 'EDM', headliner: true, time: '23:00', end: '24:00' },
+        { name: 'Lost Frequencies', genre: 'Future House', headliner: true, time: '22:00', end: '23:00' },
+        { name: 'I Hate Models', genre: 'Techno', headliner: false, time: '21:00', end: '22:00' },
+        { name: 'William Black', genre: 'Melodic Bass', headliner: false, time: '20:00', end: '21:00' },
+        { name: 'AC Slater', genre: 'House', headliner: false, time: '19:00', end: '20:00' },
+        { name: 'Kikie', genre: 'House', headliner: false, time: '18:00', end: '19:00' },
+        { name: 'Bestboi', genre: 'House', headliner: false, time: '17:00', end: '18:00' },
       ],
       'Apr 12': [
-        { name: 'Zedd', genre: 'Electro House', headliner: true },
-        { name: 'Don Diablo presents CTRL ALT DELETE', sub: 'Asia Premiere', genre: 'Future House', headliner: true },
-        { name: 'Dabin', genre: 'Melodic Bass', headliner: false },
-        { name: 'Sidepiece', genre: 'Tech House', headliner: false },
-        { name: 'Marie Vaunt', genre: 'House', headliner: false },
+        { name: 'Zedd', genre: 'Electro House', headliner: true, time: '23:00', end: '24:00' },
+        { name: 'CTRL ALT DELETE', sub: 'Asia Premiere', genre: 'Future House', headliner: true, time: '22:00', end: '23:00' },
+        { name: 'Dabin', genre: 'Melodic Bass', headliner: false, time: '21:00', end: '22:00' },
+        { name: 'Sidepiece', genre: 'Tech House', headliner: false, time: '20:00', end: '21:00' },
+        { name: 'Marie Vaunt', genre: 'House', headliner: false, time: '19:00', end: '20:00' },
+        { name: 'Tito', genre: 'House', headliner: false, time: '18:00', end: '19:00' },
+        { name: 'Maysaa', genre: 'House', headliner: false, time: '17:00', end: '18:00' },
       ],
       'Apr 13': [
-        { name: 'Kygo', genre: 'Tropical House', headliner: true },
-        { name: 'Gryffin', genre: 'Melodic House', headliner: true },
-        { name: 'Da Tweekaz', genre: 'Hardstyle', headliner: false },
-        { name: 'Ray Volpe', genre: 'Bass House', headliner: false },
-        { name: 'Frank Walker', genre: 'Future Bass', headliner: false },
+        { name: 'Kygo', genre: 'Tropical House', headliner: true, time: '23:00', end: '24:00' },
+        { name: 'Gryffin', genre: 'Melodic House', headliner: true, time: '22:00', end: '23:00' },
+        { name: 'Da Tweekaz', genre: 'Hardstyle', headliner: false, time: '21:00', end: '22:00' },
+        { name: 'Ray Volpe', genre: 'Bass House', headliner: false, time: '20:00', end: '21:00' },
+        { name: 'Frank Walker', genre: 'Future Bass', headliner: false, time: '19:00', end: '20:00' },
+        { name: 'Yao', genre: 'House', headliner: false, time: '18:00', end: '19:00' },
+        { name: 'Mordan', genre: 'House', headliner: false, time: '17:00', end: '18:00' },
       ],
     },
-    regionalSupport: ['Bestboi', 'Kikie', 'Maysaa', 'Mordan', '+1+0', 'Yao'],
   },
   {
     id: 'siam',
