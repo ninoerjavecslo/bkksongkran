@@ -21,7 +21,7 @@ export async function verifyTurnstile(
   token: string,
   remoteip?: string
 ): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET ?? import.meta.env.TURNSTILE_SECRET;
+  const secret = process.env['TURNSTILE_SECRET'];
   // In local dev without the secret configured, allow testing without Turnstile
   if (!secret) {
     if (import.meta.env.DEV) return true;

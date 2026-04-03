@@ -152,20 +152,51 @@ export const festivals: Festival[] = [
     featured: true,
     url: 'https://siamsongkran.info',
     crowd: 'high',
-    description: 'Martin Garrix, Marshmello, John Summit, ARTBAT, Alok. 4 nights at Bravo BKK Arena in the heart of Bangkok\'s nightlife district.',
+    description: 'Martin Garrix, Marshmello, John Summit, ARTBAT b2b R3HAB, Alok. 4 nights of Main Stage sets at Bravo BKK Arena in the heart of Bangkok\'s nightlife district.',
     schedule: {
       'Apr 11': [
-        { name: 'Afrojack b2b R3HAB', genre: 'Big Room / Electro', headliner: true },
+        { name: 'ARTBAT b2b R3HAB', genre: 'Techno / Big Room', headliner: true,  time: '23:15', end: 'late' },
+        { name: 'Ben Nicky',         genre: 'Trance',            headliner: true,  time: '22:00', end: '23:15' },
+        { name: 'Vini Vici',         genre: 'Psy Trance',        headliner: false, time: '20:45', end: '22:00' },
+        { name: 'Andromedik',        genre: 'Drum & Bass',       headliner: false, time: '19:45', end: '20:45' },
+        { name: 'Y3LLO',             genre: 'House',             headliner: false, time: '18:45', end: '19:45' },
+        { name: 'Meguru',            genre: 'House',             headliner: false, time: '17:45', end: '18:45' },
+        { name: 'Sweeny',            genre: 'House',             headliner: false, time: '17:15', end: '17:45' },
+        { name: 'Ben.G',             genre: 'House',             headliner: false, time: '16:45', end: '17:15' },
+        { name: 'Brynna',            genre: 'House',             headliner: false, time: '16:00', end: '16:45' },
       ],
       'Apr 12': [
-        { name: 'Alok', sub: 'Urban Theory Show', genre: 'House / Bass', headliner: true },
-        { name: 'Marshmello', genre: 'Future Bass', headliner: true },
+        { name: 'Marshmello',                          genre: 'Future Bass',  headliner: true,  time: '23:15', end: 'late' },
+        { name: 'Alok',                                genre: 'Bass House',   headliner: true,  time: '22:00', end: '23:15' },
+        { name: 'Third Party b3b DubVision b3b Matisse & Sadko', genre: 'Big Room', headliner: true, time: '20:45', end: '22:00' },
+        { name: 'Alleycvt',                            genre: 'House',        headliner: false, time: '19:45', end: '20:45' },
+        { name: 'Jovynn',                              genre: 'House',        headliner: false, time: '18:45', end: '19:45' },
+        { name: 'Kaku',                                genre: 'House',        headliner: false, time: '17:45', end: '18:45' },
+        { name: 'Dia',                                 genre: 'House',        headliner: false, time: '17:15', end: '17:45' },
+        { name: 'Setty b3b Poohpn b3b Goblin',        genre: 'House',        headliner: false, time: '16:45', end: '17:15' },
+        { name: 'Honey Toast',                         genre: 'House',        headliner: false, time: '16:00', end: '16:45' },
       ],
       'Apr 13': [
-        { name: 'Martin Garrix', genre: 'Progressive House', headliner: true },
+        { name: 'Martin Garrix',    genre: 'Progressive House', headliner: true,  time: '23:15', end: 'late' },
+        { name: 'Agents of Time',   genre: 'Techno',            headliner: true,  time: '22:00', end: '23:15' },
+        { name: 'Slushii',          genre: 'Future Bass',       headliner: false, time: '20:45', end: '22:00' },
+        { name: 'Arcando',          genre: 'Big Room',          headliner: false, time: '19:45', end: '20:45' },
+        { name: 'DCR Milda',        genre: 'House',             headliner: false, time: '18:45', end: '19:45' },
+        { name: 'Am Not Joy & Prada', genre: 'House',           headliner: false, time: '17:45', end: '18:45' },
+        { name: 'Evin King',        genre: 'House',             headliner: false, time: '17:15', end: '17:45' },
+        { name: 'Liquid & Glass',   genre: 'House',             headliner: false, time: '16:45', end: '17:15' },
+        { name: 'Izier',            genre: 'House',             headliner: false, time: '16:00', end: '16:45' },
       ],
       'Apr 14': [
-        { name: 'John Summit', genre: 'Chicago House', headliner: true },
+        { name: 'John Summit',                    genre: 'Chicago House', headliner: true,  time: '23:15', end: 'late' },
+        { name: 'Gorgon City',                    genre: 'House',         headliner: true,  time: '22:00', end: '23:15' },
+        { name: 'Layton Giordani',                genre: 'Techno',        headliner: false, time: '20:45', end: '22:00' },
+        { name: 'Devault',                        genre: 'Tech House',    headliner: false, time: '19:45', end: '20:45' },
+        { name: '22Bullets',                      genre: 'House',         headliner: false, time: '18:45', end: '19:45' },
+        { name: 'Karty',                          genre: 'House',         headliner: false, time: '17:45', end: '18:45' },
+        { name: 'Beyond',                         genre: 'House',         headliner: false, time: '17:15', end: '17:45' },
+        { name: 'Chickenpunk',                    genre: 'House',         headliner: false, time: '16:45', end: '17:15' },
+        { name: 'Heartbreakkid b2b Sunday Sundae', genre: 'House',        headliner: false, time: '16:00', end: '16:45' },
       ],
     }
   },
@@ -187,20 +218,186 @@ export const festivals: Festival[] = [
     description: "Asia's largest gay circuit festival. 20th Anniversary. Night parties + Bear & Boy pool parties at Emsphere, Sukhumvit (BTS Phrom Phong).",
     schedule: {
       'Apr 10': [
-        { name: 'Opening Party — Illuminate', sub: 'Theme: Chrome · UOB Live Hall', genre: 'Circuit', headliner: true },
+        { name: 'Brian Solis · Mario Beckman', sub: 'Opening Party "Team Alpha"', genre: 'Circuit', headliner: true, time: '19:00', end: 'late' },
+        { name: 'Yoshaun · Tomo', sub: 'Opening DJs', genre: 'Circuit', headliner: false, time: '19:00', end: 'late' },
       ],
       'Apr 11': [
-        { name: 'Boy Pool Party — AQUA', sub: 'Tribe Sky Beach Club · Noon–7pm', genre: 'Pool Party', headliner: false, isPool: true },
-        { name: 'Main Party Vol. One', sub: 'Theme: Galactic Royalty · UOB Live Hall', genre: 'Circuit', headliner: true },
+        { name: 'Boy Pool Party — AQUA', sub: 'Boren · Kai · Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true, time: '12:00', end: '19:00' },
+        { name: 'Mistermiss · Tomer Maizner', sub: 'Main Party Vol. One "Empire Of The World"', genre: 'Circuit', headliner: true, time: '19:00', end: 'late' },
+        { name: 'Herric · Sun J', sub: 'Opening DJs', genre: 'Circuit', headliner: false, time: '19:00', end: 'late' },
       ],
       'Apr 12': [
-        { name: 'Bear Pool Party — AQUAXXL', sub: 'Tribe Sky Beach Club · Noon–7pm', genre: 'Pool Party', headliner: false, isPool: true },
-        { name: 'Main Party Vol. Two — Adro Mada', sub: 'Theme: Chrome & Glow · UOB Live Hall', genre: 'Circuit', headliner: true },
+        { name: 'Bear Pool Party — AQUAXXL', sub: 'Pat+ · CallMeKevin · Tribe Sky Beach Club', genre: 'Pool Party', headliner: false, isPool: true, time: '12:00', end: '19:00' },
+        { name: 'Karsten Sollors · LeaNH · Fran Albuquerque', sub: 'Main Party Vol. Two "Adro Mada"', genre: 'Circuit', headliner: true, time: '19:00', end: 'late' },
+        { name: 'Rita · Grant', sub: 'Opening DJs', genre: 'Circuit', headliner: false, time: '19:00', end: 'late' },
       ],
       'Apr 13': [
-        { name: 'Closing Party — Kink', sub: 'Theme: Leather & Kink · UOB Live Hall', genre: 'Circuit', headliner: true },
+        { name: 'Jair Sandoval · Alex Acosta', sub: 'Closing Party "Kink"', genre: 'Circuit', headliner: true, time: '19:00', end: 'late' },
+        { name: 'Taki · Brian Cua', sub: 'Opening DJs', genre: 'Circuit', headliner: false, time: '19:00', end: 'late' },
       ],
     }
+  },
+];
+
+// ── Party / Community Events ───────────────────
+export interface PartyEvent {
+  id: string;
+  name: string;
+  tagline: string;
+  dates: string;
+  time: string;
+  venue: string;
+  area: string;
+  price: string;
+  color: string;
+  colorDark: string;
+  ticketUrl?: string;
+  desc: string;
+  stages?: string[];
+  lineup?: string[];
+  lgbtq?: boolean;
+  inviteOnly?: boolean;
+  days: number[];
+}
+
+export const partyEvents: PartyEvent[] = [
+  // Apr 10
+  {
+    id: 'midsommar',
+    name: 'Midsommar Bangkok',
+    tagline: 'A night of summer, music, and queer joy.',
+    dates: 'Apr 10',
+    time: '10PM – Late',
+    venue: 'Circus Dance Festival',
+    area: 'Bangkok',
+    price: 'Invite Only',
+    color: '#e879f9',
+    colorDark: '#a21caf',
+    ticketUrl: 'https://www.instagram.com/midsommar_bangkok',
+    desc: 'An exclusive invite-only LGBTQ+ party to kick off Songkran weekend at Circus Dance Festival. Request your invitation via Instagram @midsommar_bangkok.',
+    lineup: ['ANZA', 'Bryant', 'Pat+', 'KP', 'Chobeatz', '4YU'],
+    lgbtq: true,
+    inviteOnly: true,
+    days: [10],
+  },
+  {
+    id: 'bsbw',
+    name: 'Bangkok Songkran Bear Week 2026',
+    tagline: "Asia's biggest LGBTQ+ bear celebration.",
+    dates: 'Apr 10–13',
+    time: 'Multiple events',
+    venue: 'Various venues, Bangkok',
+    area: 'Bangkok',
+    price: '฿1,890–7,490',
+    color: '#d97706',
+    colorDark: '#92400e',
+    ticketUrl: 'https://www.eventpop.me/e/131558',
+    desc: "Asia's premier LGBTQ+ bear event spanning four days of Songkran. Bear Cruise Dinner on the Chao Phraya River (Apr 10), Bangkok Twilight pool & garden party (Apr 11, 1–7PM), SOAK onsen party at Kaikan Onsen BKK (Apr 12, 12–5PM), and SCRUM night party (Apr 12, 8PM–2AM). 20+ required, original passport.",
+    stages: ['Bear Cruise Dinner — Apr 10', 'Bangkok Twilight Pool Party — Apr 11', 'SOAK Onsen Party — Apr 12', 'SCRUM Night Party — Apr 12'],
+    lgbtq: true,
+    days: [10, 11, 12, 13],
+  },
+  // Apr 11
+  {
+    id: 'beefest',
+    name: 'BEEFEST',
+    tagline: 'The First Fest of BEEF. All day. All wet. All BEEF.',
+    dates: 'Apr 11',
+    time: '2PM – 12AM',
+    venue: 'The River Club, Bangkok',
+    area: 'Bangkok',
+    price: 'Ticketed',
+    color: '#f59e0b',
+    colorDark: '#b45309',
+    ticketUrl: 'https://www.eventpop.me/e/133985/beefest-2026',
+    desc: 'Not just another pool party — this is the beginning of something bigger. Songkran Edition featuring 3 stages, an all-day water experience, and Bangkok\'s finest circuit DJs.',
+    stages: ['Pool Party Stage', 'The RIVER dance floor', 'Dark Cruise'],
+    lineup: ['Tackhey', 'Kazuma', 'Callmekevin', 'Frxnk', 'Mex', 'Tony HM'],
+    lgbtq: true,
+    days: [11],
+  },
+  // Apr 12
+  {
+    id: 'jizzy-lounge',
+    name: 'Jizzy Lounge × BKK WET 2.0',
+    tagline: 'Afternoon LGBTQ+ Songkran splash.',
+    dates: 'Apr 12',
+    time: '1PM – 6PM',
+    venue: 'Bangkok',
+    area: 'Bangkok',
+    price: 'Invite Only',
+    color: '#c026d3',
+    colorDark: '#86198f',
+    ticketUrl: 'https://www.instagram.com/jizzy.lounge.bkk',
+    desc: 'BKK WET 2.0 returns with Jizzy Lounge for an LGBTQ+ Songkran afternoon party. The perfect warm-up before the night begins. Invite only — request via Instagram @jizzy.lounge.bkk.',
+    lgbtq: true,
+    inviteOnly: true,
+    days: [12],
+  },
+  // Apr 13
+  {
+    id: 'gspot-pool',
+    name: 'G-SPOT Party: Pool Edition 2026',
+    tagline: "Bangkok's hottest LGBTQ+ pool party, Songkran edition.",
+    dates: 'Apr 13',
+    time: '3PM – 9PM',
+    venue: 'Ibis Styles Bangkok Silom',
+    area: 'Silom',
+    price: 'Ticketed',
+    color: '#ec4899',
+    colorDark: '#be185d',
+    ticketUrl: 'https://www.ticketmelon.com/th/G-SPOT-PARTY/POOL-EDITION-2026',
+    desc: "The iconic G-SPOT Party returns for Songkran day at Ibis Styles Bangkok Silom. Every ticket includes 1 free welcome drink and a complimentary snack. Expect music, water, and Bangkok's LGBTQ+ crowd at its finest.",
+    lgbtq: true,
+    days: [13],
+  },
+  {
+    id: 'unleash-day1',
+    name: 'Unleash: Wet Your Throat',
+    tagline: 'Afternoon pool & cruising party to kick off Songkran.',
+    dates: 'Apr 13',
+    time: '4PM – 9PM',
+    venue: 'Side Bar Silom',
+    area: 'Silom',
+    price: 'Ticketed',
+    color: '#06b6d4',
+    colorDark: '#0e7490',
+    ticketUrl: 'https://yourtessera.com/e/unleash',
+    desc: 'The LGBTQ+ afternoon warm-up party on Songkran day. Pool vibes, cruising, and good music at Side Bar Silom. Part 1 of the Unleash Songkran experience.',
+    lgbtq: true,
+    days: [13],
+  },
+  // Apr 14
+  {
+    id: 'unleash-day2',
+    name: 'Unleash: Main Party',
+    tagline: 'The full-night LGBTQ+ experience. Silom goes off.',
+    dates: 'Apr 14',
+    time: '10PM – 6AM',
+    venue: 'Silom (venue TBA)',
+    area: 'Silom',
+    price: 'Ticketed',
+    color: '#0284c7',
+    colorDark: '#075985',
+    ticketUrl: 'https://yourtessera.com/e/unleash',
+    desc: 'The main event. An all-night LGBTQ+ party closing out Songkran 2026 in Silom. Venue to be announced — check Tessera for updates.',
+    lgbtq: true,
+    days: [14],
+  },
+  {
+    id: 'k2o',
+    name: 'K2O Songkran Music Festival',
+    tagline: 'The final splash of Songkran weekend.',
+    dates: 'Apr 14',
+    time: '5PM – Late',
+    venue: 'S2O Land, Ratchada Rd',
+    area: 'MRT Thailand Cultural Centre',
+    price: '฿3,200',
+    color: '#f97316',
+    colorDark: '#c2410c',
+    ticketUrl: 'https://www.eventpop.me/e/134917/k2o2026',
+    desc: 'Closing out Songkran weekend at S2O Land in Ratchada. All area standing, all ages. Organized by S2O Factory.',
+    days: [14],
   },
 ];
 

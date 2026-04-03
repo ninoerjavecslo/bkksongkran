@@ -1,0 +1,306 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import { festivals, partyEvents } from '../data/index';
+
+const DAYS = [
+  { num: 10, label: 'Apr 10', weekday: 'Fri', note: 'Opening Night' },
+  { num: 11, label: 'Apr 11', weekday: 'Sat', note: '' },
+  { num: 12, label: 'Apr 12', weekday: 'Sun', note: '' },
+  { num: 13, label: 'Apr 13', weekday: 'Mon', note: 'Songkran Day' },
+  { num: 14, label: 'Apr 14', weekday: 'Tue', note: 'Final Night' },
+];
+
+function parse24h(t: string): number {
+  if (!t) return 99;
+  t = t.trim();
+  if (/^\d{1,2}:\d{2}$/.test(t)) return parseInt(t.split(':')[0]);
+  const m = t.match(/^(\d+)(?::\d+)?\s*(AM|PM)$/i);
+  if (!m) return 99;
+  let h = parseInt(m[1]);
+  const p = m[2].toUpperCase();
+  if (p === 'PM' && h !== 12) h += 12;
+  if (p === 'AM' && h === 12) h = 0;
+  return h;
+}
+
+function to12h(t: string): string {
+  const h = parseInt(t.split(':')[0]);
+  if (h === 0) return '12AM';
+  if (h === 12) return '12PM';
+  return h < 12 ? `${h}AM` : `${h - 12}PM`;
+}
+
+interface ScheduleItem {
+  timeDisplay: string;
+  timeSort: number;
+  name: string;
+  sub?: string;
+  venue: string;
+  color: string;
+  colorDark: string;
+  ticketUrl?: string;
+  lgbtq?: boolean;
+  inviteOnly?: boolean;
+  isPool: boolean;
+  tag: string;
+  headliners: string[];
+}
+
+function buildDay(dayNum: number): ScheduleItem[] {
+  const dayKey = `Apr ${dayNum}`;
+  const items: ScheduleItem[] = [];
+
+  // Major festivals
+  for (const f of festivals) {
+    const sched = f.schedule[dayKey];
+    if (!sched?.length) continue;
+
+    const pools = sched.filter(e => e.isPool);
+    const mains = sched.filter(e => !e.isPool);
+
+    // Pool party entries (GCircuit only)
+    for (const p of pools) {
+      items.push({
+        timeDisplay: `${to12h(p.time || '12:00')} – ${to12h(p.end || '19:00')}`,
+        timeSort: parse24h(p.time || '12:00'),
+        name: p.name,
+        sub: p.sub,
+        venue: 'Tribe Sky Beach Club, Emsphere',
+        color: f.color,
+        colorDark: f.colorDark,
+        ticketUrl: f.url,
+        lgbtq: true,
+        isPool: true,
+        tag: 'GCircuit',
+        headliners: [],
+      });
+    }
+
+    // Main party block — one entry per festival per day
+    if (mains.length > 0) {
+      const opener = mains[mains.length - 1]; // array is desc, last = earliest
+      const headlinerEntry = mains.find(e => e.headliner);
+      const headliners = mains
+        .filter(e => e.headliner)
+        .slice(0, 3)
+        .map(e => {
+          if (f.id === 'gcircuit' || !e.sub) return e.name;
+          return `${e.name} (${e.sub})`;
+        });
+
+      items.push({
+        timeDisplay: `${to12h(opener.time || '17:00')} – Late`,
+        timeSort: parse24h(opener.time || '17:00'),
+        name: f.name,
+        sub: f.id === 'gcircuit' && headlinerEntry?.sub ? headlinerEntry.sub : undefined,
+        venue: f.venue,
+        color: f.color,
+        colorDark: f.colorDark,
+        ticketUrl: f.url,
+        lgbtq: f.type === 'circuit',
+        isPool: false,
+        tag: f.id === 's2o' ? 'S2O' : f.id === 'siam' ? 'Siam' : 'GCircuit',
+        headliners,
+      });
+    }
+  }
+
+  // Party / community events
+  for (const p of partyEvents) {
+    if (!p.days.includes(dayNum)) continue;
+    const rawStart = p.time.split(' – ')[0].split('–')[0].trim();
+    items.push({
+      timeDisplay: p.time,
+      timeSort: parse24h(rawStart),
+      name: p.name,
+      sub: undefined,
+      venue: p.venue,
+      color: p.color,
+      colorDark: p.colorDark,
+      ticketUrl: p.ticketUrl,
+      lgbtq: p.lgbtq,
+      inviteOnly: p.inviteOnly,
+      isPool: false,
+      tag: p.lgbtq ? 'LGBTQ+' : 'Party',
+      headliners: [],
+    });
+  }
+
+  return items.sort((a, b) => a.timeSort - b.timeSort);
+}
+
+const schedule = DAYS.map(d => ({ ...d, items: buildDay(d.num) }));
+---
+
+<BaseLayout
+  title="Songkran 2026 Bangkok — Full Schedule by Day"
+  description="Day-by-day schedule for Songkran Bangkok 2026. S2O, Siam Songkran, GCircuit, pool parties, and LGBTQ+ events — all in one place."
+  canonical="https://bkksongkran.com/schedule"
+>
+  <!-- Page header -->
+  <div class="pt-36 pb-12 px-6 text-center" style="background:linear-gradient(180deg,rgba(225,243,255,0.8),rgba(238,248,255,0));">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-xs font-bold uppercase tracking-widest mb-3" style="color:#006479;">April 10–14, 2026 · Bangkok</div>
+      <h1 class="font-headline font-black text-5xl md:text-7xl tracking-tight mb-4" style="color:#003345;">
+        Full<br/>
+        <span style="background:linear-gradient(90deg,#006479,#40cef3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Schedule</span>
+      </h1>
+      <p class="text-base max-w-md mx-auto" style="color:#6b8fa3;">
+        Every festival, pool party, and community event — sorted by day and time.
+      </p>
+      <div class="flex justify-center gap-3 mt-6 flex-wrap text-xs font-semibold">
+        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#40cef315;color:#006479;">
+          <span class="w-2 h-2 rounded-full inline-block" style="background:#40cef3;"></span> S2O
+        </span>
+        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#ff8eb215;color:#b4005d;">
+          <span class="w-2 h-2 rounded-full inline-block" style="background:#ff8eb2;"></span> Siam Songkran
+        </span>
+        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#c084fc15;color:#7c3aed;">
+          <span class="w-2 h-2 rounded-full inline-block" style="background:#c084fc;"></span> GCircuit
+        </span>
+        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f59e0b15;color:#b45309;">
+          <span class="w-2 h-2 rounded-full inline-block" style="background:#f59e0b;"></span> Party Events
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky day tabs -->
+  <div class="sticky top-0 z-30 px-4 py-3" style="background:rgba(238,248,255,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(192,232,255,0.5);">
+    <div class="max-w-5xl mx-auto flex gap-2 overflow-x-auto" style="scrollbar-width:none;-ms-overflow-style:none;">
+      {schedule.map((day, i) => (
+        <button
+          class="schedule-day-tab flex-shrink-0 flex flex-col items-center px-5 py-2.5 rounded-xl transition-all border-2 cursor-pointer"
+          data-idx={String(i)}
+          style={i === 0
+            ? 'border-color:#006479;background:transparent;color:#006479;'
+            : 'border-color:#d0e8ff;background:transparent;color:#6b8fa3;'}
+        >
+          <span class="text-[10px] font-semibold opacity-60 leading-tight">{day.weekday}</span>
+          <span class="font-bold text-sm leading-tight">{day.label}</span>
+          {day.note && <span class="text-[9px] font-semibold mt-0.5 opacity-70">{day.note}</span>}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Day panels -->
+  <div class="px-4 md:px-6 py-10">
+    <div class="max-w-5xl mx-auto">
+      {schedule.map((day, i) => (
+        <div class="schedule-day-panel" data-idx={String(i)} style={i !== 0 ? 'display:none;' : ''}>
+
+          <!-- Day heading -->
+          <div class="mb-6 flex items-end justify-between gap-3 flex-wrap">
+            <div>
+              <h2 class="font-headline font-black text-2xl md:text-3xl" style="color:#003345;">
+                {day.weekday}, {day.label}
+                {day.note && (
+                  <span class="text-base font-semibold ml-2" style="color:#006479;">· {day.note}</span>
+                )}
+              </h2>
+              <p class="text-sm mt-1" style="color:#6b8fa3;">{day.items.length} events today</p>
+            </div>
+            <a href="/events" class="text-xs font-semibold flex items-center gap-1 transition-all hover:underline" style="color:#006479;">
+              Full lineups
+              <span class="material-symbols-outlined text-sm">open_in_new</span>
+            </a>
+          </div>
+
+          <!-- Timeline -->
+          <div class="rounded-2xl overflow-hidden" style="border:1px solid rgba(192,232,255,0.5);background:white;">
+            {day.items.map((item, idx) => (
+              <div class={`flex gap-3 md:gap-4 items-start px-4 py-4 transition-colors hover:bg-sky-50/40 ${idx !== day.items.length - 1 ? 'border-b' : ''}`}
+                   style="border-color:rgba(224,242,255,0.7);">
+
+                <!-- Time -->
+                <div class="w-12 md:w-14 flex-shrink-0 text-right pt-0.5">
+                  <div class="text-[11px] font-bold tabular-nums leading-tight" style={`color:${item.colorDark};`}>
+                    {item.timeDisplay.split('–')[0].trim()}
+                  </div>
+                </div>
+
+                <!-- Color accent bar -->
+                <div class="w-[3px] self-stretch rounded-full flex-shrink-0" style={`background:${item.color};`}></div>
+
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex-1 min-w-0">
+
+                      <!-- Tags row -->
+                      <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+                        <span class="text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-md"
+                              style={`background:${item.color}22;color:${item.colorDark};`}>
+                          {item.isPool ? '🏊 Pool Party' : item.tag}
+                        </span>
+                        {item.lgbtq && !item.isPool && (
+                          <span class="text-[9px] px-1.5 py-0.5 rounded-md font-bold" style="background:#fdf4ff;color:#a21caf;">🏳️‍🌈 LGBTQ+</span>
+                        )}
+                        {item.inviteOnly && (
+                          <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md" style="background:#f8fafc;color:#64748b;">Invite Only</span>
+                        )}
+                      </div>
+
+                      <!-- Name -->
+                      <div class="font-bold text-sm md:text-[15px] text-on-surface leading-snug">{item.name}</div>
+
+                      <!-- GCircuit party sub-title -->
+                      {item.sub && (
+                        <div class="text-xs italic mt-0.5" style={`color:${item.colorDark};opacity:0.75;`}>{item.sub}</div>
+                      )}
+
+                      <!-- Venue & time range -->
+                      <div class="text-xs mt-0.5 flex flex-wrap gap-x-1.5" style="color:#6b8fa3;">
+                        <span>{item.venue}</span>
+                        <span>·</span>
+                        <span>{item.timeDisplay}</span>
+                      </div>
+
+                      <!-- Headliners -->
+                      {item.headliners.length > 0 && (
+                        <div class="flex flex-wrap gap-1 mt-2">
+                          {item.headliners.map(h => (
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                                  style={`background:${item.color}15;color:${item.colorDark};border:1px solid ${item.color}30;`}>
+                              ★ {h}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <!-- Ticket / invite button -->
+                    {item.ticketUrl && (
+                      <a href={item.ticketUrl} target="_blank" rel="noopener noreferrer"
+                         class="flex-shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-full transition-all hover:scale-105 whitespace-nowrap"
+                         style={`background:${item.color}15;color:${item.colorDark};border:1px solid ${item.color}30;`}>
+                        {item.inviteOnly ? 'Request →' : 'Tickets →'}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.schedule-day-tab');
+    const panels = document.querySelectorAll<HTMLElement>('.schedule-day-panel');
+
+    const ACTIVE = 'border-color:#006479;background:transparent;color:#006479;';
+    const INACTIVE = 'border-color:#d0e8ff;background:transparent;color:#6b8fa3;';
+
+    function showDay(idx: number) {
+      tabs.forEach((t, i) => { t.style.cssText = i === idx ? ACTIVE : INACTIVE; });
+      panels.forEach((p, i) => { p.style.display = i === idx ? '' : 'none'; });
+    }
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => showDay(i)));
+  </script>
+</BaseLayout>

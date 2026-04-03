@@ -2,7 +2,7 @@
 import BaseLayout from '../components/layout/BaseLayout.astro';
 import FestivalSchedule from '../components/organisms/FestivalSchedule.astro';
 import Breadcrumb from '../components/atoms/Breadcrumb.astro';
-import { festivals, additionalEvents, waterFightZones } from '../data/index';
+import { festivals, additionalEvents, waterFightZones, partyEvents } from '../data/index';
 
 const ticketedEvents = additionalEvents.filter(e => e.type === 'festival');
 const freeEvents = additionalEvents.filter(e => e.type !== 'festival');
@@ -117,6 +117,10 @@ const eventSchema = {
           <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
           Headliner Festivals
         </a>
+        <a href="#party-events" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105" style="border-color:#b45309;color:#b45309;background:#f59e0b15;">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">local_fire_department</span>
+          Party Events
+        </a>
         <a href="#water-fights" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all hover:scale-105" style="border-color:#FF3B30;color:#FF3B30;background:#FF3B3015;">
           <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">water_drop</span>
           Water Fight Zones
@@ -203,6 +207,150 @@ const eventSchema = {
       </div>
     </div>
   </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- COMMUNITY & PARTY EVENTS                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  {partyEvents.length > 0 && (
+    <section class="px-6 pb-20" id="party-events">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center gap-3 mb-10">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#f59e0b15;">
+            <span class="material-symbols-outlined text-xl" style="color:#b45309;font-variation-settings:'FILL' 1;">local_fire_department</span>
+          </div>
+          <div>
+            <h2 class="font-headline font-extrabold text-2xl tracking-tight" style="color:#003345;">Community & Party Events</h2>
+            <p class="text-xs" style="color:#6b8fa3;">Independent parties, community nights and more.</p>
+          </div>
+        </div>
+
+        <!-- Day filter tabs -->
+        <div class="flex gap-2 mb-8 flex-wrap" id="party-day-filter">
+          {[
+            { day: 'all', label: 'All Events' },
+            { day: '10',  label: 'Fri Apr 10' },
+            { day: '11',  label: 'Sat Apr 11' },
+            { day: '12',  label: 'Sun Apr 12' },
+            { day: '13',  label: 'Mon Apr 13' },
+            { day: '14',  label: 'Tue Apr 14' },
+          ].map(({ day, label }) => (
+            <button
+              class="party-day-btn text-sm font-bold px-4 py-2 rounded-full border-2 transition-all hover:scale-105"
+              data-day={day}
+              style={day === 'all'
+                ? 'border-color:#b45309;color:#b45309;background:#f59e0b20;'
+                : 'border-color:#d0e8ff;color:#326177;background:white;'}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div class="space-y-6" id="party-events-list">
+          {partyEvents.map(event => (
+            <div class="rounded-2xl overflow-hidden party-event-card" data-days={event.days.join(',')} style={`border:1px solid ${event.color}30;background:white;`}>
+              <!-- Banner -->
+              <div class="p-6 md:p-8" style={`background:linear-gradient(135deg,${event.colorDark},${event.color});`}>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <div class="text-xs font-bold uppercase tracking-widest text-white opacity-70">
+                        {event.lgbtq ? 'LGBTQ+ Party' : 'Community Event'}
+                      </div>
+                      {event.lgbtq && (
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:rgba(255,255,255,0.2);color:#fff;letter-spacing:0.05em;">🏳️‍🌈 LGBTQ+</span>
+                      )}
+                    </div>
+                    <h3 class="font-headline text-3xl md:text-4xl font-black text-white">{event.name}</h3>
+                    <p class="text-white opacity-80 italic mt-1">{event.tagline}</p>
+                    <div class="flex flex-wrap gap-4 mt-3">
+                      <span class="flex items-center gap-1.5 text-sm font-semibold text-white opacity-85">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">calendar_month</span>
+                        {event.dates}, 2026 · {event.time}
+                      </span>
+                      <span class="flex items-center gap-1.5 text-sm font-semibold text-white opacity-85">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">location_on</span>
+                        {event.venue}
+                      </span>
+                    </div>
+                  </div>
+                  {event.ticketUrl && (
+                    <a href={event.ticketUrl} target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 self-start flex-shrink-0"
+                       style={`background:#fff;color:${event.colorDark};`}>
+                      <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">
+                        {event.inviteOnly ? 'open_in_new' : 'confirmation_number'}
+                      </span>
+                      {event.inviteOnly ? 'Request Invite' : 'Buy Tickets'}
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <!-- Details -->
+              <div class="p-6 md:p-8 grid md:grid-cols-2 gap-6">
+                <!-- Description + Stages -->
+                <div class="space-y-4">
+                  <p class="text-sm leading-relaxed" style="color:#326177;">{event.desc}</p>
+                  {event.stages && (
+                    <div>
+                      <div class="text-[10px] font-bold uppercase tracking-widest mb-2" style={`color:${event.colorDark};`}>Stages</div>
+                      <div class="flex flex-wrap gap-2">
+                        {event.stages.map(stage => (
+                          <span class="text-xs font-semibold px-3 py-1 rounded-full" style={`background:${event.color}15;color:${event.colorDark};border:1px solid ${event.color}30;`}>
+                            {stage}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <!-- DJ Lineup -->
+                {event.lineup && (
+                  <div>
+                    <div class="text-[10px] font-bold uppercase tracking-widest mb-3" style={`color:${event.colorDark};`}>DJ Lineup</div>
+                    <div class="flex flex-wrap gap-2">
+                      {event.lineup.map(dj => (
+                        <span class="text-sm font-bold px-3 py-1.5 rounded-full" style={`background:${event.color}12;color:${event.colorDark};border:1px solid ${event.color}25;`}>
+                          {dj}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <script>
+    const btns = document.querySelectorAll<HTMLButtonElement>('.party-day-btn');
+    const cards = document.querySelectorAll<HTMLElement>('.party-event-card');
+
+    const ACTIVE = 'border-color:#b45309;color:#b45309;background:#f59e0b20;';
+    const INACTIVE = 'border-color:#d0e8ff;color:#326177;background:white;';
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const day = btn.dataset.day!;
+        btns.forEach(b => { b.style.cssText = INACTIVE; });
+        btn.style.cssText = ACTIVE;
+
+        cards.forEach(card => {
+          if (day === 'all') {
+            card.style.display = '';
+          } else {
+            const days = (card.dataset.days ?? '').split(',');
+            card.style.display = days.includes(day) ? '' : 'none';
+          }
+        });
+      });
+    });
+  </script>
 
   <!-- ═══════════════════════════════════════════ -->
   <!-- WATER FIGHT ZONES                          -->
