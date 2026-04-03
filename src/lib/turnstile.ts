@@ -5,8 +5,6 @@
  * Env var: TURNSTILE_SECRET (server-side only, never PUBLIC_)
  */
 
-const secret = import.meta.env.TURNSTILE_SECRET;
-
 /**
  * Verifies a Cloudflare Turnstile token.
  *
@@ -23,6 +21,7 @@ export async function verifyTurnstile(
   token: string,
   remoteip?: string
 ): Promise<boolean> {
+  const secret = import.meta.env.TURNSTILE_SECRET;
   // In local dev without the secret configured, allow testing without Turnstile
   if (!secret) {
     if (import.meta.env.DEV) return true;
