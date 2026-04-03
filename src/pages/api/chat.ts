@@ -105,7 +105,7 @@ function jsonError(message: string, status: number) {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  const TURNSTILE_SECRET = import.meta.env.TURNSTILE_SECRET;
+  const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET;
   try {
     // ── Origin check (blocks direct API hammering from scripts) ──
     const origin = request.headers.get('origin') ?? '';
