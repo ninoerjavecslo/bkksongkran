@@ -1,0 +1,386 @@
+---
+import { festivals, partyEvents } from '../data/index';
+
+const DAYS = [
+  { num: 10, label: 'Fri\n10 Apr' },
+  { num: 11, label: 'Sat\n11 Apr' },
+  { num: 12, label: 'Sun\n12 Apr' },
+  { num: 13, label: 'Mon\n13 Apr' },
+  { num: 14, label: 'Tue\n14 Apr' },
+];
+
+function to12h(t: string): string {
+  const h = parseInt(t.split(':')[0]);
+  if (h === 0) return '12AM';
+  if (h === 12) return '12PM';
+  return h < 12 ? `${h}AM` : `${h - 12}PM`;
+}
+
+// Build rows: each row is one "event source" with cells per day
+interface Cell {
+  label: string;
+  sub?: string;
+  time?: string;
+  color: string;
+  active: boolean;
+}
+
+interface Row {
+  name: string;
+  link: string;
+  color: string;
+  cells: Cell[];
+}
+
+const rows: Row[] = [];
+
+// GCircuit
+{
+  const f = festivals.find(f => f.id === 'gcircuit')!;
+  const cells: Cell[] = DAYS.map(d => {
+    const sched = f.schedule[`Apr ${d.num}`];
+    if (!sched?.length) return { label: '', color: f.color, active: false };
+    const mains = sched.filter(e => !e.isPool);
+    const headliner = mains.find(e => e.headliner);
+    const opener = mains[mains.length - 1];
+    return {
+      label: headliner?.sub ?? 'Night Party',
+      sub: headliner?.name,
+      time: opener?.time ? `${to12h(opener.time)} – Late` : '7PM – Late',
+      color: f.color,
+      active: true,
+    };
+  });
+  rows.push({ name: 'GCircuit', link: f.url, color: f.color, cells });
+}
+
+// GCircuit Pool
+{
+  const f = festivals.find(f => f.id === 'gcircuit')!;
+  const cells: Cell[] = DAYS.map(d => {
+    const sched = f.schedule[`Apr ${d.num}`];
+    if (!sched?.length) return { label: '', color: f.color, active: false };
+    const pool = sched.find(e => e.isPool);
+    if (!pool) return { label: '', color: f.color, active: false };
+    return {
+      label: pool.name,
+      sub: pool.sub,
+      time: `${to12h(pool.time || '12:00')} – ${to12h(pool.end || '19:00')}`,
+      color: f.color,
+      active: true,
+    };
+  });
+  if (cells.some(c => c.active)) {
+    rows.push({ name: 'GCircuit Pool', link: f.url, color: f.color, cells });
+  }
+}
+
+// S2O
+{
+  const f = festivals.find(f => f.id === 's2o')!;
+  const cells: Cell[] = DAYS.map(d => {
+    const sched = f.schedule[`Apr ${d.num}`];
+    if (!sched?.length) return { label: '', color: f.color, active: false };
+    const headliners = sched.filter(e => e.headliner).map(e => e.name).join(' · ');
+    const opener = sched[sched.length - 1];
+    return {
+      label: 'S2O Songkran',
+      sub: headliners,
+      time: opener?.time ? `${to12h(opener.time)} – Late` : '5PM – Late',
+      color: f.color,
+      active: true,
+    };
+  });
+  rows.push({ name: 'S2O', link: f.url, color: f.color, cells });
+}
+
+// Siam Songkran
+{
+  const f = festivals.find(f => f.id === 'siam')!;
+  const cells: Cell[] = DAYS.map(d => {
+    const sched = f.schedule[`Apr ${d.num}`];
+    if (!sched?.length) return { label: '', color: f.color, active: false };
+    const headliners = sched.filter(e => e.headliner).slice(0, 2).map(e => e.name).join(' · ');
+    const opener = sched[sched.length - 1];
+    return {
+      label: 'Siam Songkran',
+      sub: headliners,
+      time: opener?.time ? `${to12h(opener.time)} – Midnight` : '4PM – Midnight',
+      color: f.color,
+      active: true,
+    };
+  });
+  rows.push({ name: 'Siam Songkran', link: f.url, color: f.color, cells });
+}
+
+// Party events — one row each
+for (const p of partyEvents) {
+  const cells: Cell[] = DAYS.map(d => {
+    if (!p.days.includes(d.num)) return { label: '', color: p.color, active: false };
+    return {
+      label: p.name,
+      sub: p.venue !== 'Bangkok' && p.venue !== 'Various venues, Bangkok' ? p.venue : undefined,
+      time: p.time,
+      color: p.color,
+      active: true,
+    };
+  });
+  rows.push({ name: p.name, link: p.ticketUrl ?? '', color: p.color, cells });
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Songkran Bangkok 2026 — Full Schedule</title>
+  <style is:global>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0f8ff;
+      color: #003345;
+      padding: 24px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      line-height: 1;
+      color: #003345;
+    }
+
+    .page-title span {
+      color: #006479;
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: #6b8fa3;
+      margin-top: 4px;
+    }
+
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #006479;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .print-btn:hover { opacity: 0.85; }
+
+    .schedule-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,100,121,0.10);
+      background: white;
+    }
+
+    .schedule-table th {
+      background: #003345;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 10px 12px;
+      text-align: center;
+      white-space: pre-line;
+      line-height: 1.4;
+    }
+
+    .schedule-table th.col-event {
+      text-align: left;
+      width: 140px;
+      background: #002233;
+    }
+
+    .schedule-table th.day-fri  { background: #1a4a5a; }
+    .schedule-table th.day-sat  { background: #005a70; }
+    .schedule-table th.day-sun  { background: #006479; }
+    .schedule-table th.day-mon  { background: #007a90; color:#fff; font-weight:800; }
+    .schedule-table th.day-tue  { background: #005a70; }
+
+    .schedule-table tr:nth-child(even) td { background: #f7fbff; }
+    .schedule-table tr:nth-child(odd) td  { background: white; }
+
+    td {
+      padding: 0;
+      vertical-align: top;
+      border-bottom: 1px solid #e8f4fb;
+    }
+
+    td.col-event {
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #003345;
+      border-right: 2px solid #e8f4fb;
+      white-space: nowrap;
+    }
+
+    .cell-inner {
+      padding: 8px 10px;
+      height: 100%;
+      min-height: 72px;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .cell-inner.active {
+      border-top: 3px solid var(--cell-color);
+    }
+
+    .cell-label {
+      font-weight: 700;
+      font-size: 10px;
+      color: #003345;
+      margin-bottom: 2px;
+    }
+
+    .cell-sub {
+      font-size: 9px;
+      color: #326177;
+      font-style: italic;
+      margin-bottom: 3px;
+      line-height: 1.3;
+    }
+
+    .cell-time {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--cell-color-bg);
+      color: var(--cell-color-dark);
+      margin-top: 2px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #326177;
+      font-weight: 600;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .footer {
+      margin-top: 12px;
+      font-size: 10px;
+      color: #6b8fa3;
+      text-align: center;
+    }
+
+    @media print {
+      body { background: white; padding: 12px; }
+      .print-btn { display: none; }
+      .schedule-table { box-shadow: none; }
+      @page { size: A3 landscape; margin: 12mm; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">Songkran Bangkok <span>2026</span></div>
+      <div class="page-sub">Full Party Schedule · April 10–14 · bkksongkran.com</div>
+    </div>
+    <button class="print-btn" onclick="window.print()">
+      ⬇ Save as PDF
+    </button>
+  </div>
+
+  <table class="schedule-table">
+    <thead>
+      <tr>
+        <th class="col-event">Event</th>
+        <th class="day-fri">Fri<br/>Apr 10<br/><span style="font-weight:500;opacity:0.8;">Opening Night</span></th>
+        <th class="day-sat">Sat<br/>Apr 11</th>
+        <th class="day-sun">Sun<br/>Apr 12</th>
+        <th class="day-mon">Mon<br/>Apr 13<br/><span style="font-weight:500;opacity:0.9;">🌊 Songkran</span></th>
+        <th class="day-tue">Tue<br/>Apr 14<br/><span style="font-weight:500;opacity:0.8;">Final Night</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map(row => (
+        <tr>
+          <td class="col-event" style={`border-left:3px solid ${row.color};`}>
+            {row.name}
+          </td>
+          {row.cells.map(cell => (
+            <td>
+              {cell.active ? (
+                <div
+                  class="cell-inner active"
+                  style={`--cell-color:${cell.color};--cell-color-bg:${cell.color}18;--cell-color-dark:${cell.color};`}
+                >
+                  <div class="cell-label">{cell.label}</div>
+                  {cell.sub && <div class="cell-sub">{cell.sub}</div>}
+                  {cell.time && <span class="cell-time">{cell.time}</span>}
+                </div>
+              ) : (
+                <div class="cell-inner" style="background:transparent;"></div>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#c084fc;"></span>GCircuit — LGBTQ+ Circuit Festival</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#40cef3;"></span>S2O Songkran</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ff8eb2;"></span>Siam Songkran</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#f59e0b;"></span>BEEFEST</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e879f9;"></span>Midsommar (Private)</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ec4899;"></span>G-SPOT Pool Party</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#d97706;"></span>Bangkok Bear Week</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#c026d3;"></span>Jizzy Lounge (Private)</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#06b6d4;"></span>Unleash</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#f97316;"></span>K2O Festival</div>
+  </div>
+
+  <div class="footer">bkksongkran.com · Data subject to change. Check official event pages for updates.</div>
+
+</body>
+</html>
