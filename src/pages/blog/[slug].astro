@@ -93,6 +93,15 @@ function renderContent(md: string): string {
       continue;
     }
 
+    // Image
+    if (trimmed.startsWith('![')) {
+      const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+      if (imgMatch) {
+        out.push(`<img src="${esc(imgMatch[2])}" alt="${esc(imgMatch[1])}" class="article-img" />`);
+        continue;
+      }
+    }
+
     // Regular paragraph
     out.push(`<p>${fmt(trimmed)}</p>`);
   }
@@ -305,6 +314,15 @@ const related = articles.filter(a => a.slug !== article.slug).slice(0, 3);
   }
   .article-content tbody tr:hover td {
     background: rgba(225,243,255,0.4);
+  }
+
+  /* Images */
+  .article-content .article-img {
+    width: 100%;
+    border-radius: 0.75rem;
+    margin: 1.5rem 0;
+    display: block;
+    object-fit: cover;
   }
 
   /* First paragraph after h1 — larger intro text */

@@ -1142,4 +1142,113 @@ You don't need to attend any ticketed events to have an amazing Songkran. But if
 | Phone protection | Waterproof pouch essential |
     `,
   },
+  {
+    slug: 'siam-songkran-2026-experience',
+    title: 'SIAM Songkran 2026: The Full Day-to-Night Experience Guide',
+    metaTitle: 'SIAM Songkran 2026 Experience Guide — MELORA, Daytime, Food & After-Parties',
+    metaDescription: 'Everything to know about SIAM Songkran 2026 beyond the headliners — daytime activities, Thai food vendors, festival merch, the MELORA stage concept, and Bangkok after-parties.',
+    h1: 'SIAM Songkran 2026: The Full Experience Guide',
+    excerpt: 'Martin Garrix and Marshmello headline the nights — but SIAM Songkran 2026 has a lot more going on. Here\'s the complete picture: daytime activities, Thai food, festival merch, and where the party continues after.',
+    publishedDate: '2026-04-11',
+    modifiedDate: '2026-04-11',
+    readTime: 7,
+    category: 'Festivals',
+    categoryColor: '#006479',
+    featuredImage: '/hero-songkran.jpg',
+    keywords: ['siam songkran 2026 experience', 'siam songkran melora', 'siam songkran day activities', 'siam songkran food', 'siam songkran merchandise', 'siam songkran after party', 'bravo bkk arena songkran', 'siam songkran 2026 guide', 'songkran festival 2026 bangkok'],
+    content: `
+## What SIAM Songkran 2026 Actually Is
+
+If you've only heard about the headliners, you're missing half the festival.
+
+SIAM Songkran 2026 — officially **"Chang Songkran presents SIAM Songkran Music Festival 2026: The Melora"** — runs **April 11–14** at **Bravo BKK Arena, Royal City Avenue (RCA)**. It's a four-day event structured as a full day-to-night experience, not just a nightly EDM show.
+
+The daytime program runs from early afternoon. The club stages open after dark. Between those two things, there's a lot happening.
+
+![SIAM Songkran 2026 festival crowd](/ssk-ambience-1.jpg)
+
+## The MELORA Concept
+
+The 2026 edition introduces a new stage identity: **MELORA** — a name drawn from the idea of water flowing through life, people, and music in a cycle.
+
+The SIAM stage has been reimagined as a **"Temple of Celebration"** — an ancient, forgotten structure brought back to life by the convergence of water, music, and human energy. It's a deliberate departure from previous mascot-driven themes. The reference points are architectural and cultural rather than character-led.
+
+In practice: expect a production design that leans into Thai temple aesthetics filtered through modern festival scale. Large structures, water elements built into the staging, and a visual language that ties the venue back to why Bangkok is where this is happening.
+
+![SIAM Songkran MELORA stage design concept](/ssk-stage-design.png)
+
+## Day-to-Night Experience: A Festival for All-Day Living
+
+### Day-Time Highlights
+
+- Coffee Rave Party @ ELYSIUM (13:00–16:00)
+- Wellness Experiences including Ice Bath & Sauna
+- Thai Cultural Parade (4 Regions)
+- Muay Thai Show
+- Thai Massage Zone
+- Brand Activations, Special Drinks, and Photo Booth Experiences
+
+### Night-Time: Global EDM Experience
+
+SIAM Songkran delivers a world-class lineup featuring top-ranked DJs, including Martin Garrix, Alok, R3HAB, Vini Vici, Marshmello, and John Summit — alongside rising global talents such as ALLEYCVT, Arcando, Jovynn, and Y3LLO.
+
+A dedicated Chill Stage also showcases local artists from over 10 club partners, highlighting Thailand's vibrant music ecosystem.
+
+### After-Party: Extending the Experience Across Bangkok
+
+The experience continues beyond the festival grounds, connecting directly to Bangkok's nightlife scene, including: VOID Club, ATLAS Super Club, UPPER HOUSE, BACCARAT, and ELYSIUM Immersive Club.
+
+![SIAM Songkran night crowd](/ssk-ambience-2.jpg)
+
+## Food at the Festival
+
+SIAM Songkran curates its food vendors rather than just filling space with generic stalls. The 2026 lineup includes:
+
+- **Stewed Eggs & Pork Ribs** — slow-braised, proper Thai street style
+- **Shredded Chicken Noodles**
+- **Smizzle Burger**
+- **Dry-Fried Moo Krata** — Thai BBQ pork, done properly
+- **Hoy Tod** — crispy oyster omelette, winner of The Spoon 2025
+- **Giant Octopus** — grilled whole, the photo op of the weekend
+
+Eat before the main stage. Food queues during peak sets are long.
+
+## Festival Merchandise
+
+SIAM Songkran has expanded into fashion for 2026 through three Thai brand collaborations:
+
+**Fabrique** — contemporary streetwear with a youth-culture angle. Limited runs, festival-specific colorways.
+
+**POEM Bangkok** — an established Thai fashion house known for structured, tailored pieces. Their festival collection applies that same craft to more wearable silhouettes.
+
+**HAUS OF PRIME** — bold identity-driven lifestyle pieces. Think statement rather than subtle.
+
+The collection includes one-pieces, bikinis, and sets. Available beforehand on **Shopee**, **Lazada**, and **TikTok Shop** — or in limited quantities onsite. If you want specific pieces, buy online before you arrive. Onsite stock sells out.
+
+![SIAM Songkran 2026 festival merchandise](/ssk-merch-1.jpg)
+
+![SIAM Songkran merchandise collection](/ssk-merch-product-1.jpg)
+
+## Practical Info
+
+**Venue:** Bravo BKK Arena, Royal City Avenue (RCA), Rama 9, Bangkok
+**Dates:** April 11–14, 2026
+**Age:** 20+ — original passport required at the gate
+**Getting there:** MRT Phetchaburi or MRT Asoke, then Grab to RCA (~฿60–80, budget more during Songkran surge)
+**Tickets:** [siamsongkran.info](https://siamsongkran.info)
+
+Avoid motorbike taxis on festival nights — the roads around RCA get chaotic. Grab pool options can help if surge pricing is high.
+
+![SIAM Songkran festival atmosphere Bangkok](/ssk-ambience-3.jpg)
+
+## How It Compares to S2O
+
+If you're choosing between SIAM Songkran and [S2O](/blog/s2o-festival-2026-lineup):
+
+- **S2O** is the outdoor water park setup — industrial water cannons, festival-in-the-round layout, slightly more international crowd
+- **SIAM Songkran** has indoor/outdoor hybrid spaces at Bravo BKK Arena, a stronger daytime program, more food and cultural content, and RCA's surrounding bar strip as a built-in extension
+
+They run on overlapping dates (both start April 11). Some people do both — SIAM Songkran in the evening, S2O on different nights.
+    `,
+  },
 ];
